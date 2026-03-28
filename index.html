@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Forge — Test Management Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0c10;--bg2:#111318;--bg3:#181c24;--bg4:#1e2330;
+  --border:#ffffff0f;--border2:#ffffff18;--border3:#ffffff28;
+  --text:#f0f2f7;--text2:#8b91a8;--text3:#555c72;
+  --accent:#4f8cff;--accent2:#7c3aed;--accent3:#06d6a0;
+  --warn:#f59e0b;--danger:#ef4444;--success:#10b981;
+  --card-radius:14px;--r:8px;
+  --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;
+  --shadow:0 2px 12px #0000001a;
+}
+[data-theme="light"]{
+  --bg:#f0f2f7;--bg2:#ffffff;--bg3:#e8eaf0;--bg4:#dde0ea;
+  --border:#00000010;--border2:#00000018;--border3:#00000028;
+  --text:#0f1117;--text2:#4a5068;--text3:#8b91a8;
+  --shadow:0 2px 12px #0000001a;
+}
+/* Theme toggle */
+.theme-toggle{background:none;border:1px solid var(--border2);border-radius:20px;padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);transition:all .15s;font-family:var(--font-body)}
+.theme-toggle:hover{background:var(--bg3);color:var(--text);border-color:var(--border3)}
+.theme-toggle svg{width:13px;height:13px}
+/* About modal */
+.about-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:11px;background:linear-gradient(135deg,var(--accent2)22,var(--accent)22);border:1px solid var(--accent2)33;color:var(--accent2);font-family:var(--font-mono);cursor:pointer;transition:all .15s}
+.about-badge:hover{background:linear-gradient(135deg,var(--accent2)33,var(--accent)33)}
+/* Feedback */
+.feedback-fab{position:fixed;bottom:80px;right:24px;z-index:150;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px var(--accent)44,inset 0 1px 0 #ffffff22;font-family:var(--font-body);transition:all .25s cubic-bezier(.34,1.56,.64,1)}
+.feedback-fab:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 10px 32px var(--accent)55,inset 0 1px 0 #ffffff22}
+.feedback-fab:active{transform:translateY(0) scale(.98)}
+.feedback-fab svg{width:15px;height:15px}
+/* Logo glow */
+.logo-icon{position:relative}
+.logo-icon::after{content:'';position:absolute;inset:-3px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));filter:blur(8px);opacity:.4;z-index:-1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border3);border-radius:4px}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;backdrop-filter:blur(12px)}
+.main{overflow-y:auto;min-height:100vh}
+.logo{padding:22px 20px 18px;border-bottom:1px solid var(--border)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-icon svg{width:18px;height:18px}
+.logo-text{font-family:var(--font-head);font-size:17px;font-weight:700;letter-spacing:-0.3px}
+.logo-sub{font-size:10px;color:var(--text3);margin-top:1px;font-family:var(--font-mono)}
+.nav{padding:12px 10px;flex:1}
+.nav-section{margin-bottom:18px}
+.nav-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:0 10px;margin-bottom:6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;color:var(--text2);transition:all .18s;font-size:13px;font-weight:400;user-select:none;border:none;background:none;width:100%;text-align:left;position:relative}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--accent)14;color:var(--accent);font-weight:500}
+.nav-item.active::before{content:'';position:absolute;left:-10px;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 2px 2px 0}
+.nav-item svg{width:15px;height:15px;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:600;padding:2px 6px;border-radius:20px;font-family:var(--font-mono)}
+.nav-badge.green{background:var(--success)}
+.sidebar-footer{padding:14px;border-top:1px solid var(--border)}
+.sidebar-stat{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px}
+.sidebar-stat span{color:var(--text2);font-family:var(--font-mono)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.page-title{font-family:var(--font-head);font-size:18px;font-weight:700}
+.page-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.topbar-actions{display:flex;gap:8px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:var(--font-body)}
+.btn svg{width:14px;height:14px}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 8px var(--accent)33}.btn-primary:hover{background:#3a7aff;box-shadow:0 4px 16px var(--accent)44;transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0);box-shadow:0 1px 4px var(--accent)33}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}.btn-ghost:hover{background:var(--bg3);color:var(--text);border-color:var(--border3)}
+.btn-success{background:var(--success)22;color:var(--success);border:1px solid var(--success)33}.btn-success:hover{background:var(--success)33}
+.btn-danger{background:var(--danger)22;color:var(--danger);border:1px solid var(--danger)33}.btn-danger:hover{background:var(--danger)33}
+.btn-warn{background:var(--warn)22;color:var(--warn);border:1px solid var(--warn)33}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-xs{padding:3px 8px;font-size:11px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.spinner{width:13px;height:13px;border:2px solid #ffffff30;border-top-color:#fff;border-radius:50%;animation:spin .65s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.page{display:none}.page.active{display:block}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-radius);padding:20px;transition:border-color .2s,box-shadow .2s}
+.card:hover{border-color:var(--border2);box-shadow:0 4px 24px #0000001a}
+[data-theme="light"] .card:hover{box-shadow:0 4px 24px #0000000f}
+.card-sm{padding:14px 16px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-family:var(--font-head);font-size:14px;font-weight:600}
+.card-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px;letter-spacing:.02em}
+.form-label span{color:var(--text3);font-weight:400;margin-left:4px}
+.form-input,.form-textarea,.form-select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:var(--font-body);font-size:13px;padding:9px 12px;transition:border-color .15s;outline:none}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--accent)88;box-shadow:0 0 0 3px var(--accent)12}
+.form-textarea{resize:vertical;min-height:90px;line-height:1.6}
+.form-select{cursor:pointer}.form-select option{background:var(--bg3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.checkbox-group{display:flex;flex-wrap:wrap;gap:8px}
+.check-pill{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid var(--border2);cursor:pointer;font-size:12px;color:var(--text2);transition:all .15s;user-select:none}
+.check-pill:hover{border-color:var(--border3);color:var(--text)}
+.check-pill.checked{border-color:var(--accent)66;background:var(--accent)14;color:var(--accent)}
+.check-pill.checked.edge{border-color:#06d6a066;background:#06d6a014;color:#06d6a0}
+.check-pill.checked.negative{border-color:#ef444466;background:#ef444414;color:#ef4444}
+.check-pill.checked.e2e{border-color:#7c3aed66;background:#7c3aed14;color:#a78bfa}
+.check-pill.checked.impact{border-color:#f59e0b66;background:#f59e0b14;color:#f59e0b}
+.check-pill input{display:none}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;font-family:var(--font-mono);letter-spacing:.01em}
+.tag-functional{background:#4f8cff18;color:#4f8cff;border:1px solid #4f8cff28}
+.tag-edge{background:#06d6a018;color:#06d6a0;border:1px solid #06d6a028}
+.tag-negative{background:#ef444418;color:#ef4444;border:1px solid #ef444428}
+.tag-e2e{background:#7c3aed18;color:#a78bfa;border:1px solid #7c3aed28}
+.tag-impact{background:#f59e0b18;color:#f59e0b;border:1px solid #f59e0b28}
+.tag-pass{background:#10b98118;color:#10b981;border:1px solid #10b98128}
+.tag-fail{background:#ef444418;color:#ef4444;border:1px solid #ef444428}
+.tag-blocked{background:#f59e0b18;color:#f59e0b;border:1px solid #f59e0b28}
+.tag-pending{background:#8b91a818;color:#8b91a8;border:1px solid #8b91a828}
+.tag-high{background:#ef444414;color:#ef4444}.tag-medium{background:#f59e0b14;color:#f59e0b}.tag-low{background:#10b98114;color:#10b981}
+.tag-generation{background:#4f8cff18;color:#4f8cff;border:1px solid #4f8cff28}
+.tag-execution{background:#7c3aed18;color:#a78bfa;border:1px solid #7c3aed28}
+.tag-manual{background:#06d6a018;color:#06d6a0;border:1px solid #06d6a028}
+.tag-deletion{background:#ef444418;color:#ef4444;border:1px solid #ef444428}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-radius);padding:16px 18px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;cursor:default}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px #00000022;border-color:var(--border2)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.blue::before{background:linear-gradient(90deg,var(--accent),transparent)}
+.stat-card.green::before{background:linear-gradient(90deg,var(--success),transparent)}
+.stat-card.warn::before{background:linear-gradient(90deg,var(--warn),transparent)}
+.stat-card.purple::before{background:linear-gradient(90deg,var(--accent2),transparent)}
+.stat-num{font-family:var(--font-head);font-size:28px;font-weight:800;line-height:1}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+.stat-delta{font-size:11px;color:var(--text3);margin-top:6px;font-family:var(--font-mono)}
+.stat-delta.up{color:var(--success)}
+.tc-table{width:100%;border-collapse:collapse}
+.tc-table th{text-align:left;font-size:11px;font-weight:500;color:var(--text3);padding:8px 12px;border-bottom:1px solid var(--border);letter-spacing:.06em;text-transform:uppercase}
+.tc-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+.tc-table tr:hover td{background:var(--bg3);transition:background .12s}
+.tc-table tbody tr{transition:background .12s}
+.tc-table tr:last-child td{border-bottom:none}
+.tc-id{font-family:var(--font-mono);font-size:12px;color:var(--text3)}
+.tc-title-cell{font-weight:500;color:var(--text);max-width:240px}
+.tc-title-cell small{display:block;font-size:11px;color:var(--text3);font-weight:400;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+.modal-overlay{position:fixed;inset:0;background:#00000088;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;animation:fadeIn .18s ease}
+.modal-overlay.open{display:flex}
+.modal{animation:slideUp .2s cubic-bezier(.4,0,.2,1)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px #00000066}
+.modal-head{padding:18px 24px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg2);z-index:1}
+.modal-title{font-family:var(--font-head);font-size:16px;font-weight:700}
+.modal-body{padding:20px 24px}
+.close-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.close-btn:hover{color:var(--text);background:var(--bg3)}
+.close-btn svg{width:18px;height:18px}
+.progress-bar{height:4px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,var(--accent),var(--accent2));position:relative;overflow:hidden}
+.progress-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#ffffff22,transparent);animation:shimmer 2s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.share-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:10px 12px;display:flex;align-items:center;gap:8px}
+.share-link{flex:1;font-family:var(--font-mono);font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;margin-top:24px}
+.section-head:first-child{margin-top:0}
+.section-title{font-family:var(--font-head);font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.section-title span{font-size:11px;color:var(--text3);font-weight:400;font-family:var(--font-mono)}
+.empty{text-align:center;padding:48px 20px;color:var(--text3)}
+.empty-icon{width:48px;height:48px;border-radius:12px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.empty-icon svg{width:22px;height:22px;opacity:.4}
+.empty h3{font-family:var(--font-head);font-size:15px;color:var(--text2);font-weight:600;margin-bottom:4px}
+.empty p{font-size:13px;line-height:1.6}
+.detail-grid{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:13px}
+.detail-key{color:var(--text3);padding-top:2px}
+.detail-val{color:var(--text);line-height:1.6}
+.detail-val ol{padding-left:16px}.detail-val ol li{margin-bottom:3px}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.sprint-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:6px;font-size:12px;font-family:var(--font-mono);background:var(--accent)14;color:var(--accent);border:1px solid var(--accent)28}
+.notif{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:13px 18px;font-size:13px;color:var(--text);box-shadow:0 12px 40px #00000055;z-index:200;transform:translateY(100px) scale(.95);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);max-width:300px;font-weight:500}
+.notif.show{transform:translateY(0) scale(1);opacity:1}
+.notif.success{border-color:var(--success)55;background:linear-gradient(135deg,var(--success)15,var(--bg2));color:var(--success)}
+.notif.error{border-color:var(--danger)55;background:linear-gradient(135deg,var(--danger)15,var(--bg2));color:var(--danger)}
+.result-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.result-btn{padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid;transition:all .15s;font-family:var(--font-mono)}
+.result-btn.pass{border-color:var(--success)44;background:var(--success)14;color:var(--success)}
+.result-btn.pass:hover,.result-btn.pass.active{background:var(--success);color:#fff}
+.result-btn.fail{border-color:var(--danger)44;background:var(--danger)14;color:var(--danger)}
+.result-btn.fail:hover,.result-btn.fail.active{background:var(--danger);color:#fff}
+.result-btn.blocked{border-color:var(--warn)44;background:var(--warn)14;color:var(--warn)}
+.result-btn.blocked:hover,.result-btn.blocked.active{background:var(--warn);color:#000}
+.note-input{background:var(--bg3);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:12px;padding:5px 8px;width:180px;font-family:var(--font-body)}
+.note-input:focus{outline:none;border-color:var(--accent)66}
+/* Inline mark buttons in sprint table */
+.inline-mark{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid;font-family:var(--font-mono);transition:all .15s cubic-bezier(.34,1.56,.64,1)}
+.inline-mark.pass{border-color:var(--success)44;color:var(--success);background:transparent}
+.inline-mark.pass:hover,.inline-mark.pass.active{background:var(--success);color:#fff;border-color:var(--success)}
+.inline-mark.fail{border-color:var(--danger)44;color:var(--danger);background:transparent}
+.inline-mark.fail:hover,.inline-mark.fail.active{background:var(--danger);color:#fff;border-color:var(--danger)}
+.inline-mark.blocked{border-color:var(--warn)44;color:var(--warn);background:transparent}
+.inline-mark.blocked:hover,.inline-mark.blocked.active{background:var(--warn);color:#000;border-color:var(--warn)}
+/* Search bar */
+.search-wrap{position:relative;flex:1;max-width:320px}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--text3);pointer-events:none}
+.search-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);color:var(--text);font-family:var(--font-body);font-size:13px;padding:8px 12px 8px 32px;outline:none;transition:border-color .15s}
+.search-input:focus{border-color:var(--accent)88;box-shadow:0 0 0 3px var(--accent)12}
+.search-input::placeholder{color:var(--text3)}
+/* Bulk actions bar */
+.bulk-bar{display:none;align-items:center;gap:10px;padding:10px 16px;background:var(--accent)0f;border-bottom:1px solid var(--accent)22;font-size:13px}
+.bulk-bar.show{display:flex}
+/* Log styles */
+.log-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.log-item:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.log-dot.generation{background:var(--accent)}.log-dot.execution{background:var(--accent2)}.log-dot.manual{background:var(--accent3)}.log-dot.deletion{background:var(--danger)}
+.log-body{flex:1}
+.log-msg{font-size:13px;color:var(--text);line-height:1.5}
+.log-meta{font-size:11px;color:var(--text3);margin-top:3px;font-family:var(--font-mono)}
+.log-time{font-size:11px;color:var(--text3);white-space:nowrap;font-family:var(--font-mono);flex-shrink:0}
+.filter-chip{padding:5px 12px;border-radius:20px;border:1px solid var(--border2);font-size:12px;cursor:pointer;color:var(--text2);transition:all .15s;background:none}
+.filter-chip:hover{border-color:var(--border3);color:var(--text)}
+.filter-chip.active{border-color:var(--accent)66;background:var(--accent)14;color:var(--accent)}
+
+/* ── MOBILE HAMBURGER ── */
+.hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:6px;border-radius:6px}
+.hamburger span{display:block;width:20px;height:2px;background:var(--text2);border-radius:2px;transition:all .25s}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:#00000055;z-index:49;backdrop-filter:blur(2px)}
+.sidebar-overlay.show{display:block}
+
+/* ── MOBILE BREAKPOINT ── */
+@media(max-width:768px){
+  .sidebar-close-btn{display:flex!important}
+  .dash-two-col{grid-template-columns:1fr!important}
+  .gen-grid{grid-template-columns:1fr!important;padding:14px!important}
+  .logs-stats-grid{grid-template-columns:1fr 1fr!important}
+
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:-240px;top:0;height:100vh;width:220px;z-index:50;transition:left .25s ease;box-shadow:4px 0 24px #00000044}
+  .sidebar.open{left:0}
+  .main{min-height:100vh}
+  .hamburger{display:flex}
+  .topbar{padding:12px 16px}
+  .page-title{font-size:15px}
+  .page-sub{font-size:11px}
+  .topbar-actions{gap:6px}
+  .topbar-actions .hide-on-mobile{display:none!important}
+  /* Generate page — single column */
+  [style*="grid-template-columns:1fr 360px"]{grid-template-columns:1fr!important}
+  [style*="grid-template-columns:1fr 380px"]{grid-template-columns:1fr!important}
+  /* Preview panel — no sticky on mobile */
+  [style*="position:sticky;top:72px"]{position:static!important}
+  /* Dashboard grid */
+  .stats-grid{grid-template-columns:1fr 1fr!important;gap:8px}
+  [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+  [style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:1fr 1fr!important}
+  [style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr!important}
+  [style*="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))"]{grid-template-columns:1fr 1fr!important}
+  /* Padding */
+  [style*="padding:28px"]{padding:16px!important}
+  .page{padding:0}
+  /* Form rows → single col */
+  .form-row{grid-template-columns:1fr!important}
+  /* Library table — horizontal scroll */
+  .tc-table{font-size:12px}
+  .tc-table th,.tc-table td{padding:7px 8px}
+  .tc-title-cell{max-width:140px}
+  /* Modals */
+  .modal{max-width:100%!important;margin:10px;border-radius:12px}
+  .modal-overlay{padding:10px}
+  /* Topbar actions — compress */
+  .theme-toggle span{display:none}
+  /* Sprint table scroll */
+  .sprint-table-wrap{overflow-x:auto}
+  /* Onboarding grid */
+  .onboard-grid{grid-template-columns:1fr!important}
+  /* Bulk bar */
+  .bulk-bar{flex-wrap:wrap;gap:6px;padding:8px 12px}
+  /* Stat num smaller */
+  .stat-num{font-size:22px!important}
+  /* Hide some library columns on mobile */
+  .hide-mobile{display:none!important}
+  /* Logo text */
+  .logo-text{font-size:15px}
+}
+
+@media(max-width:768px){
+  .export-label{display:none}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr!important}
+  .topbar{flex-wrap:wrap;gap:8px}
+  .modal-body{padding:14px 16px}
+  .modal-head{padding:14px 16px 12px}
+  .result-row{gap:6px}
+  .result-btn{padding:4px 10px;font-size:11px}
+}
+
+.ai-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;background:linear-gradient(135deg,var(--accent)22,var(--accent2)22);border:1px solid var(--accent)33;color:var(--accent);font-family:var(--font-mono)}
+/* Template pills */
+.tpl-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px}
+.tpl-pill{padding:5px 13px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--text2);background:none;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px}
+.tpl-pill:hover{background:var(--accent)14;border-color:var(--accent)44;color:var(--accent)}
+/* Tag input */
+.tag-input-wrap{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);min-height:40px;cursor:text;align-items:center}
+.tag-input-wrap:focus-within{border-color:var(--accent)88;box-shadow:0 0 0 3px var(--accent)12}
+.tag-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;background:var(--accent)18;color:var(--accent);border:1px solid var(--accent)33;font-size:11px;font-family:var(--font-mono)}
+.tag-chip button{background:none;border:none;color:var(--accent);cursor:pointer;padding:0 0 0 2px;font-size:13px;line-height:1;opacity:.7}
+.tag-chip button:hover{opacity:1}
+.tag-bare-input{background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:var(--font-body);min-width:80px;flex:1}
+/* Hint box */
+.hint-box{background:var(--accent)08;border:1px solid var(--accent)20;border-radius:var(--r);padding:10px 13px;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px;display:none}
+.hint-box.show{display:block}
+/* Severity badge */
+.tag-critical{background:#7c3aed18;color:#a78bfa;border:1px solid #7c3aed28}
+/* Assignee avatar */
+.assignee-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border-radius:20px;background:var(--bg3);border:1px solid var(--border2);font-size:12px}
+.assignee-avatar{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
+/* Regen button */
+.btn-regen{background:var(--accent2)22;color:var(--accent2);border:1px solid var(--accent2)33}
+.btn-regen:hover{background:var(--accent2)33}
+/* Onboarding */
+.onboard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.onboard-step{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-radius);padding:18px;position:relative;overflow:hidden;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1)}
+.onboard-step:hover{border-color:var(--accent)44;transform:translateY(-2px);box-shadow:0 8px 28px #0000001a}
+.onboard-step:hover .onboard-num{color:var(--accent)66}
+.onboard-step.done{border-color:var(--success)33;background:var(--success)06}
+.onboard-num{font-family:var(--font-head);font-size:32px;font-weight:800;color:var(--border3);line-height:1;margin-bottom:8px}
+.onboard-step.done .onboard-num{color:var(--success)55}
+.onboard-title{font-family:var(--font-head);font-size:13px;font-weight:700;margin-bottom:5px}
+.onboard-desc{font-size:12px;color:var(--text3);line-height:1.6}
+.onboard-check{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;background:var(--success);display:none;align-items:center;justify-content:center}
+.onboard-step.done .onboard-check{display:flex}
+</style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo" style="display:flex;align-items:center;justify-content:space-between">
+      <div class="logo-mark">
+        <div class="logo-icon" style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#4f8cff,#7c3aed);box-shadow:0 4px 16px #4f8cff55;position:relative">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;position:relative;z-index:1">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <div style="position:absolute;inset:-4px;border-radius:14px;background:linear-gradient(135deg,#4f8cff,#7c3aed);filter:blur(10px);opacity:.5;z-index:0"></div>
+        </div>
+        <div>
+          <div class="logo-text" style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">QA Forge</div>
+          <div class="logo-sub">× Claude AI</div>
+        </div>
+      </div>
+      <button onclick="closeSidebar()" style="display:none;background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;border-radius:4px" class="sidebar-close-btn" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="nav">
+      <div class="nav-section">
+        <div class="nav-label">Workspace</div>
+        <button class="nav-item active" onclick="navigate('dashboard')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+        </button>
+        <button class="nav-item" onclick="navigate('generate')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Generate Cases
+        </button>
+        <button class="nav-item" onclick="navigate('library')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Test Library
+          <span class="nav-badge" id="libraryBadge">0</span>
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Sprint</div>
+        <button class="nav-item" onclick="navigate('sprint')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Sprint Board
+        </button>
+        <button class="nav-item" onclick="navigate('signoff')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>Share & Signoff
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Tracking</div>
+        <button class="nav-item" onclick="navigate('logs')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Activity Logs
+          <span class="nav-badge green" id="logsBadge">0</span>
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">Info</div>
+        <button class="nav-item" onclick="openModal('aboutModal')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>About QA Forge
+        </button>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-stat">Total cases <span id="sfTotal">0</span></div>
+      <div class="sidebar-stat">Sprints <span id="sfSprints">0</span></div>
+      <div class="sidebar-stat">Pass rate <span id="sfPass">—</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div><div class="page-title">Dashboard</div><div class="page-sub">Overview of your QA workspace</div></div>
+        </div>
+        <div class="topbar-actions">
+          <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <span id="themeLabel">Light</span>
+          </button>
+
+          <button class="btn btn-ghost btn-sm export-btn" onclick="exportAllCSV()" title="Export CSV">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span class="export-label">CSV</span>
+          </button>
+          <button class="btn btn-ghost btn-sm export-btn" onclick="exportExcel()" title="Export Excel" style="color:var(--success);border-color:var(--success)33">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <span class="export-label">Excel</span>
+          </button>
+          <button class="btn btn-primary" onclick="navigate('generate')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Test Cases
+          </button>
+        </div>
+      </div>
+      <div style="padding:28px" id="dashContent"></div>
+    </div>
+
+    <!-- GENERATE -->
+    <div class="page" id="page-generate" style="padding:0">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div><div class="page-title">Generate Test Cases</div><div class="page-sub">Powered by Claude — describe your feature, get structured test cases instantly</div></div>
+        </div>
+      </div>
+      <div class="gen-grid" style="padding:28px;display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:start">
+        <div>
+          <div class="card">
+            <div class="card-title" style="margin-bottom:18px">Requirement Details</div>
+
+            <div class="form-group">
+              <label class="form-label">Feature / Requirement Description <span>*</span></label>
+              <textarea class="form-textarea" id="reqDesc" style="min-height:100px" placeholder="Describe the feature in detail. E.g: User login with email and password. Support OAuth via Google. Lockout after 5 failed attempts. Remember me checkbox stores session for 30 days..." oninput="updateHint()"></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Project Platform</label>
+                <select class="form-select" id="reqProject" onchange="updateHint()">
+                  <option value="">Select Platform</option>
+                  <option value="Android">📱 Android</option>
+                  <option value="iOS">🍎 iOS</option>
+                  <option value="EXE">🖥️ EXE (Desktop)</option>
+                  <option value="Web">🌐 Web</option>
+                  <option value="API">⚙️ API / Backend</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Test Environment</label>
+                <select class="form-select" id="reqEnv">
+                  <option value="UAT">UAT</option>
+                  <option value="LIVE">LIVE</option>
+                  <option value="CUG">CUG</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Module / Component</label><input class="form-input" id="reqModule" placeholder="e.g. Authentication" list="moduleList"><datalist id="moduleList"></datalist></div>
+              <div class="form-group"><label class="form-label">Sprint</label><input class="form-input" id="reqSprint" placeholder="e.g. Sprint 12" list="sprintList"><datalist id="sprintList"></datalist></div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Number of Cases</label>
+                <select class="form-select" id="reqCount">
+                  <option value="25" selected>25 cases</option>
+                  <option value="50">50 cases</option>
+                  <option value="75">75 cases</option>
+                  <option value="100">100 cases</option>
+                </select>
+              </div>
+            </div>
+
+
+
+            <div class="form-group">
+              <label class="form-label">Impacted Modules <span>(comma-separated)</span></label>
+              <input class="form-input" id="reqImpacted" placeholder="e.g. Order Placement, Risk Engine, Reporting">
+            </div>
+
+
+
+            <div class="form-group">
+              <label class="form-label">Test Types to Cover</label>
+              <div class="checkbox-group" id="typeCheckboxes">
+                <label class="check-pill checked" data-type="Functional"><input type="checkbox" checked> Functional</label>
+                <label class="check-pill checked edge" data-type="Edge Case"><input type="checkbox" checked> Edge Cases</label>
+                <label class="check-pill checked negative" data-type="Negative"><input type="checkbox" checked> Negative</label>
+                <label class="check-pill checked e2e" data-type="End to End"><input type="checkbox" checked> End to End</label>
+                <label class="check-pill checked impact" data-type="Impact"><input type="checkbox" checked> Impact</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Additional Notes <span>(optional)</span></label>
+              <textarea class="form-textarea" id="reqNotes" style="min-height:56px" placeholder="Extra context, assumptions, known issues, or constraints..."></textarea>
+            </div>
+
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-primary" id="genBtn" onclick="generateCases()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Generate Test Cases
+              </button>
+              <button class="btn btn-regen" id="regenBtn" onclick="generateCases()" style="display:none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>Regenerate
+              </button>
+              <button class="btn btn-ghost" onclick="clearForm()">Clear</button>
+              <span id="genStatus" style="font-size:12px;color:var(--text3)"></span>
+            </div>
+          </div>
+          <!-- Manual add -->
+          <div class="card" style="margin-top:16px">
+            <div class="card-title" style="margin-bottom:4px">Add Case Manually</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:14px">Add a custom test case to an existing module & sprint</div>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Title</label><input class="form-input" id="manTitle" placeholder="Test case title"></div>
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Type</label><select class="form-select" id="manType"><option>Functional</option><option>Edge Case</option><option>Negative</option><option>End to End</option><option>Impact</option></select></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Module</label><input class="form-input" id="manModule" placeholder="Module name" list="moduleList"></div>
+              <div class="form-group" style="margin-bottom:10px"><label class="form-label">Sprint</label><input class="form-input" id="manSprint" placeholder="Sprint name" list="sprintList"></div>
+            </div>
+            <div class="form-group" style="margin-bottom:10px"><label class="form-label">Steps (one per line)</label><textarea class="form-textarea" id="manSteps" style="min-height:60px" placeholder="Step 1&#10;Step 2"></textarea></div>
+            <div class="form-group" style="margin-bottom:10px"><label class="form-label">Expected Result</label><input class="form-input" id="manExpected" placeholder="What should happen?"></div>
+            <button class="btn btn-ghost" onclick="addManualCase()">Add Test Case</button>
+          </div>
+        </div>
+        <!-- Preview -->
+        <div>
+          <div class="card" style="position:sticky;top:72px">
+            <div class="card-title" style="margin-bottom:4px">Generation Preview</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:16px">Results appear here after generation</div>
+            <div id="previewArea">
+              <div class="empty" style="padding:32px 10px">
+                <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                <h3>Ready to generate</h3><p>Fill in the details and hit Generate</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIBRARY -->
+    <div class="page" id="page-library" style="padding:0">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div><div class="page-title">Test Library</div><div class="page-sub">All test cases — search, filter, bulk update</div></div>
+        </div>
+        <div class="topbar-actions">
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" id="libSearch" placeholder="Search by title, ID, module…" oninput="renderLibrary()">
+          </div>
+          <select class="form-select" style="width:140px;padding:7px 10px" id="filterModule" onchange="renderLibrary()"><option value="">All modules</option></select>
+          <select class="form-select" style="width:130px;padding:7px 10px" id="filterSprint" onchange="renderLibrary()"><option value="">All sprints</option></select>
+          <select class="form-select" style="width:120px;padding:7px 10px" id="filterType" onchange="renderLibrary()"><option value="">All types</option><option>Functional</option><option>Edge Case</option><option>Negative</option><option>End to End</option><option>Impact</option></select>
+          <select class="form-select" style="width:120px;padding:7px 10px" id="filterProject" onchange="renderLibrary()"><option value="">All platforms</option><option value="Android">📱 Android</option><option value="iOS">🍎 iOS</option><option value="EXE">🖥️ EXE</option><option value="Web">🌐 Web</option><option value="API">⚙️ API</option></select>
+          <select class="form-select" style="width:120px;padding:7px 10px" id="filterStatus" onchange="renderLibrary()"><option value="">All status</option><option value="pending">Pending</option><option value="pass">Pass</option><option value="fail">Fail</option><option value="blocked">Blocked</option></select>
+          <button class="btn btn-ghost btn-sm" onclick="exportFilteredCSV()">Export CSV</button>
+        </div>
+      </div>
+      <!-- Bulk action bar -->
+      <div class="bulk-bar" id="bulkBar">
+        <input type="checkbox" id="selectAllCb" onchange="toggleSelectAll(this.checked)" style="accent-color:var(--accent)">
+        <span id="bulkCount" style="color:var(--accent);font-weight:500;font-size:13px"></span>
+        <span style="color:var(--text3);font-size:13px">selected</span>
+        <div style="display:flex;gap:8px;margin-left:8px">
+          <button class="btn btn-ghost btn-sm" onclick="bulkSetStatus('pass')">✓ Mark Pass</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulkSetStatus('fail')">✗ Mark Fail</button>
+          <button class="btn btn-ghost btn-sm" onclick="bulkSetStatus('blocked')">⊘ Mark Blocked</button>
+          <button class="btn btn-danger btn-sm" onclick="bulkDelete()">Delete Selected</button>
+        </div>
+      </div>
+      <div style="padding:28px">
+        <div class="card" style="padding:0;overflow:hidden"><div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><div id="libraryContent"></div></div></div>
+      </div>
+    </div>
+
+    <!-- SPRINT BOARD -->
+    <div class="page" id="page-sprint" style="padding:0">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div><div class="page-title">Sprint Board</div><div class="page-sub">Mark results inline — pass, fail, or blocked per case</div></div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-sm" onclick="showMergeSprint()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>Merge into Sanity Suite
+          </button>
+        </div>
+      </div>
+      <div style="padding:28px" id="sprintContent"></div>
+    </div>
+
+    <!-- SHARE & SIGNOFF -->
+    <div class="page" id="page-signoff" style="padding:0">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div><div class="page-title">Share & Signoff</div><div class="page-sub">Generate shareable execution links for your team</div></div>
+        </div>
+      </div>
+      <div style="padding:28px" id="signoffContent"></div>
+    </div>
+
+    <!-- ACTIVITY LOGS -->
+    <div class="page" id="page-logs" style="padding:0">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+          <div><div class="page-title">Activity Logs</div><div class="page-sub">Full audit trail — generations, executions, status changes</div></div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost btn-sm" onclick="exportLogsCSV()">Export CSV</button>
+          <button class="btn btn-ghost btn-sm" onclick="copyLogsText()">Copy as Text</button>
+          <button class="btn btn-danger btn-sm" onclick="clearLogs()">Clear Logs</button>
+        </div>
+      </div>
+      <div style="padding:28px">
+        <div class="logs-stats-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px" id="logsStats"></div>
+        <div class="card" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div class="card-title">Filter Logs</div>
+            <span id="logsCount" style="font-size:12px;color:var(--text3);font-family:var(--font-mono)"></span>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="logFilters"></div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden"><div id="logsContent" style="padding:8px 20px"></div></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TC Detail / Edit Modal -->
+<div class="modal-overlay" id="tcDetailModal">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-head">
+      <div><div class="modal-title" id="modalTcId"></div><div style="font-size:12px;color:var(--text3);margin-top:2px" id="modalTcMeta"></div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-ghost btn-sm" id="editToggleBtn" onclick="toggleEditMode()">Edit</button>
+        <button class="close-btn" onclick="closeModal('tcDetailModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalTcBody"></div>
+  </div>
+</div>
+
+<!-- Merge Modal -->
+<div class="modal-overlay" id="mergeModal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head">
+      <div class="modal-title">Merge Sprints into Sanity Suite</div>
+      <button class="close-btn" onclick="closeModal('mergeModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Sanity Suite Name</label><input class="form-input" id="mergeSprintName" placeholder="e.g. Sprint 12 Release Sanity"></div>
+      <div class="form-group"><label class="form-label">Select sprints to merge</label><div id="mergeSprintList" style="display:flex;flex-direction:column;gap:8px;max-height:240px;overflow-y:auto"></div></div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn btn-primary" onclick="doMerge()">Create Sanity Suite</button>
+        <button class="btn btn-ghost" onclick="closeModal('mergeModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<!-- About Modal -->
+<div class="modal-overlay" id="aboutModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head">
+      <div class="modal-title">About QA Forge</div>
+      <button class="close-btn" onclick="closeModal('aboutModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center;margin-bottom:24px">
+        <!-- QA Forge Logo SVG -->
+        <div style="position:relative;width:90px;height:90px;margin:0 auto 14px">
+          <!-- Outer glow ring -->
+          <div style="position:absolute;inset:-6px;border-radius:28px;background:linear-gradient(135deg,#4f8cff,#7c3aed);filter:blur(14px);opacity:.5"></div>
+          <!-- Main icon container -->
+          <div style="position:relative;width:90px;height:90px;background:linear-gradient(145deg,#1a1f2e,#0d1117);border-radius:22px;border:1px solid #ffffff18;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px #00000044,inset 0 1px 0 #ffffff12">
+            <!-- Inner gradient overlay -->
+            <div style="position:absolute;inset:0;border-radius:22px;background:linear-gradient(145deg,#4f8cff15,#7c3aed25)"></div>
+            <!-- SVG Logo -->
+            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:54px;height:54px;position:relative;z-index:1">
+              <!-- Shield base -->
+              <path d="M24 4L8 10V22C8 31.6 15.2 40.4 24 43C32.8 40.4 40 31.6 40 22V10L24 4Z" fill="url(#shieldGrad)" opacity="0.9"/>
+              <!-- Shield border -->
+              <path d="M24 4L8 10V22C8 31.6 15.2 40.4 24 43C32.8 40.4 40 31.6 40 22V10L24 4Z" stroke="#ffffff22" stroke-width="1" fill="none"/>
+              <!-- Lightning bolt (AI power) -->
+              <path d="M27 14L19 25H24.5L21 34L29 23H23.5L27 14Z" fill="white" opacity="0.95"/>
+              <!-- Checkmark overlay -->
+              <path d="M16 23L21 28L32 17" stroke="#06d6a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs>
+                <linearGradient id="shieldGrad" x1="8" y1="4" x2="40" y2="43">
+                  <stop offset="0%" stop-color="#4f8cff"/>
+                  <stop offset="100%" stop-color="#7c3aed"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+        <div style="font-family:var(--font-head);font-size:24px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">QA Forge</div>
+        <div style="font-size:11px;color:var(--text3);font-family:var(--font-mono);margin-top:5px;letter-spacing:.05em">AI-POWERED TEST MANAGEMENT PLATFORM</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--success)"></span>
+          <span style="font-size:11px;color:var(--success);font-family:var(--font-mono)">Powered by Claude AI</span>
+        </div>
+      </div>
+      <div style="background:var(--bg3);border-radius:var(--card-radius);padding:16px;margin-bottom:16px;border:1px solid var(--border)">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Built by</div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:18px;font-weight:800;color:#fff;flex-shrink:0">S</div>
+          <div>
+            <div style="font-family:var(--font-head);font-size:15px;font-weight:700">Sagar Sankhe</div>
+            
+            <a href="mailto:sagarsankhe23@gmail.com" style="font-size:12px;color:var(--accent);text-decoration:none;font-family:var(--font-mono);margin-top:3px;display:block">sagarsankhe23@gmail.com</a>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">
+        QA Forge is an AI-powered test case management platform built to supercharge QA workflows. Generate structured test cases from plain-English descriptions using Claude AI, manage sprints, track execution status, and share results with your team — all in one place.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div style="background:var(--bg3);border-radius:var(--r);padding:8px 12px;font-size:12px;border:1px solid var(--border)">🤖 Claude AI Integration</div>
+        <div style="background:var(--bg3);border-radius:var(--r);padding:8px 12px;font-size:12px;border:1px solid var(--border)">📋 Test Case Generation</div>
+        <div style="background:var(--bg3);border-radius:var(--r);padding:8px 12px;font-size:12px;border:1px solid var(--border)">🔍 Smart Search & Filter</div>
+        <div style="background:var(--bg3);border-radius:var(--r);padding:8px 12px;font-size:12px;border:1px solid var(--border)">✅ Inline Execution Marking</div>
+        <div style="background:var(--bg3);border-radius:var(--r);padding:8px 12px;font-size:12px;border:1px solid var(--border)">📊 Sprint & Coverage Dashboard</div>
+        <div style="background:var(--bg3);border-radius:var(--r);padding:8px 12px;font-size:12px;border:1px solid var(--border)">📝 Activity Audit Logs</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="closeModal('aboutModal');openModal('feedbackModal')">💬 Send Feedback</button>
+        <button class="btn btn-ghost" onclick="closeModal('aboutModal')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
+<div class="modal-overlay" id="feedbackModal">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Share Feedback</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">Help improve QA Forge — your feedback matters!</div>
+      </div>
+      <button class="close-btn" onclick="closeModal('feedbackModal')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">How would you rate QA Forge?</label>
+        <div style="display:flex;gap:8px;margin-bottom:4px" id="ratingRow">
+          <button onclick="setRating(1)" id="star1" style="font-size:24px;background:none;border:none;cursor:pointer;padding:4px;transition:transform .1s;filter:grayscale(1)" onmouseover="hoverRating(1)" onmouseout="resetRatingHover()">⭐</button>
+          <button onclick="setRating(2)" id="star2" style="font-size:24px;background:none;border:none;cursor:pointer;padding:4px;transition:transform .1s;filter:grayscale(1)" onmouseover="hoverRating(2)" onmouseout="resetRatingHover()">⭐</button>
+          <button onclick="setRating(3)" id="star3" style="font-size:24px;background:none;border:none;cursor:pointer;padding:4px;transition:transform .1s;filter:grayscale(1)" onmouseover="hoverRating(3)" onmouseout="resetRatingHover()">⭐</button>
+          <button onclick="setRating(4)" id="star4" style="font-size:24px;background:none;border:none;cursor:pointer;padding:4px;transition:transform .1s;filter:grayscale(1)" onmouseover="hoverRating(4)" onmouseout="resetRatingHover()">⭐</button>
+          <button onclick="setRating(5)" id="star5" style="font-size:24px;background:none;border:none;cursor:pointer;padding:4px;transition:transform .1s;filter:grayscale(1)" onmouseover="hoverRating(5)" onmouseout="resetRatingHover()">⭐</button>
+        </div>
+        <div id="ratingLabel" style="font-size:12px;color:var(--text3);font-family:var(--font-mono);height:16px"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Name <span>(optional)</span></label>
+        <input class="form-input" id="fbName" placeholder="e.g. Rahul Sharma">
+      </div>
+      <div class="form-group">
+        <label class="form-label">What do you like most?</label>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:6px">
+          <button onclick="toggleFbTag(this)" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--text2);background:none;cursor:pointer;transition:all .15s">AI Generation</button>
+          <button onclick="toggleFbTag(this)" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--text2);background:none;cursor:pointer;transition:all .15s">Search & Filter</button>
+          <button onclick="toggleFbTag(this)" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--text2);background:none;cursor:pointer;transition:all .15s">Sprint Board</button>
+          <button onclick="toggleFbTag(this)" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--text2);background:none;cursor:pointer;transition:all .15s">Activity Logs</button>
+          <button onclick="toggleFbTag(this)" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--text2);background:none;cursor:pointer;transition:all .15s">UI Design</button>
+          <button onclick="toggleFbTag(this)" style="padding:5px 12px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--text2);background:none;cursor:pointer;transition:all .15s">Bulk Actions</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Feedback <span>*</span></label>
+        <textarea class="form-textarea" id="fbText" style="min-height:90px" placeholder="What do you think? Any suggestions or issues?"></textarea>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="flex:1" onclick="submitFeedback()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Submit Feedback
+        </button>
+        <button class="btn btn-ghost" onclick="closeModal('feedbackModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Feedback FAB -->
+<button class="feedback-fab" onclick="openModal('feedbackModal')">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  Feedback
+</button>
+
+<script>
+const KEY = 'qaforge_demo';
+const DEMO_DATA = {"testCases": [{"id": "TC-001", "title": "Verify valid login with email and password", "type": "Functional", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User is registered and system is accessible", "steps": ["Navigate to login page", "Enter valid email address", "Enter valid password", "Click Login button", "Verify redirection to dashboard"], "expected": "User is logged in and redirected to the dashboard", "impactedArea": "Dashboard, Session Management", "created": "2026-03-10T09:00:00.000Z"}, {"id": "TC-002", "title": "Login fails with incorrect password", "type": "Negative", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User account exists", "steps": ["Navigate to login page", "Enter valid email", "Enter wrong password", "Click Login", "Observe error message"], "expected": "Error message 'Invalid credentials' is displayed", "impactedArea": "Authentication", "created": "2026-03-10T09:01:00.000Z"}, {"id": "TC-003", "title": "Account lockout after 5 failed attempts", "type": "Edge Case", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User account is active", "steps": ["Attempt login with wrong password 5 times", "Observe lockout message", "Try valid credentials", "Verify account is locked", "Check email for lockout notification"], "expected": "Account locked after 5 attempts, email notification sent", "impactedArea": "Authentication, Email Service", "created": "2026-03-10T09:02:00.000Z"}, {"id": "TC-004", "title": "Remember me persists session for 30 days", "type": "Functional", "priority": "Medium", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User has valid credentials", "steps": ["Login with Remember Me checked", "Close browser", "Reopen browser after 24 hours", "Navigate to app URL", "Verify session is still active"], "expected": "User remains logged in without re-authentication", "impactedArea": "Session Management", "created": "2026-03-10T09:03:00.000Z"}, {"id": "TC-005", "title": "OAuth login via Google redirects correctly", "type": "End to End", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "Google OAuth app is configured", "steps": ["Click Sign in with Google", "Authenticate with Google credentials", "Authorize app permissions", "Verify redirect back to app", "Check user profile populated"], "expected": "User logged in via Google, profile synced", "impactedArea": "Authentication, Profile", "created": "2026-03-10T09:04:00.000Z"}, {"id": "TC-006", "title": "Verify order placement with valid items", "type": "Functional", "priority": "High", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "User logged in, items in cart", "steps": ["Navigate to cart", "Review items and quantities", "Click Proceed to Checkout", "Enter shipping details", "Confirm and place order"], "expected": "Order placed successfully with confirmation number", "impactedArea": "Inventory, Payment, Notifications", "created": "2026-03-14T10:00:00.000Z"}, {"id": "TC-007", "title": "Order fails with out-of-stock item", "type": "Negative", "priority": "High", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "Item set to out-of-stock in inventory", "steps": ["Add out-of-stock item to cart", "Navigate to checkout", "Attempt to place order", "Observe system response"], "expected": "Error displayed: Item no longer available", "impactedArea": "Inventory, Order Placement", "created": "2026-03-14T10:01:00.000Z"}, {"id": "TC-008", "title": "Place order with maximum cart items limit", "type": "Edge Case", "priority": "Medium", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "Cart limit is set to 50 items", "steps": ["Add 50 items to cart", "Attempt to add 51st item", "Observe behavior", "Proceed to checkout with 50 items", "Complete order"], "expected": "51st item rejected with message, 50-item order completes", "impactedArea": "Cart, Order Placement", "created": "2026-03-14T10:02:00.000Z"}, {"id": "TC-009", "title": "Risk engine blocks high-risk trades", "type": "Impact", "priority": "High", "module": "Risk Engine", "sprint": "Sprint 13", "preconditions": "Risk thresholds configured", "steps": ["Login as trader", "Attempt trade exceeding risk limit", "Observe blocking behavior", "Check audit log", "Verify notification to risk manager"], "expected": "Trade blocked, audit logged, manager notified", "impactedArea": "Trading, Audit, Notifications", "created": "2026-03-14T10:03:00.000Z"}, {"id": "TC-010", "title": "BOD process runs successfully at market open", "type": "End to End", "priority": "High", "module": "BOD Process", "sprint": "Sprint 13", "preconditions": "System in pre-market state", "steps": ["Trigger BOD at 9:00 AM", "Monitor position initialization", "Verify P&L reset", "Check risk limit reload", "Confirm trading enabled"], "expected": "BOD completes in under 2 minutes, all systems ready", "impactedArea": "Risk Engine, Trading, Reporting", "created": "2026-03-14T10:04:00.000Z"}, {"id": "TC-011", "title": "Dashboard loads within 3 seconds", "type": "Functional", "priority": "Medium", "module": "Dashboard", "sprint": "Sprint 14", "preconditions": "User logged in with 1000+ records", "steps": ["Login with heavy data account", "Navigate to dashboard", "Measure load time", "Verify all widgets render", "Check for JS errors"], "expected": "Dashboard renders fully within 3 seconds", "impactedArea": "Dashboard, Performance", "created": "2026-03-16T11:00:00.000Z"}, {"id": "TC-012", "title": "Export to CSV includes all required fields", "type": "Functional", "priority": "Medium", "module": "Reporting", "sprint": "Sprint 14", "preconditions": "At least 10 test cases exist", "steps": ["Navigate to Test Library", "Apply module filter", "Click Export CSV", "Open exported file", "Verify all 12 columns present"], "expected": "CSV contains ID, Title, Type, Priority, Module, Sprint, Status, Notes", "impactedArea": "Reporting", "created": "2026-03-16T11:01:00.000Z"}, {"id": "TC-013", "title": "Sanity suite merge combines cases without duplicates", "type": "End to End", "priority": "High", "module": "Sprint Board", "sprint": "Sprint 14", "preconditions": "At least 2 sprints with overlapping cases", "steps": ["Navigate to Sprint Board", "Select Sprint 12 and Sprint 13", "Click Merge", "Name suite Release 1.0 Sanity", "Verify case count is deduplicated"], "expected": "Suite created with unique cases only", "impactedArea": "Sprint Board, Test Management", "created": "2026-03-16T11:02:00.000Z"}, {"id": "TC-014", "title": "Bulk mark 20 cases as passed simultaneously", "type": "Edge Case", "priority": "Medium", "module": "Test Library", "sprint": "Sprint 14", "preconditions": "20+ test cases in library", "steps": ["Open Test Library", "Select all cases via checkbox", "Click Mark Pass", "Confirm action", "Verify all cases show pass status"], "expected": "All 20 cases marked pass, activity log updated", "impactedArea": "Test Library, Activity Logs", "created": "2026-03-16T11:03:00.000Z"}, {"id": "TC-015", "title": "Inline pass/fail on sprint board persists on refresh", "type": "Functional", "priority": "Low", "module": "Sprint Board", "sprint": "Sprint 14", "preconditions": "Sprint board has test cases", "steps": ["Open Sprint Board", "Mark TC-001 as Pass inline", "Refresh the page", "Verify TC-001 still shows Pass", "Check activity log entry"], "expected": "Result persists after page refresh, logged in activity", "impactedArea": "Sprint Board, Activity Logs", "created": "2026-03-16T11:04:00.000Z"}], "sprints": {"Sprint 12": {"name": "Sprint 12", "cases": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005"]}, "Sprint 13": {"name": "Sprint 13", "cases": ["TC-006", "TC-007", "TC-008", "TC-009", "TC-010"]}, "Sprint 14": {"name": "Sprint 14", "cases": ["TC-011", "TC-012", "TC-013", "TC-014", "TC-015"]}}, "sanitySuites": [{"id": "suite_demo1", "name": "Release 1.0 Sanity", "mergedSprints": ["Sprint 12", "Sprint 13"], "caseIds": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005", "TC-006", "TC-007", "TC-008", "TC-009", "TC-010"], "created": "2026-03-16T12:00:00.000Z"}], "results": {"TC-001": {"status": "pass", "markedAt": "2026-03-15T10:00:00.000Z", "note": ""}, "TC-002": {"status": "pass", "markedAt": "2026-03-15T10:05:00.000Z", "note": ""}, "TC-003": {"status": "pass", "markedAt": "2026-03-15T10:10:00.000Z", "note": ""}, "TC-004": {"status": "fail", "markedAt": "2026-03-15T10:15:00.000Z", "note": "Session expires after browser restart \u2014 BUG-2341"}, "TC-005": {"status": "pass", "markedAt": "2026-03-15T10:20:00.000Z", "note": ""}, "TC-006": {"status": "pass", "markedAt": "2026-03-16T09:00:00.000Z", "note": ""}, "TC-007": {"status": "pass", "markedAt": "2026-03-16T09:05:00.000Z", "note": ""}, "TC-008": {"status": "blocked", "markedAt": "2026-03-16T09:10:00.000Z", "note": "Cart limit feature not yet deployed to QA env"}, "TC-009": {"status": "pass", "markedAt": "2026-03-16T09:15:00.000Z", "note": ""}, "TC-010": {"status": "fail", "markedAt": "2026-03-16T09:20:00.000Z", "note": "BOD taking 4.2 min \u2014 BUG-2356 raised"}, "TC-011": {"status": "pass", "markedAt": "2026-03-17T08:00:00.000Z", "note": ""}, "TC-012": {"status": "pass", "markedAt": "2026-03-17T08:05:00.000Z", "note": ""}}, "logs": [{"id": "log_001", "type": "generation", "message": "Generated 5 cases for \"Authentication\" \u203a Sprint 12", "meta": {"count": 5, "module": "Authentication", "sprint": "Sprint 12", "types": ["Functional", "Negative", "Edge Case", "End to End"], "durationMs": 3210, "ids": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005"]}, "timestamp": "2026-03-10T09:00:00.000Z"}, {"id": "log_002", "type": "generation", "message": "Generated 5 cases for \"Order Placement\" \u203a Sprint 13", "meta": {"count": 5, "module": "Order Placement", "sprint": "Sprint 13", "types": ["Functional", "Negative", "Edge Case", "Impact", "End to End"], "durationMs": 2980, "ids": ["TC-006", "TC-007", "TC-008", "TC-009", "TC-010"]}, "timestamp": "2026-03-14T10:00:00.000Z"}, {"id": "log_003", "type": "execution", "message": "TC-001 marked PASS \u2014 \"Verify valid login with email and password\"", "meta": {"id": "TC-001", "module": "Authentication", "sprint": "Sprint 12", "status": "pass", "change": "pending \u2192 pass"}, "timestamp": "2026-03-15T10:00:00.000Z"}, {"id": "log_004", "type": "execution", "message": "TC-004 marked FAIL \u2014 \"Remember me persists session for 30 days\"", "meta": {"id": "TC-004", "module": "Authentication", "sprint": "Sprint 12", "status": "fail", "change": "pending \u2192 fail"}, "timestamp": "2026-03-15T10:15:00.000Z"}, {"id": "log_005", "type": "execution", "message": "TC-008 marked BLOCKED \u2014 \"Place order with maximum cart items limit\"", "meta": {"id": "TC-008", "module": "Order Placement", "sprint": "Sprint 13", "status": "blocked", "change": "pending \u2192 blocked"}, "timestamp": "2026-03-16T09:10:00.000Z"}, {"id": "log_006", "type": "execution", "message": "TC-010 marked FAIL \u2014 \"BOD process runs successfully at market open\"", "meta": {"id": "TC-010", "module": "BOD Process", "sprint": "Sprint 13", "status": "fail", "change": "pending \u2192 fail"}, "timestamp": "2026-03-16T09:20:00.000Z"}, {"id": "log_007", "type": "manual", "message": "Sanity suite \"Release 1.0 Sanity\" created (10 cases from Sprint 12, Sprint 13)", "meta": {"suiteName": "Release 1.0 Sanity", "sprints": ["Sprint 12", "Sprint 13"], "caseCount": 10}, "timestamp": "2026-03-16T12:00:00.000Z"}, {"id": "log_008", "type": "generation", "message": "Generated 5 cases for \"Dashboard\" \u203a Sprint 14", "meta": {"count": 5, "module": "Dashboard", "sprint": "Sprint 14", "types": ["Functional", "Edge Case", "End to End"], "durationMs": 2750, "ids": ["TC-011", "TC-012", "TC-013", "TC-014", "TC-015"]}, "timestamp": "2026-03-16T11:00:00.000Z"}, {"id": "log_009", "type": "execution", "message": "TC-011 marked PASS \u2014 \"Dashboard loads within 3 seconds\"", "meta": {"id": "TC-011", "module": "Dashboard", "sprint": "Sprint 14", "status": "pass", "change": "pending \u2192 pass"}, "timestamp": "2026-03-17T08:00:00.000Z"}, {"id": "log_010", "type": "deletion", "message": "Deleted TC-000 \u2014 \"Placeholder test case\"", "meta": {"id": "TC-000", "module": "General", "sprint": "Unassigned"}, "timestamp": "2026-03-10T08:55:00.000Z"}]};
+let DB = (() => {
+  const stored = localStorage.getItem(KEY);
+  if (stored) { try { return JSON.parse(stored); } catch(e) {} }
+  return JSON.parse(JSON.stringify(DEMO_DATA));
+})();
+if (!DB.logs) DB.logs = [];
+const save = () => localStorage.setItem(KEY, JSON.stringify(DB));
+const typeColors = {Functional:'functional','Edge Case':'edge',Negative:'negative','End to End':'e2e',Impact:'impact'};
+let activeLogFilter = 'all';
+let currentTcId = null;
+let editMode = false;
+let selectedCases = new Set();
+
+// ---- NOTIFICATIONS ----
+function showNotif(msg, type='') {
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.className = 'notif show' + (type ? ' ' + type : '');
+  clearTimeout(n._t);
+  n._t = setTimeout(() => n.className = 'notif', 3200);
+}
+
+// ---- LOGGING ----
+function addLog(type, message, meta = {}) {
+  DB.logs.unshift({ id:'log_'+Date.now()+'_'+Math.random().toString(36).slice(2,6), type, message, meta, timestamp: new Date().toISOString() });
+  save();
+  document.getElementById('logsBadge').textContent = DB.logs.length;
+}
+
+function timeSince(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + 'h ago';
+  return Math.floor(h / 24) + 'd ago';
+}
+
+// ---- NAVIGATE ----
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page)?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick')?.includes("'" + page + "'")) n.classList.add('active');
+  });
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'library') { selectedCases.clear(); renderLibrary(); }
+  if (page === 'sprint') renderSprint();
+  if (page === 'signoff') renderSignoff();
+  if (page === 'logs') renderLogs();
+  updateSidebar();
+}
+
+function updateSidebar() {
+  const total = DB.testCases.length;
+  const sprints = Object.keys(DB.sprints).length;
+  const results = Object.values(DB.results);
+  const passed = results.filter(r => r.status === 'pass').length;
+  const rate = results.length ? Math.round(passed / results.length * 100) + '%' : '—';
+  document.getElementById('sfTotal').textContent = total;
+  document.getElementById('sfSprints').textContent = sprints;
+  document.getElementById('sfPass').textContent = rate;
+  document.getElementById('libraryBadge').textContent = total;
+  document.getElementById('logsBadge').textContent = DB.logs.length;
+}
+
+function updateDataLists() {
+  const modules = [...new Set(DB.testCases.map(t => t.module))].filter(Boolean);
+  const sprints = [...new Set(DB.testCases.map(t => t.sprint))].filter(Boolean);
+  document.getElementById('moduleList').innerHTML = modules.map(m => `<option value="${m}">`).join('');
+  document.getElementById('sprintList').innerHTML = sprints.map(s => `<option value="${s}">`).join('');
+}
+
+// ---- DASHBOARD ----
+function renderDashboard() {
+  const total = DB.testCases.length;
+  const results = Object.values(DB.results);
+  const passed = results.filter(r => r.status === 'pass').length;
+  const failed = results.filter(r => r.status === 'fail').length;
+  const blocked = results.filter(r => r.status === 'blocked').length;
+  const pending = total - passed - failed - blocked;
+  const sprintKeys = Object.keys(DB.sprints);
+
+  let html = '';
+
+  // Onboarding if empty
+  if (total === 0) {
+    html += `
+    <div style="margin-bottom:28px">
+      <div style="font-family:var(--font-head);font-size:22px;font-weight:800;margin-bottom:6px">Welcome to QA Forge 👋</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px">Your AI-powered test management platform. Follow the steps below to get started.</div>
+      <div class="onboard-grid">
+        <div class="onboard-step" onclick="navigate('generate')">
+          <div class="onboard-check"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:11px;height:11px"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="onboard-num">01</div>
+          <div class="onboard-title">Generate Test Cases</div>
+          <div class="onboard-desc">Describe your feature and let Claude generate structured test cases instantly.</div>
+          <div style="margin-top:12px"><span class="btn btn-primary btn-sm" style="pointer-events:none">Open Generator →</span></div>
+        </div>
+        <div class="onboard-step" onclick="navigate('library')" id="onboard2">
+          <div class="onboard-check"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:11px;height:11px"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="onboard-num">02</div>
+          <div class="onboard-title">Review Test Library</div>
+          <div class="onboard-desc">Browse, search, filter and edit all your test cases. Export to CSV anytime.</div>
+          <div style="margin-top:12px"><span class="btn btn-ghost btn-sm" style="pointer-events:none">View Library →</span></div>
+        </div>
+        <div class="onboard-step" onclick="navigate('sprint')" id="onboard3">
+          <div class="onboard-check"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:11px;height:11px"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="onboard-num">03</div>
+          <div class="onboard-title">Execute & Track</div>
+          <div class="onboard-desc">Mark Pass / Fail / Blocked directly on the Sprint Board. Share results with your team.</div>
+          <div style="margin-top:12px"><span class="btn btn-ghost btn-sm" style="pointer-events:none">Sprint Board →</span></div>
+        </div>
+      </div>
+    </div>`;
+  } else {
+    // Stats
+    html += `<div class="stats-grid">
+      <div class="stat-card blue"><div class="stat-num">${total}</div><div class="stat-lbl">Total Cases</div><div class="stat-delta up">${sprintKeys.length} sprint${sprintKeys.length !== 1 ? 's' : ''}</div></div>
+      <div class="stat-card green"><div class="stat-num">${passed}</div><div class="stat-lbl">Passed</div><div class="stat-delta up">${total ? Math.round(passed / total * 100) : 0}% pass rate</div></div>
+      <div class="stat-card warn"><div class="stat-num">${failed}</div><div class="stat-lbl">Failed</div><div class="stat-delta">${blocked} blocked · ${pending} pending</div></div>
+      <div class="stat-card purple"><div class="stat-num">${DB.sanitySuites.length}</div><div class="stat-lbl">Sanity Suites</div><div class="stat-delta">merged sprints</div></div>
+    </div>`;
+  }
+
+  // Two-col content
+  html += `<div class="dash-two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">`;
+
+  // Recent cases
+  const recent = [...DB.testCases].reverse().slice(0, 8);
+  html += `<div class="card"><div class="card-header"><div><div class="card-title">Recent Activity</div><div class="card-sub">Latest generated cases</div></div><button class="btn btn-ghost btn-sm" onclick="navigate('library')">View all</button></div>`;
+  if (!recent.length) {
+    html += `<div style="text-align:center;padding:24px;font-size:13px;color:var(--text3)">No test cases yet.<br><button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="navigate('generate')">Generate First Cases</button></div>`;
+  } else {
+    html += recent.map(tc => {
+      const res = DB.results[tc.id];
+      const statusDot = res ? `<span style="width:7px;height:7px;border-radius:50%;background:${res.status==='pass'?'var(--success)':res.status==='fail'?'var(--danger)':'var(--warn)'};flex-shrink:0;display:inline-block"></span>` : `<span style="width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0;display:inline-block"></span>`;
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openTcDetail('${tc.id}')">
+        ${statusDot}
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--text3);min-width:52px">${tc.id}</span>
+        <span style="flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${tc.title}</span>
+        <span class="tag tag-${typeColors[tc.type]||'functional'}" style="font-size:10px">${tc.type}</span>
+      </div>`;
+    }).join('');
+  }
+  html += `</div>`;
+
+  // Coverage
+  const types = ['Functional','Edge Case','Negative','End to End','Impact'];
+  const typeClr = {Functional:'#4f8cff','Edge Case':'#06d6a0',Negative:'#ef4444','End to End':'#a78bfa',Impact:'#f59e0b'};
+  html += `<div class="card"><div class="card-header"><div><div class="card-title">Coverage by Type</div><div class="card-sub">Distribution across all cases</div></div></div>`;
+  if (!total) {
+    html += `<div style="text-align:center;padding:24px;font-size:13px;color:var(--text3)">No data yet</div>`;
+  } else {
+    html += types.map(t => {
+      const n = DB.testCases.filter(c => c.type === t).length;
+      const pct = Math.round(n / total * 100);
+      return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text2)">${t}</span><span style="color:var(--text3);font-family:var(--font-mono)">${n} &nbsp;${pct}%</span></div><div class="progress-bar" style="margin-bottom:0"><div class="progress-fill" style="width:${pct}%;background:${typeClr[t]}"></div></div></div>`;
+    }).join('');
+  }
+  html += `</div></div>`;
+
+  // Sprint overview
+  if (sprintKeys.length) {
+    html += `<div class="card" style="margin-top:16px"><div class="card-header"><div><div class="card-title">Sprint Overview</div><div class="card-sub">All sprints at a glance</div></div><button class="btn btn-ghost btn-sm" onclick="navigate('sprint')">Sprint Board</button></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">`;
+    sprintKeys.forEach(name => {
+      const data = DB.sprints[name];
+      const n = data.cases.length;
+      const p = data.cases.filter(id => DB.results[id]?.status === 'pass').length;
+      const f = data.cases.filter(id => DB.results[id]?.status === 'fail').length;
+      const pct = n ? Math.round(p / n * 100) : 0;
+      const color = pct >= 80 ? 'var(--success)' : pct >= 50 ? 'var(--warn)' : 'var(--danger)';
+      html += `<div class="card card-sm" style="cursor:pointer" onclick="navigate('sprint')">
+        <div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-bottom:3px">Sprint</div>
+        <div style="font-family:var(--font-head);font-size:13px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:6px">${n} cases · ${f} failed</div>
+        <div class="progress-bar" style="margin-bottom:4px"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+        <div style="font-size:12px;font-weight:700;color:${color}">${pct}% passed</div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  }
+
+  document.getElementById('dashContent').innerHTML = html;
+}
+
+// ---- GENERATE ----
+
+async function generateCases() {
+  const desc = document.getElementById('reqDesc').value.trim();
+  if (!desc) { showNotif('Please enter a requirement description'); return; }
+  const types = [...document.querySelectorAll('#typeCheckboxes .check-pill.checked')].map(p => p.dataset.type);
+  if (!types.length) { showNotif('Select at least one test type'); return; }
+
+  const count = document.getElementById('reqCount').value;
+  const module = document.getElementById('reqModule').value.trim() || 'General';
+  const sprint = document.getElementById('reqSprint').value.trim() || 'Unassigned';
+  const impacted = document.getElementById('reqImpacted').value.trim();
+  const notes = document.getElementById('reqNotes').value.trim();
+  const project = document.getElementById('reqProject')?.value || '';
+  const env = document.getElementById('reqEnv')?.value || 'UAT';
+  const platformNote = project ? ` Platform: ${project}.` : '';
+  const envNote = ` Test environment: ${env}.`;
+  const startId = DB.testCases.length + 1;
+
+  const btn = document.getElementById('genBtn');
+  const regenBtn = document.getElementById('regenBtn');
+  const status = document.getElementById('genStatus');
+  btn.innerHTML = '<span class="spinner"></span> Asking Claude…';
+  btn.disabled = true;
+  if (regenBtn) regenBtn.disabled = true;
+  status.textContent = 'Calling Claude AI…';
+
+  const prompt = `You are a senior QA engineer. Generate exactly ${count} test cases.
+Feature: ${desc}
+Module: ${module}${platformNote}${envNote}
+Test types required: ${types.join(', ')}
+${impacted ? ' Impacted modules: ' + impacted + '.' : ''}${notes ? ' Context: ' + notes : ''}
+
+Return ONLY a valid JSON array. No markdown, no code fences. Raw JSON only.
+Each object must have exactly: id (start from TC-${String(startId).padStart(3,'0')}), title (max 10 words), type (one of [${types.map(t=>`"${t}"`).join(',')}]), priority ("High"|"Medium"|"Low"), preconditions (string), steps (array of 3-6 strings), expected (string), impactedArea (string).`;
+
+  const t0 = Date.now();
+  try {
+    const resp = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4000, messages:[{role:'user',content:prompt}] })
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error?.message || JSON.stringify(data.error) || 'API error');
+    const raw = data.content.filter(c => c.type === 'text').map(c => c.text).join('');
+    const cases = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const ms = Date.now() - t0;
+    cases.forEach(tc => { tc.module = module; tc.sprint = sprint; tc.impacted = impacted; tc.project = project; tc.env = env; tc.created = new Date().toISOString(); });
+    DB.testCases.push(...cases);
+    if (!DB.sprints[sprint]) DB.sprints[sprint] = { name: sprint, cases: [] };
+    DB.sprints[sprint].cases.push(...cases.map(c => c.id));
+    save(); updateDataLists(); renderPreview(cases, module, sprint);
+    showNotif(cases.length + ' test cases generated!', 'success');
+    status.textContent = cases.length + ' cases added · ' + (ms/1000).toFixed(1) + 's';
+    updateSidebar();
+    if (regenBtn) { regenBtn.style.display = 'inline-flex'; }
+    addLog('generation', `Generated ${cases.length} cases for "${module}" › ${sprint}${project?' ['+project+']':''}`, { count:cases.length, module, sprint, project, env, types, durationMs:ms, ids:cases.map(c=>c.id) });
+  } catch(e) {
+    showNotif('Error: ' + e.message, 'error');
+    status.textContent = 'Generation failed.';
+    addLog('generation', `FAILED for "${module}" — ${e.message}`, { error:e.message, module, sprint });
+  } finally {
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Generate Test Cases';
+    btn.disabled = false;
+    if (regenBtn) regenBtn.disabled = false;
+  }
+}
+
+function addManualCase() {
+  const title = document.getElementById('manTitle').value.trim();
+  if (!title) { showNotif('Enter a title'); return; }
+  const module = document.getElementById('manModule').value.trim() || 'General';
+  const sprint = document.getElementById('manSprint').value.trim() || 'Unassigned';
+  const steps = document.getElementById('manSteps').value.trim().split('\n').filter(Boolean);
+  const expected = document.getElementById('manExpected').value.trim();
+  const type = document.getElementById('manType').value;
+  const id = 'TC-' + String(DB.testCases.length + 1).padStart(3,'0');
+  const tc = { id, title, type, priority:'Medium', module, sprint, preconditions:'System is accessible', steps:steps.length?steps:['Follow test steps'], expected:expected||'Expected outcome as described', impactedArea:module, created:new Date().toISOString(), manual:true };
+  DB.testCases.push(tc);
+  if (!DB.sprints[sprint]) DB.sprints[sprint] = { name:sprint, cases:[] };
+  DB.sprints[sprint].cases.push(id);
+  save(); updateDataLists(); updateSidebar();
+  ['manTitle','manModule','manSprint','manSteps','manExpected'].forEach(i => document.getElementById(i).value='');
+  showNotif('Manual case ' + id + ' added!', 'success');
+  addLog('manual', `Manually added ${id} — "${title}"`, { id, title, module, sprint, type });
+}
+
+function renderPreview(cases, module, sprint) {
+  const countByType = {};
+  cases.forEach(c => countByType[c.type] = (countByType[c.type]||0)+1);
+  let html = `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${Object.entries(countByType).map(([t,n])=>`<span class="tag tag-${typeColors[t]||'functional'}">${t}: ${n}</span>`).join('')}</div>`;
+  html += `<div style="font-size:11px;color:var(--text3);margin-bottom:10px;font-family:var(--font-mono)">${module} · ${sprint}</div>`;
+  cases.slice(0,6).forEach(tc => {
+    html += `<div style="padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openTcDetail('${tc.id}')">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">${tc.id}</span>
+        <span class="tag tag-${typeColors[tc.type]||'functional'}" style="font-size:10px">${tc.type}</span>
+        <span class="tag tag-${(tc.priority||'medium').toLowerCase()}" style="font-size:10px">${tc.priority}</span>
+      </div>
+      <div style="font-size:13px;font-weight:500">${tc.title}</div>
+    </div>`;
+  });
+  if (cases.length > 6) html += `<div style="font-size:12px;color:var(--text3);padding-top:8px;text-align:center">+${cases.length-6} more in Library</div>`;
+  html += `<div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-ghost btn-sm" onclick="navigate('library')">View Library</button><button class="btn btn-success btn-sm" onclick="navigate('sprint')">Sprint Board</button></div>`;
+  document.getElementById('previewArea').innerHTML = html;
+}
+
+// ---- LIBRARY (with search + bulk) ----
+function renderLibrary() {
+  const search = (document.getElementById('libSearch')?.value || '').toLowerCase();
+  const filterMod = document.getElementById('filterModule').value;
+  const filterSpr = document.getElementById('filterSprint').value;
+  const filterType = document.getElementById('filterType').value;
+  const filterStatus = document.getElementById('filterStatus').value;
+
+  const modules = [...new Set(DB.testCases.map(t => t.module))].filter(Boolean);
+  const sprints = [...new Set(DB.testCases.map(t => t.sprint))].filter(Boolean);
+  document.getElementById('filterModule').innerHTML = '<option value="">All modules</option>' + modules.map(m => `<option ${m===filterMod?'selected':''}>${m}</option>`).join('');
+  document.getElementById('filterSprint').innerHTML = '<option value="">All sprints</option>' + sprints.map(s => `<option ${s===filterSpr?'selected':''}>${s}</option>`).join('');
+
+  const filterProject = document.getElementById('filterProject')?.value || '';
+  let cases = DB.testCases;
+  if (search) cases = cases.filter(c => c.title?.toLowerCase().includes(search) || c.id?.toLowerCase().includes(search) || c.module?.toLowerCase().includes(search) || c.sprint?.toLowerCase().includes(search) || (c.tags||[]).join(' ').toLowerCase().includes(search));
+  if (filterMod) cases = cases.filter(c => c.module === filterMod);
+  if (filterSpr) cases = cases.filter(c => c.sprint === filterSpr);
+  if (filterType) cases = cases.filter(c => c.type === filterType);
+  if (filterProject) cases = cases.filter(c => c.project === filterProject);
+  if (filterStatus) {
+    if (filterStatus === 'pending') cases = cases.filter(c => !DB.results[c.id]?.status);
+    else cases = cases.filter(c => DB.results[c.id]?.status === filterStatus);
+  }
+
+  // Bulk bar
+  const bulkBar = document.getElementById('bulkBar');
+  if (selectedCases.size > 0) {
+    bulkBar.classList.add('show');
+    document.getElementById('bulkCount').textContent = selectedCases.size;
+  } else {
+    bulkBar.classList.remove('show');
+  }
+
+  if (!cases.length) {
+    document.getElementById('libraryContent').innerHTML = `<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div><h3>${DB.testCases.length?'No matches':'No test cases yet'}</h3><p>${DB.testCases.length?'Try adjusting your search or filters':'Go to Generate to create your first set'}</p></div>`;
+    return;
+  }
+
+  let html = `<table class="tc-table"><thead><tr>
+    <th style="width:32px"><input type="checkbox" id="libSelectAll" onchange="toggleSelectAll(this.checked)" style="accent-color:var(--accent)"></th>
+    <th>ID</th><th>Title</th><th>Type</th><th>Priority</th><th class="hide-mobile">Platform</th><th>Module</th><th class="hide-mobile">Sprint</th><th>Status</th><th></th>
+  </tr></thead><tbody>`;
+  cases.forEach(tc => {
+    const res = DB.results[tc.id];
+    const statusTag = res ? `<span class="tag tag-${res.status}">${res.status}</span>` : `<span class="tag tag-pending">pending</span>`;
+    const checked = selectedCases.has(tc.id) ? 'checked' : '';
+    const platformIcon = {Android:'📱',iOS:'🍎',EXE:'🖥️',Web:'🌐',API:'⚙️'}[tc.project]||'';
+    html += `<tr>
+      <td><input type="checkbox" ${checked} onchange="toggleCaseSelect('${tc.id}',this.checked)" style="accent-color:var(--accent)"></td>
+      <td class="tc-id">${tc.id}</td>
+      <td class="tc-title-cell">${tc.title}<small>${tc.tags&&tc.tags.length?tc.tags.map(t=>'#'+t).join(' '):tc.impactedArea||tc.impacted||''}</small></td>
+      <td><span class="tag tag-${typeColors[tc.type]||'functional'}">${tc.type}</span></td>
+      <td><span class="tag tag-${(tc.priority||'medium').toLowerCase()}">${tc.priority}</span></td>
+      <td class="hide-mobile" style="font-size:12px;color:var(--text2)">${platformIcon} ${tc.project||'—'}</td>
+      <td style="font-size:12px;color:var(--text2)">${tc.module}</td>
+      <td class="hide-mobile"><span class="sprint-chip" style="font-size:10px;padding:2px 7px">${tc.sprint}</span></td>
+      <td>${statusTag}</td>
+      <td style="display:flex;gap:5px">
+        <button class="btn btn-ghost btn-xs" onclick="openTcDetail('${tc.id}')">View</button>
+        <button class="btn btn-ghost btn-xs" onclick="openTcDetail('${tc.id}');toggleEditMode(true)">Edit</button>
+        <button class="btn btn-danger btn-xs" onclick="deleteCase('${tc.id}')">Del</button>
+      </td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('libraryContent').innerHTML = html;
+}
+
+function toggleCaseSelect(id, checked) {
+  if (checked) selectedCases.add(id); else selectedCases.delete(id);
+  renderLibrary();
+}
+
+function toggleSelectAll(checked) {
+  const search = (document.getElementById('libSearch')?.value || '').toLowerCase();
+  const filterMod = document.getElementById('filterModule').value;
+  const filterSpr = document.getElementById('filterSprint').value;
+  const filterType = document.getElementById('filterType').value;
+  let cases = DB.testCases;
+  if (search) cases = cases.filter(c => c.title?.toLowerCase().includes(search)||c.id?.toLowerCase().includes(search)||c.module?.toLowerCase().includes(search));
+  if (filterMod) cases = cases.filter(c => c.module===filterMod);
+  if (filterSpr) cases = cases.filter(c => c.sprint===filterSpr);
+  if (filterType) cases = cases.filter(c => c.type===filterType);
+  if (checked) cases.forEach(c => selectedCases.add(c.id));
+  else selectedCases.clear();
+  renderLibrary();
+}
+
+function bulkSetStatus(status) {
+  if (!selectedCases.size) return;
+  selectedCases.forEach(id => {
+    if (!DB.results[id]) DB.results[id] = {};
+    DB.results[id].status = status;
+    DB.results[id].markedAt = new Date().toISOString();
+  });
+  save(); updateSidebar();
+  addLog('execution', `Bulk marked ${selectedCases.size} cases as ${status.toUpperCase()}`, { count:selectedCases.size, status });
+  showNotif(`${selectedCases.size} cases marked ${status}`, 'success');
+  selectedCases.clear();
+  renderLibrary();
+}
+
+function bulkDelete() {
+  if (!selectedCases.size) return;
+  if (!confirm(`Delete ${selectedCases.size} selected test cases?`)) return;
+  const ids = [...selectedCases];
+  DB.testCases = DB.testCases.filter(tc => !selectedCases.has(tc.id));
+  Object.keys(DB.sprints).forEach(s => { DB.sprints[s].cases = DB.sprints[s].cases.filter(id => !selectedCases.has(id)); });
+  ids.forEach(id => delete DB.results[id]);
+  save(); updateSidebar();
+  addLog('deletion', `Bulk deleted ${ids.length} cases`, { ids });
+  showNotif(`${ids.length} cases deleted`);
+  selectedCases.clear();
+  renderLibrary();
+}
+
+function deleteCase(id) {
+  const tc = DB.testCases.find(t => t.id === id);
+  if (!confirm('Delete ' + id + '?')) return;
+  DB.testCases = DB.testCases.filter(t => t.id !== id);
+  Object.keys(DB.sprints).forEach(s => { DB.sprints[s].cases = DB.sprints[s].cases.filter(c => c !== id); });
+  delete DB.results[id];
+  save(); renderLibrary(); updateSidebar();
+  showNotif('Deleted ' + id);
+  if (tc) addLog('deletion', `Deleted ${id} — "${tc.title}"`, { id, module:tc.module, sprint:tc.sprint });
+}
+
+// ---- TC DETAIL + EDIT ----
+function openTcDetail(id, startEdit = false) {
+  currentTcId = id;
+  editMode = startEdit;
+  const tc = DB.testCases.find(t => t.id === id);
+  if (!tc) return;
+  document.getElementById('modalTcId').textContent = tc.id + ' — ' + tc.title;
+  document.getElementById('modalTcMeta').textContent = (tc.module||'') + ' · ' + (tc.sprint||'');
+  renderTcModalBody(tc);
+  document.getElementById('tcDetailModal').classList.add('open');
+}
+
+function renderTcModalBody(tc) {
+  const res = DB.results[tc.id];
+  const steps = Array.isArray(tc.steps) ? tc.steps : [tc.steps];
+  const tc2 = typeColors[tc.type]||'functional';
+  document.getElementById('editToggleBtn').textContent = editMode ? 'Cancel' : 'Edit';
+
+  if (editMode) {
+    document.getElementById('modalTcBody').innerHTML = `
+      <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="editTitle" value="${tc.title||''}"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Type</label><select class="form-select" id="editType">${['Functional','Edge Case','Negative','End to End','Impact'].map(t=>`<option ${t===tc.type?'selected':''}>${t}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Priority</label><select class="form-select" id="editPriority">${['High','Medium','Low'].map(p=>`<option ${p===tc.priority?'selected':''}>${p}</option>`).join('')}</select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Module</label><input class="form-input" id="editModule" value="${tc.module||''}" list="moduleList"></div>
+        <div class="form-group"><label class="form-label">Sprint</label><input class="form-input" id="editSprint" value="${tc.sprint||''}" list="sprintList"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Preconditions</label><input class="form-input" id="editPre" value="${tc.preconditions||''}"></div>
+      <div class="form-group"><label class="form-label">Steps (one per line)</label><textarea class="form-textarea" id="editSteps" style="min-height:100px">${steps.join('\n')}</textarea></div>
+      <div class="form-group"><label class="form-label">Expected Result</label><textarea class="form-textarea" id="editExpected" style="min-height:60px">${tc.expected||''}</textarea></div>
+      <div class="form-group"><label class="form-label">Impacted Area</label><input class="form-input" id="editImpact" value="${tc.impactedArea||tc.impacted||''}"></div>
+      <div style="display:flex;gap:10px;margin-top:4px">
+        <button class="btn btn-primary" onclick="saveEditedCase('${tc.id}')">Save Changes</button>
+        <button class="btn btn-ghost" onclick="editMode=false;renderTcModalBody(DB.testCases.find(t=>t.id==='${tc.id}'))">Cancel</button>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('modalTcBody').innerHTML = `
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <span class="tag tag-${tc2}">${tc.type}</span>
+      <span class="tag tag-${(tc.priority||'medium').toLowerCase()}">${tc.priority}</span>
+      ${res ? `<span class="tag tag-${res.status}">${res.status}</span>` : '<span class="tag tag-pending">pending</span>'}
+      ${tc.manual ? '<span class="tag" style="background:var(--bg3);color:var(--text3);border:1px solid var(--border)">manual</span>' : ''}
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+      ${tc.project?`<span class="tag" style="background:var(--bg3);color:var(--text2);border:1px solid var(--border2)">${tc.project==='Android'?'📱':tc.project==='iOS'?'🍎':tc.project==='EXE'?'🖥️':tc.project==='Web'?'🌐':'⚙️'} ${tc.project}</span>`:''}
+      ${tc.env?`<span class="tag" style="background:var(--bg3);color:var(--text2);border:1px solid var(--border2)">🌍 ${tc.env}</span>`:''}
+      ${tc.severity?`<span class="tag tag-${tc.severity==='Critical'?'e2e':tc.severity==='High'?'fail':tc.severity==='Medium'?'blocked':'low'}">${tc.severity}</span>`:''}
+      ${tc.assignee?`<span class="tag" style="background:var(--success)14;color:var(--success);border:1px solid var(--success)28">👤 ${tc.assignee}</span>`:''}
+      ${tc.tags&&tc.tags.length?tc.tags.map(t=>`<span class="tag" style="background:var(--bg3);color:var(--text3);border:1px solid var(--border)">#${t}</span>`).join(''):''}
+    </div>
+    <div class="detail-grid">
+      <span class="detail-key">Preconditions</span><span class="detail-val">${tc.preconditions||'—'}</span>
+      <span class="detail-key">Steps</span><span class="detail-val"><ol>${steps.map(s=>`<li>${s}</li>`).join('')}</ol></span>
+      <span class="detail-key">Expected</span><span class="detail-val">${tc.expected||'—'}</span>
+      ${tc.impactedArea||tc.impacted?`<span class="detail-key">Impact</span><span class="detail-val">${tc.impactedArea||tc.impacted}</span>`:''}
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:10px">Mark Execution Result</div>
+    <div class="result-row">
+      <button class="result-btn pass ${res?.status==='pass'?'active':''}" onclick="markResult('${tc.id}','pass')">✓ Pass</button>
+      <button class="result-btn fail ${res?.status==='fail'?'active':''}" onclick="markResult('${tc.id}','fail')">✗ Fail</button>
+      <button class="result-btn blocked ${res?.status==='blocked'?'active':''}" onclick="markResult('${tc.id}','blocked')">⊘ Blocked</button>
+      <input class="note-input" placeholder="Defect note…" value="${res?.note||''}" onchange="addNote('${tc.id}',this.value)">
+    </div>
+    ${res?.note?`<div style="margin-top:8px;font-size:12px;color:var(--text3);background:var(--bg3);padding:6px 10px;border-radius:var(--r)">Note: ${res.note}</div>`:''}`;
+}
+
+function toggleEditMode(force) {
+  editMode = force !== undefined ? force : !editMode;
+  const tc = DB.testCases.find(t => t.id === currentTcId);
+  if (tc) renderTcModalBody(tc);
+}
+
+function saveEditedCase(id) {
+  const tc = DB.testCases.find(t => t.id === id);
+  if (!tc) return;
+  const oldSprint = tc.sprint;
+  tc.title = document.getElementById('editTitle').value.trim() || tc.title;
+  tc.type = document.getElementById('editType').value;
+  tc.priority = document.getElementById('editPriority').value;
+  tc.module = document.getElementById('editModule').value.trim() || tc.module;
+  tc.sprint = document.getElementById('editSprint').value.trim() || tc.sprint;
+  tc.preconditions = document.getElementById('editPre').value.trim();
+  tc.steps = document.getElementById('editSteps').value.trim().split('\n').filter(Boolean);
+  tc.expected = document.getElementById('editExpected').value.trim();
+  tc.impactedArea = document.getElementById('editImpact').value.trim();
+  // Update sprint mapping if changed
+  if (oldSprint !== tc.sprint) {
+    if (DB.sprints[oldSprint]) DB.sprints[oldSprint].cases = DB.sprints[oldSprint].cases.filter(c => c !== id);
+    if (!DB.sprints[tc.sprint]) DB.sprints[tc.sprint] = { name:tc.sprint, cases:[] };
+    if (!DB.sprints[tc.sprint].cases.includes(id)) DB.sprints[tc.sprint].cases.push(id);
+  }
+  save(); updateDataLists(); updateSidebar();
+  document.getElementById('modalTcId').textContent = tc.id + ' — ' + tc.title;
+  document.getElementById('modalTcMeta').textContent = tc.module + ' · ' + tc.sprint;
+  editMode = false;
+  renderTcModalBody(tc);
+  showNotif('Case updated!', 'success');
+  addLog('manual', `Edited ${id} — "${tc.title}"`, { id, module:tc.module, sprint:tc.sprint });
+}
+
+function markResult(id, status) {
+  const tc = DB.testCases.find(t => t.id === id);
+  const prev = DB.results[id]?.status;
+  if (!DB.results[id]) DB.results[id] = {};
+  DB.results[id].status = status;
+  DB.results[id].markedAt = new Date().toISOString();
+  save();
+  const tc2 = DB.testCases.find(t => t.id === id);
+  if (tc2) renderTcModalBody(tc2);
+  showNotif('Marked as ' + status, 'success');
+  updateSidebar();
+  if (tc) addLog('execution', `${id} marked ${status.toUpperCase()} — "${tc.title}"`, { id, title:tc.title, module:tc.module, sprint:tc.sprint, status, prev, change:`${prev||'pending'} → ${status}` });
+}
+
+function addNote(id, note) {
+  if (!DB.results[id]) DB.results[id] = {};
+  DB.results[id].note = note;
+  save();
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ---- SPRINT BOARD (inline marking) ----
+function renderSprint() {
+  const sprintEntries = Object.entries(DB.sprints);
+  if (!sprintEntries.length) {
+    document.getElementById('sprintContent').innerHTML = `<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h3>No sprints yet</h3><p>Generate test cases and assign them to a sprint</p></div>`;
+    return;
+  }
+  let html = '';
+  if (DB.sanitySuites.length) {
+    html += `<div class="section-head"><div class="section-title">Sanity Suites <span>${DB.sanitySuites.length}</span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:28px">`;
+    DB.sanitySuites.forEach(suite => {
+      const cases = suite.caseIds.map(id => DB.testCases.find(tc => tc.id === id)).filter(Boolean);
+      const passed = cases.filter(c => DB.results[c.id]?.status === 'pass').length;
+      const failed = cases.filter(c => DB.results[c.id]?.status === 'fail').length;
+      const pct = cases.length ? Math.round(passed/cases.length*100) : 0;
+      const color = pct>=80?'var(--success)':pct>=50?'var(--warn)':'var(--danger)';
+      html += `<div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><div><div style="font-family:var(--font-head);font-size:14px;font-weight:700">${suite.name}</div><div style="font-size:10px;color:var(--text3);font-family:var(--font-mono);margin-top:2px">${suite.mergedSprints.join(' + ')}</div></div><span style="font-size:22px;font-family:var(--font-head);font-weight:800;color:${color}">${pct}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div><div style="font-size:11px;color:var(--text3);margin-top:5px">${cases.length} cases · ${passed} passed · ${failed} failed</div><div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="navigate('signoff')">Share</button><button class="btn btn-danger btn-sm" onclick="deleteSuite('${suite.id}')">Delete</button></div></div>`;
+    });
+    html += '</div>';
+  }
+  html += `<div class="section-head"><div class="section-title">All Sprints <span>${sprintEntries.length}</span></div></div>`;
+  sprintEntries.forEach(([sprintName, data]) => {
+    const cases = data.cases.map(id => DB.testCases.find(tc => tc.id === id)).filter(Boolean);
+    const passed = cases.filter(c => DB.results[c.id]?.status === 'pass').length;
+    const failed = cases.filter(c => DB.results[c.id]?.status === 'fail').length;
+    const pending = cases.filter(c => !DB.results[c.id]?.status).length;
+    const pct = cases.length ? Math.round(passed/cases.length*100) : 0;
+    const color = pct>=80?'var(--success)':pct>=50?'var(--warn)':'var(--danger)';
+    html += `<div class="card" style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="font-family:var(--font-head);font-size:15px;font-weight:700">${sprintName}</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px">${cases.length} cases · <span style="color:var(--success)">${passed} passed</span> · <span style="color:var(--danger)">${failed} failed</span> · ${pending} pending</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:26px;font-family:var(--font-head);font-weight:800;color:${color}">${pct}%</span>
+          <button class="btn btn-ghost btn-sm" onclick="navigate('signoff')">Share</button>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+      <div style="margin-top:12px;overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table class="tc-table">
+          <thead><tr><th>ID</th><th>Title</th><th>Type</th><th>Priority</th><th>Status</th><th>Mark Result</th><th>Note</th></tr></thead>
+          <tbody>${cases.map(tc => {
+            const res = DB.results[tc.id];
+            const st = res?.status || 'pending';
+            return `<tr>
+              <td class="tc-id" style="cursor:pointer" onclick="openTcDetail('${tc.id}')">${tc.id}</td>
+              <td style="font-size:13px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer" onclick="openTcDetail('${tc.id}')">${tc.title}</td>
+              <td><span class="tag tag-${typeColors[tc.type]||'functional'}" style="font-size:10px">${tc.type}</span></td>
+              <td><span class="tag tag-${(tc.priority||'medium').toLowerCase()}" style="font-size:10px">${tc.priority}</span></td>
+              <td><span class="tag tag-${st}" style="font-size:10px">${st}</span></td>
+              <td>
+                <div style="display:flex;gap:4px">
+                  <button class="inline-mark pass ${st==='pass'?'active':''}" onclick="inlineMark('${tc.id}','pass','${sprintName}')">✓</button>
+                  <button class="inline-mark fail ${st==='fail'?'active':''}" onclick="inlineMark('${tc.id}','fail','${sprintName}')">✗</button>
+                  <button class="inline-mark blocked ${st==='blocked'?'active':''}" onclick="inlineMark('${tc.id}','blocked','${sprintName}')">⊘</button>
+                </div>
+              </td>
+              <td><input style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;padding:3px 6px;width:130px;outline:none" placeholder="Add note…" value="${res?.note||''}" onchange="addNote('${tc.id}',this.value)"></td>
+            </tr>`;
+          }).join('')}</tbody>
+        </table>
+      </div>
+    </div>`;
+  });
+  document.getElementById('sprintContent').innerHTML = html;
+}
+
+function inlineMark(id, status, sprintName) {
+  const tc = DB.testCases.find(t => t.id === id);
+  const prev = DB.results[id]?.status;
+  // Toggle off if same status clicked
+  if (prev === status) {
+    delete DB.results[id];
+    save(); updateSidebar(); renderSprint();
+    showNotif('Result cleared');
+    return;
+  }
+  if (!DB.results[id]) DB.results[id] = {};
+  DB.results[id].status = status;
+  DB.results[id].markedAt = new Date().toISOString();
+  save(); updateSidebar(); renderSprint();
+  showNotif(`${id} → ${status}`, 'success');
+  if (tc) addLog('execution', `${id} marked ${status.toUpperCase()} — "${tc.title}"`, { id, title:tc.title, module:tc.module, sprint:sprintName, status, change:`${prev||'pending'} → ${status}` });
+}
+
+function deleteSuite(id) {
+  if (!confirm('Delete this sanity suite?')) return;
+  DB.sanitySuites = DB.sanitySuites.filter(s => s.id !== id);
+  save(); renderSprint(); showNotif('Suite deleted');
+}
+
+// ---- SIGNOFF ----
+function renderSignoff() {
+  const sprints = Object.keys(DB.sprints);
+  const suites = DB.sanitySuites;
+  let html = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">`;
+  html += `<div class="card"><div class="card-title" style="margin-bottom:14px">Sprint Signoff Links</div>`;
+  if (!sprints.length) { html += '<div style="font-size:13px;color:var(--text3)">No sprints yet.</div>'; }
+  else sprints.forEach(sprint => {
+    const n = DB.sprints[sprint].cases.length;
+    const shareData = btoa(unescape(encodeURIComponent(JSON.stringify({type:'sprint',name:sprint}))));
+    const link = window.location.href.split('?')[0] + '?share=' + shareData;
+    const eid = 'lnk_' + btoa(sprint).replace(/=/g,'');
+    html += `<div style="margin-bottom:14px"><div style="font-weight:500;font-size:13px;margin-bottom:6px">${sprint} <span style="font-size:11px;color:var(--text3)">(${n} cases)</span></div><div class="share-box"><span class="share-link" id="${eid}">${link}</span><button class="btn btn-ghost btn-sm" onclick="copyLinkById('${eid}')">Copy</button></div></div>`;
+  });
+  html += '</div>';
+  html += `<div class="card"><div class="card-title" style="margin-bottom:14px">Sanity Suite Links</div>`;
+  if (!suites.length) { html += '<div style="font-size:13px;color:var(--text3)">No sanity suites yet.</div>'; }
+  else suites.forEach(suite => {
+    const shareData = btoa(unescape(encodeURIComponent(JSON.stringify({type:'suite',id:suite.id,name:suite.name}))));
+    const link = window.location.href.split('?')[0] + '?share=' + shareData;
+    html += `<div style="margin-bottom:14px"><div style="font-weight:500;font-size:13px;margin-bottom:6px">${suite.name} <span style="font-size:11px;color:var(--text3)">(${suite.caseIds.length} cases)</span></div><div class="share-box"><span class="share-link" id="lnk_${suite.id}">${link}</span><button class="btn btn-ghost btn-sm" onclick="copyLinkById('lnk_${suite.id}')">Copy</button></div></div>`;
+  });
+  html += '</div></div>';
+  document.getElementById('signoffContent').innerHTML = html;
+}
+
+function copyLinkById(elId) {
+  const el = document.getElementById(elId);
+  if (el) { navigator.clipboard.writeText(el.textContent).catch(()=>{}); showNotif('Link copied!','success'); }
+}
+
+// ---- MERGE ----
+function showMergeSprint() {
+  const sprints = Object.keys(DB.sprints);
+  if (!sprints.length) { showNotif('No sprints to merge yet'); return; }
+  document.getElementById('mergeSprintList').innerHTML = sprints.map(s => `
+    <label style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r);border:1px solid var(--border);cursor:pointer;font-size:13px">
+      <input type="checkbox" value="${s}" style="accent-color:var(--accent)">
+      <span style="flex:1">${s}</span>
+      <span style="font-size:11px;color:var(--text3);font-family:var(--font-mono)">${DB.sprints[s].cases.length} cases</span>
+    </label>`).join('');
+  document.getElementById('mergeModal').classList.add('open');
+}
+
+function doMerge() {
+  const name = document.getElementById('mergeSprintName').value.trim();
+  if (!name) { showNotif('Enter a suite name'); return; }
+  const selected = [...document.querySelectorAll('#mergeSprintList input:checked')].map(i => i.value);
+  if (!selected.length) { showNotif('Select at least one sprint'); return; }
+  const caseIds = [...new Set(selected.flatMap(s => DB.sprints[s]?.cases||[]))];
+  DB.sanitySuites.push({ id:'suite_'+Date.now(), name, mergedSprints:selected, caseIds, created:new Date().toISOString() });
+  save(); closeModal('mergeModal'); document.getElementById('mergeSprintName').value='';
+  showNotif(`Suite "${name}" created!`,'success');
+  addLog('manual', `Sanity suite "${name}" created (${caseIds.length} cases)`, { suiteName:name, sprints:selected, caseCount:caseIds.length });
+  renderSprint(); updateSidebar();
+}
+
+// ---- EXPORT ----
+function exportCSV(cases, filename) {
+  const rows = [['ID','Title','Type','Priority','Module','Sprint','Preconditions','Steps','Expected','Impact','Status','Note']];
+  cases.forEach(tc => {
+    const res = DB.results[tc.id];
+    rows.push([tc.id, tc.title, tc.type, tc.priority, tc.module, tc.sprint, tc.preconditions||'', Array.isArray(tc.steps)?tc.steps.join(' | '):tc.steps||'', tc.expected||'', tc.impactedArea||tc.impacted||'', res?.status||'pending', res?.note||'']);
+  });
+  const csv = rows.map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = filename; a.click();
+  showNotif('CSV exported!','success');
+}
+function exportAllCSV() { exportCSV(DB.testCases,'qa_forge_all.csv'); }
+
+function exportExcel() {
+  // Simple Excel-compatible XML export
+  const cases = DB.testCases;
+  const rows = [['ID','Title','Type','Priority','Severity','Platform','Environment','Module','Sprint','Assignee','Tags','Preconditions','Steps','Expected','Impact','Status','Note','Created']];
+  cases.forEach(tc => {
+    const res = DB.results[tc.id];
+    rows.push([tc.id, tc.title, tc.type, tc.priority, tc.severity||'', tc.project||'', tc.env||'', tc.module, tc.sprint, tc.assignee||'', (tc.tags||[]).join(', '), tc.preconditions||'', Array.isArray(tc.steps)?tc.steps.join(' | '):tc.steps||'', tc.expected||'', tc.impactedArea||tc.impacted||'', res?.status||'pending', res?.note||'', tc.created||'']);
+  });
+  let xml = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Test Cases"><Table>';
+  rows.forEach((row, ri) => {
+    xml += '<Row>';
+    row.forEach(cell => {
+      const val = String(cell||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      xml += `<Cell><Data ss:Type="String">${val}</Data></Cell>`;
+    });
+    xml += '</Row>';
+  });
+  xml += '</Table></Worksheet></Workbook>';
+  const a = document.createElement('a');
+  a.href = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(xml);
+  a.download = 'qa_forge_test_cases.xls';
+  a.click();
+  showNotif('Excel exported!', 'success');
+  addLog('manual', `Exported ${cases.length} cases to Excel`, { count: cases.length });
+}
+function exportFilteredCSV() {
+  const search = (document.getElementById('libSearch')?.value||'').toLowerCase();
+  const fm = document.getElementById('filterModule').value;
+  const fs = document.getElementById('filterSprint').value;
+  const ft = document.getElementById('filterType').value;
+  let cases = DB.testCases;
+  if (search) cases = cases.filter(c => c.title?.toLowerCase().includes(search)||c.id?.toLowerCase().includes(search)||c.module?.toLowerCase().includes(search));
+  if (fm) cases = cases.filter(c => c.module===fm);
+  if (fs) cases = cases.filter(c => c.sprint===fs);
+  if (ft) cases = cases.filter(c => c.type===ft);
+  exportCSV(cases,'qa_forge_filtered.csv');
+}
+
+// ---- LOGS ----
+function setLogFilter(filter, el) {
+  activeLogFilter = filter;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el?.classList.add('active');
+  renderLogsContent();
+}
+
+function renderLogs() {
+  const logs = DB.logs;
+  const genCount = logs.filter(l => l.type==='generation').length;
+  const execCount = logs.filter(l => l.type==='execution').length;
+  const manCount = logs.filter(l => l.type==='manual').length;
+  const delCount = logs.filter(l => l.type==='deletion').length;
+
+  document.getElementById('logsStats').innerHTML = `
+    <div class="stat-card blue"><div class="stat-num">${logs.length}</div><div class="stat-lbl">Total Events</div><div class="stat-delta">full audit trail</div></div>
+    <div class="stat-card green"><div class="stat-num">${genCount}</div><div class="stat-lbl">Generations</div><div class="stat-delta up">AI runs</div></div>
+    <div class="stat-card purple"><div class="stat-num">${execCount}</div><div class="stat-lbl">Executions</div><div class="stat-delta">pass/fail/blocked</div></div>
+    <div class="stat-card warn"><div class="stat-num">${manCount+delCount}</div><div class="stat-lbl">Manual / Deletions</div><div class="stat-delta">manual ops</div></div>`;
+
+  // Filter chips with counts
+  document.getElementById('logFilters').innerHTML = [
+    ['all','All Events',logs.length],
+    ['generation','⚡ Generations',genCount],
+    ['execution','✓ Executions',execCount],
+    ['manual','✎ Manual',manCount],
+    ['deletion','✗ Deletions',delCount]
+  ].map(([f,label,count]) =>
+    `<button class="filter-chip ${activeLogFilter===f?'active':''}" onclick="setLogFilter('${f}',this)">${label} <span style="opacity:.6;font-family:var(--font-mono)">${count}</span></button>`
+  ).join('');
+
+  renderLogsContent();
+}
+
+function renderLogsContent() {
+  let logs = DB.logs;
+  if (activeLogFilter !== 'all') logs = logs.filter(l => l.type === activeLogFilter);
+  document.getElementById('logsCount').textContent = logs.length + ' events';
+  if (!logs.length) {
+    document.getElementById('logsContent').innerHTML = `<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3>No logs yet</h3><p>Activity appears here as you generate and execute test cases</p></div>`;
+    return;
+  }
+  const html = logs.map(log => {
+    let metaLine = '';
+    if (log.type==='generation'&&log.meta) {
+      const ids = log.meta.ids||[];
+      metaLine = [log.meta.types?.join(', '), log.meta.durationMs?(log.meta.durationMs/1000).toFixed(1)+'s':null, ids.length?ids.slice(0,3).join(', ')+(ids.length>3?` +${ids.length-3}`:''):null].filter(Boolean).join(' · ');
+    } else if (log.type==='execution'&&log.meta) {
+      metaLine = [log.meta.module, log.meta.sprint, log.meta.change?`${log.meta.change}`:null].filter(Boolean).join(' · ');
+    } else if (log.meta&&(log.meta.module||log.meta.sprint)) {
+      metaLine = [log.meta.module, log.meta.sprint].filter(Boolean).join(' · ');
+    }
+    return `<div class="log-item">
+      <div class="log-dot ${log.type||'generation'}"></div>
+      <div class="log-body">
+        <div class="log-msg">${log.message}</div>
+        ${metaLine?`<div class="log-meta">${metaLine}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <span class="tag tag-${log.type}" style="font-size:10px">${log.type}</span>
+        <span class="log-time" title="${new Date(log.timestamp).toLocaleString()}">${timeSince(log.timestamp)}</span>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('logsContent').innerHTML = `<div style="padding:4px 0">${html}</div>`;
+}
+
+function exportLogsCSV() {
+  const rows = [['Timestamp','Type','Message','Module','Sprint','IDs','Extra']];
+  DB.logs.forEach(log => rows.push([new Date(log.timestamp).toLocaleString(), log.type, log.message, log.meta?.module||'', log.meta?.sprint||'', log.meta?.ids?log.meta.ids.join(', '):(log.meta?.id||''), log.meta?.change||log.meta?.error||'']));
+  const csv = rows.map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='qa_forge_logs.csv'; a.click();
+  showNotif('Logs exported!','success');
+}
+
+function copyLogsText() {
+  let logs = DB.logs;
+  if (activeLogFilter!=='all') logs = logs.filter(l=>l.type===activeLogFilter);
+  const text = logs.map(l=>`[${new Date(l.timestamp).toLocaleString()}] [${l.type.toUpperCase()}] ${l.message}`).join('\n');
+  navigator.clipboard.writeText(text).then(()=>showNotif('Copied!','success')).catch(()=>showNotif('Copy failed'));
+}
+
+function clearLogs() {
+  if (!confirm('Clear all activity logs?')) return;
+  DB.logs=[]; save(); renderLogs(); updateSidebar(); showNotif('Logs cleared');
+}
+
+// Type checkbox
+document.querySelectorAll('#typeCheckboxes .check-pill').forEach(pill => {
+  pill.addEventListener('click', function() {
+    const inp = this.querySelector('input');
+    inp.checked = !inp.checked;
+    inp.checked ? this.classList.add('checked') : this.classList.remove('checked');
+  });
+});
+
+function clearForm() {
+  ['reqDesc','reqModule','reqSprint','reqImpacted','reqNotes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['reqProject','reqEnv'].forEach(id=>{const el=document.getElementById(id);if(el)el.selectedIndex=0;});
+
+  document.getElementById('genStatus').textContent='';
+  const regenBtn=document.getElementById('regenBtn');
+  if(regenBtn) regenBtn.style.display='none';
+  document.getElementById('previewArea').innerHTML=`<div class="empty" style="padding:32px 10px"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><h3>Ready to generate</h3><p>Fill in the details and hit Generate</p></div>`;
+}
+
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); });
+
+// ---- MOBILE SIDEBAR ----
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const btns = document.querySelectorAll('.hamburger');
+  const isOpen = sidebar.classList.contains('open');
+  if (isOpen) {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+    btns.forEach(b => b.classList.remove('open'));
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('show');
+    btns.forEach(b => b.classList.add('open'));
+  }
+}
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+  document.querySelectorAll('.hamburger').forEach(b => b.classList.remove('open'));
+}
+// Close sidebar when nav item clicked on mobile
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+
+// Init
+updateDataLists(); updateSidebar(); renderDashboard();
+
+// ---- THEME ----
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  const btn = document.getElementById('themeBtn');
+  const label = document.getElementById('themeLabel');
+  if (isDark) {
+    label.textContent = 'Dark';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><span id="themeLabel">Dark</span>';
+  } else {
+    label.textContent = 'Light';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><span id="themeLabel">Light</span>';
+  }
+  localStorage.setItem('qaforge_theme', isDark ? 'light' : 'dark');
+}
+// Restore theme on load
+const savedTheme = localStorage.getItem('qaforge_theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+if (savedTheme === 'light') {
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><span id="themeLabel">Dark</span>';
+}
+
+// ---- MODAL HELPER ----
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+
+// ---- FEEDBACK ----
+let currentRating = 0;
+const ratingLabels = {1:'😞 Poor',2:'😐 Fair',3:'🙂 Good',4:'😊 Great',5:'🤩 Excellent!'};
+function setRating(n) {
+  currentRating = n;
+  document.getElementById('ratingLabel').textContent = ratingLabels[n] || '';
+  [1,2,3,4,5].forEach(i => {
+    const el = document.getElementById('star'+i);
+    if (el) el.style.filter = i <= n ? 'none' : 'grayscale(1)';
+  });
+}
+function hoverRating(n) {
+  [1,2,3,4,5].forEach(i => {
+    const el = document.getElementById('star'+i);
+    if (el) el.style.filter = i <= n ? 'none' : 'grayscale(1)';
+  });
+  document.getElementById('ratingLabel').textContent = ratingLabels[n] || '';
+}
+function resetRatingHover() { setRating(currentRating); }
+function toggleFbTag(btn) {
+  const active = btn.style.background !== '' && btn.style.background !== 'none';
+  btn.style.background = active ? 'none' : 'var(--accent)22';
+  btn.style.color = active ? 'var(--text2)' : 'var(--accent)';
+  btn.style.borderColor = active ? 'var(--border2)' : 'var(--accent)66';
+}
+function submitFeedback() {
+  const text = document.getElementById('fbText').value.trim();
+  if (!text) { showNotif('Please enter your feedback'); return; }
+  const name = document.getElementById('fbName').value.trim() || 'Anonymous';
+  const tags = [...document.querySelectorAll('#feedbackModal button[style*="accent"]')].map(b => b.textContent).join(', ');
+  const rating = currentRating ? ratingLabels[currentRating] : 'Not rated';
+  // Save feedback locally
+  const feedbacks = JSON.parse(localStorage.getItem('qaforge_feedback') || '[]');
+  feedbacks.push({ name, rating, tags, text, timestamp: new Date().toISOString() });
+  localStorage.setItem('qaforge_feedback', JSON.stringify(feedbacks));
+  addLog('manual', `Feedback from ${name} — ${rating}`, { name, rating, tags });
+  closeModal('feedbackModal');
+  showNotif('Thank you for your feedback! 🙏', 'success');
+  document.getElementById('fbText').value = '';
+  document.getElementById('fbName').value = '';
+  currentRating = 0;
+  [1,2,3,4,5].forEach(i => { const el = document.getElementById('star'+i); if(el) el.style.filter='grayscale(1)'; });
+}
+</script>
+</body>
+</html>
