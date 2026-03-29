@@ -1,47 +1,27 @@
 import { getStore } from "@netlify/blobs";
 
 export default async (req) => {
-  if (req.method !== "GET") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-    });
-  }
+  const headers = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers });
+  if (req.method !== "GET") return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers });
+
+  const empty = { testCases: [], sprints: {}, sanitySuites: [], results: {}, logs: [], lastSaved: null };
 
   try {
     const store = getStore({ name: "qaforge-data", consistency: "strong" });
     const data = await store.get("workspace", { type: "json" });
-
-    if (!data) {
-      // First time — return empty workspace
-      return new Response(
-        JSON.stringify({
-          testCases: [],
-          sprints: {},
-          sanitySuites: [],
-          results: {},
-          logs: [],
-          lastSaved: null,
-        }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-        }
-      );
-    }
-
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-    });
+    return new Response(JSON.stringify(data || empty), { status: 200, headers });
   } catch (err) {
-    return new Response(JSON.stringify({ error: "Failed to load: " + err.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-    });
+    console.error("Blobs load error:", err);
+    // Return empty instead of error — app falls back to local gracefully
+    return new Response(JSON.stringify(empty), { status: 200, headers });
   }
 };
 
-export const config = {
-  path: "/api/db/load",
-};
+export const config = { path: "/api/db/load" };
