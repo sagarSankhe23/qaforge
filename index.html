@@ -962,10 +962,24 @@ async function loadFromServer() {
     localStorage.setItem(KEY, JSON.stringify(DB));
     setSyncState('synced', 'Synced ✓');
   } catch(err) {
-    if (msg) msg.textContent = 'Using local cache…';
+    console.warn('Cloud load failed, using local cache:', err.message);
     const localRaw = localStorage.getItem(KEY);
-    if (localRaw) { try { DB = { ...EMPTY_DB(), ...JSON.parse(localRaw) }; } catch {} }
-    setSyncState('error', 'Cloud unavailable');
+    if (localRaw) {
+      try {
+        const parsed = JSON.parse(localRaw);
+        if (parsed.testCases) {
+          DB = { ...EMPTY_DB(), ...parsed };
+          if (msg) msg.textContent = 'Loaded from local cache (' + (DB.testCases.length) + ' cases)';
+        } else {
+          DB = JSON.parse(JSON.stringify(DEMO_DATA));
+          if (msg) msg.textContent = 'Starting fresh workspace…';
+        }
+      } catch { DB = JSON.parse(JSON.stringify(DEMO_DATA)); }
+    } else {
+      DB = JSON.parse(JSON.stringify(DEMO_DATA));
+      if (msg) msg.textContent = 'Starting fresh workspace…';
+    }
+    setSyncState('error', 'Offline — local only');
   } finally {
     if (overlay) {
       setTimeout(() => overlay.classList.add('hidden'), 600);
