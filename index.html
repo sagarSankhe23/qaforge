@@ -296,6 +296,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 }
 
 .ai-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;background:linear-gradient(135deg,var(--accent)22,var(--accent2)22);border:1px solid var(--accent)33;color:var(--accent);font-family:var(--font-mono)}
+/* Sync indicator */
+.sync-dot{width:7px;height:7px;border-radius:50%;display:inline-block;transition:background .3s}
+.sync-dot.synced{background:var(--success)}
+.sync-dot.syncing{background:var(--warn);animation:pulse .8s infinite}
+.sync-dot.error{background:var(--danger)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sync-status{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);font-family:var(--font-mono);padding:0 4px}
+/* Loading overlay */
+.loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:500;transition:opacity .4s}
+.loading-overlay.hidden{opacity:0;pointer-events:none}
+.loading-logo{width:72px;height:72px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 8px 32px var(--accent)44;animation:logoPulse 1.5s ease-in-out infinite}
+@keyframes logoPulse{0%,100%{box-shadow:0 8px 32px var(--accent)44}50%{box-shadow:0 12px 48px var(--accent)77}}
+.loading-text{font-family:var(--font-head);font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+.loading-sub{font-size:12px;color:var(--text3);font-family:var(--font-mono)}
+.loading-bar{width:180px;height:3px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:16px}
+.loading-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;animation:loadBar 1.5s ease-in-out infinite}
+@keyframes loadBar{0%{width:0%;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0%;margin-left:100%}}
 /* Template pills */
 .tpl-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px}
 .tpl-pill{padding:5px 13px;border-radius:20px;border:1px solid var(--border2);font-size:12px;color:var(--text2);background:none;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px}
@@ -333,6 +350,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 </style>
 </head>
 <body>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-logo">
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:40px;height:40px">
+      <path d="M24 4L8 10V22C8 31.6 15.2 40.4 24 43C32.8 40.4 40 31.6 40 22V10L24 4Z" fill="url(#lg1)" opacity="0.95"/>
+      <path d="M27 14L19 25H24.5L21 34L29 23H23.5L27 14Z" fill="white" opacity="0.95"/>
+      <path d="M16 23L21 28L32 17" stroke="#06d6a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <defs><linearGradient id="lg1" x1="8" y1="4" x2="40" y2="43"><stop offset="0%" stop-color="#4f8cff"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+    </svg>
+  </div>
+  <div class="loading-text">QA Forge</div>
+  <div class="loading-sub" id="loadingMsg">Loading your workspace…</div>
+  <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+</div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <div class="app">
   <aside class="sidebar">
@@ -394,6 +424,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
       <div class="sidebar-stat">Total cases <span id="sfTotal">0</span></div>
       <div class="sidebar-stat">Sprints <span id="sfSprints">0</span></div>
       <div class="sidebar-stat">Pass rate <span id="sfPass">—</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+        <div class="sync-status">
+          <span class="sync-dot synced" id="syncDot"></span>
+          <span id="syncLabel">Synced</span>
+        </div>
+        <button onclick="manualSync()" style="background:none;border:none;color:var(--text3);font-size:10px;cursor:pointer;font-family:var(--font-mono);padding:0" title="Sync now">↻ sync</button>
+      </div>
     </div>
   </aside>
 
@@ -827,18 +864,115 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 <script>
 const KEY = 'qaforge_demo';
 const DEMO_DATA = {"testCases": [{"id": "TC-001", "title": "Verify valid login with email and password", "type": "Functional", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User is registered and system is accessible", "steps": ["Navigate to login page", "Enter valid email address", "Enter valid password", "Click Login button", "Verify redirection to dashboard"], "expected": "User is logged in and redirected to the dashboard", "impactedArea": "Dashboard, Session Management", "created": "2026-03-10T09:00:00.000Z"}, {"id": "TC-002", "title": "Login fails with incorrect password", "type": "Negative", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User account exists", "steps": ["Navigate to login page", "Enter valid email", "Enter wrong password", "Click Login", "Observe error message"], "expected": "Error message 'Invalid credentials' is displayed", "impactedArea": "Authentication", "created": "2026-03-10T09:01:00.000Z"}, {"id": "TC-003", "title": "Account lockout after 5 failed attempts", "type": "Edge Case", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User account is active", "steps": ["Attempt login with wrong password 5 times", "Observe lockout message", "Try valid credentials", "Verify account is locked", "Check email for lockout notification"], "expected": "Account locked after 5 attempts, email notification sent", "impactedArea": "Authentication, Email Service", "created": "2026-03-10T09:02:00.000Z"}, {"id": "TC-004", "title": "Remember me persists session for 30 days", "type": "Functional", "priority": "Medium", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User has valid credentials", "steps": ["Login with Remember Me checked", "Close browser", "Reopen browser after 24 hours", "Navigate to app URL", "Verify session is still active"], "expected": "User remains logged in without re-authentication", "impactedArea": "Session Management", "created": "2026-03-10T09:03:00.000Z"}, {"id": "TC-005", "title": "OAuth login via Google redirects correctly", "type": "End to End", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "Google OAuth app is configured", "steps": ["Click Sign in with Google", "Authenticate with Google credentials", "Authorize app permissions", "Verify redirect back to app", "Check user profile populated"], "expected": "User logged in via Google, profile synced", "impactedArea": "Authentication, Profile", "created": "2026-03-10T09:04:00.000Z"}, {"id": "TC-006", "title": "Verify order placement with valid items", "type": "Functional", "priority": "High", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "User logged in, items in cart", "steps": ["Navigate to cart", "Review items and quantities", "Click Proceed to Checkout", "Enter shipping details", "Confirm and place order"], "expected": "Order placed successfully with confirmation number", "impactedArea": "Inventory, Payment, Notifications", "created": "2026-03-14T10:00:00.000Z"}, {"id": "TC-007", "title": "Order fails with out-of-stock item", "type": "Negative", "priority": "High", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "Item set to out-of-stock in inventory", "steps": ["Add out-of-stock item to cart", "Navigate to checkout", "Attempt to place order", "Observe system response"], "expected": "Error displayed: Item no longer available", "impactedArea": "Inventory, Order Placement", "created": "2026-03-14T10:01:00.000Z"}, {"id": "TC-008", "title": "Place order with maximum cart items limit", "type": "Edge Case", "priority": "Medium", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "Cart limit is set to 50 items", "steps": ["Add 50 items to cart", "Attempt to add 51st item", "Observe behavior", "Proceed to checkout with 50 items", "Complete order"], "expected": "51st item rejected with message, 50-item order completes", "impactedArea": "Cart, Order Placement", "created": "2026-03-14T10:02:00.000Z"}, {"id": "TC-009", "title": "Risk engine blocks high-risk trades", "type": "Impact", "priority": "High", "module": "Risk Engine", "sprint": "Sprint 13", "preconditions": "Risk thresholds configured", "steps": ["Login as trader", "Attempt trade exceeding risk limit", "Observe blocking behavior", "Check audit log", "Verify notification to risk manager"], "expected": "Trade blocked, audit logged, manager notified", "impactedArea": "Trading, Audit, Notifications", "created": "2026-03-14T10:03:00.000Z"}, {"id": "TC-010", "title": "BOD process runs successfully at market open", "type": "End to End", "priority": "High", "module": "BOD Process", "sprint": "Sprint 13", "preconditions": "System in pre-market state", "steps": ["Trigger BOD at 9:00 AM", "Monitor position initialization", "Verify P&L reset", "Check risk limit reload", "Confirm trading enabled"], "expected": "BOD completes in under 2 minutes, all systems ready", "impactedArea": "Risk Engine, Trading, Reporting", "created": "2026-03-14T10:04:00.000Z"}, {"id": "TC-011", "title": "Dashboard loads within 3 seconds", "type": "Functional", "priority": "Medium", "module": "Dashboard", "sprint": "Sprint 14", "preconditions": "User logged in with 1000+ records", "steps": ["Login with heavy data account", "Navigate to dashboard", "Measure load time", "Verify all widgets render", "Check for JS errors"], "expected": "Dashboard renders fully within 3 seconds", "impactedArea": "Dashboard, Performance", "created": "2026-03-16T11:00:00.000Z"}, {"id": "TC-012", "title": "Export to CSV includes all required fields", "type": "Functional", "priority": "Medium", "module": "Reporting", "sprint": "Sprint 14", "preconditions": "At least 10 test cases exist", "steps": ["Navigate to Test Library", "Apply module filter", "Click Export CSV", "Open exported file", "Verify all 12 columns present"], "expected": "CSV contains ID, Title, Type, Priority, Module, Sprint, Status, Notes", "impactedArea": "Reporting", "created": "2026-03-16T11:01:00.000Z"}, {"id": "TC-013", "title": "Sanity suite merge combines cases without duplicates", "type": "End to End", "priority": "High", "module": "Sprint Board", "sprint": "Sprint 14", "preconditions": "At least 2 sprints with overlapping cases", "steps": ["Navigate to Sprint Board", "Select Sprint 12 and Sprint 13", "Click Merge", "Name suite Release 1.0 Sanity", "Verify case count is deduplicated"], "expected": "Suite created with unique cases only", "impactedArea": "Sprint Board, Test Management", "created": "2026-03-16T11:02:00.000Z"}, {"id": "TC-014", "title": "Bulk mark 20 cases as passed simultaneously", "type": "Edge Case", "priority": "Medium", "module": "Test Library", "sprint": "Sprint 14", "preconditions": "20+ test cases in library", "steps": ["Open Test Library", "Select all cases via checkbox", "Click Mark Pass", "Confirm action", "Verify all cases show pass status"], "expected": "All 20 cases marked pass, activity log updated", "impactedArea": "Test Library, Activity Logs", "created": "2026-03-16T11:03:00.000Z"}, {"id": "TC-015", "title": "Inline pass/fail on sprint board persists on refresh", "type": "Functional", "priority": "Low", "module": "Sprint Board", "sprint": "Sprint 14", "preconditions": "Sprint board has test cases", "steps": ["Open Sprint Board", "Mark TC-001 as Pass inline", "Refresh the page", "Verify TC-001 still shows Pass", "Check activity log entry"], "expected": "Result persists after page refresh, logged in activity", "impactedArea": "Sprint Board, Activity Logs", "created": "2026-03-16T11:04:00.000Z"}], "sprints": {"Sprint 12": {"name": "Sprint 12", "cases": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005"]}, "Sprint 13": {"name": "Sprint 13", "cases": ["TC-006", "TC-007", "TC-008", "TC-009", "TC-010"]}, "Sprint 14": {"name": "Sprint 14", "cases": ["TC-011", "TC-012", "TC-013", "TC-014", "TC-015"]}}, "sanitySuites": [{"id": "suite_demo1", "name": "Release 1.0 Sanity", "mergedSprints": ["Sprint 12", "Sprint 13"], "caseIds": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005", "TC-006", "TC-007", "TC-008", "TC-009", "TC-010"], "created": "2026-03-16T12:00:00.000Z"}], "results": {"TC-001": {"status": "pass", "markedAt": "2026-03-15T10:00:00.000Z", "note": ""}, "TC-002": {"status": "pass", "markedAt": "2026-03-15T10:05:00.000Z", "note": ""}, "TC-003": {"status": "pass", "markedAt": "2026-03-15T10:10:00.000Z", "note": ""}, "TC-004": {"status": "fail", "markedAt": "2026-03-15T10:15:00.000Z", "note": "Session expires after browser restart \u2014 BUG-2341"}, "TC-005": {"status": "pass", "markedAt": "2026-03-15T10:20:00.000Z", "note": ""}, "TC-006": {"status": "pass", "markedAt": "2026-03-16T09:00:00.000Z", "note": ""}, "TC-007": {"status": "pass", "markedAt": "2026-03-16T09:05:00.000Z", "note": ""}, "TC-008": {"status": "blocked", "markedAt": "2026-03-16T09:10:00.000Z", "note": "Cart limit feature not yet deployed to QA env"}, "TC-009": {"status": "pass", "markedAt": "2026-03-16T09:15:00.000Z", "note": ""}, "TC-010": {"status": "fail", "markedAt": "2026-03-16T09:20:00.000Z", "note": "BOD taking 4.2 min \u2014 BUG-2356 raised"}, "TC-011": {"status": "pass", "markedAt": "2026-03-17T08:00:00.000Z", "note": ""}, "TC-012": {"status": "pass", "markedAt": "2026-03-17T08:05:00.000Z", "note": ""}}, "logs": [{"id": "log_001", "type": "generation", "message": "Generated 5 cases for \"Authentication\" \u203a Sprint 12", "meta": {"count": 5, "module": "Authentication", "sprint": "Sprint 12", "types": ["Functional", "Negative", "Edge Case", "End to End"], "durationMs": 3210, "ids": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005"]}, "timestamp": "2026-03-10T09:00:00.000Z"}, {"id": "log_002", "type": "generation", "message": "Generated 5 cases for \"Order Placement\" \u203a Sprint 13", "meta": {"count": 5, "module": "Order Placement", "sprint": "Sprint 13", "types": ["Functional", "Negative", "Edge Case", "Impact", "End to End"], "durationMs": 2980, "ids": ["TC-006", "TC-007", "TC-008", "TC-009", "TC-010"]}, "timestamp": "2026-03-14T10:00:00.000Z"}, {"id": "log_003", "type": "execution", "message": "TC-001 marked PASS \u2014 \"Verify valid login with email and password\"", "meta": {"id": "TC-001", "module": "Authentication", "sprint": "Sprint 12", "status": "pass", "change": "pending \u2192 pass"}, "timestamp": "2026-03-15T10:00:00.000Z"}, {"id": "log_004", "type": "execution", "message": "TC-004 marked FAIL \u2014 \"Remember me persists session for 30 days\"", "meta": {"id": "TC-004", "module": "Authentication", "sprint": "Sprint 12", "status": "fail", "change": "pending \u2192 fail"}, "timestamp": "2026-03-15T10:15:00.000Z"}, {"id": "log_005", "type": "execution", "message": "TC-008 marked BLOCKED \u2014 \"Place order with maximum cart items limit\"", "meta": {"id": "TC-008", "module": "Order Placement", "sprint": "Sprint 13", "status": "blocked", "change": "pending \u2192 blocked"}, "timestamp": "2026-03-16T09:10:00.000Z"}, {"id": "log_006", "type": "execution", "message": "TC-010 marked FAIL \u2014 \"BOD process runs successfully at market open\"", "meta": {"id": "TC-010", "module": "BOD Process", "sprint": "Sprint 13", "status": "fail", "change": "pending \u2192 fail"}, "timestamp": "2026-03-16T09:20:00.000Z"}, {"id": "log_007", "type": "manual", "message": "Sanity suite \"Release 1.0 Sanity\" created (10 cases from Sprint 12, Sprint 13)", "meta": {"suiteName": "Release 1.0 Sanity", "sprints": ["Sprint 12", "Sprint 13"], "caseCount": 10}, "timestamp": "2026-03-16T12:00:00.000Z"}, {"id": "log_008", "type": "generation", "message": "Generated 5 cases for \"Dashboard\" \u203a Sprint 14", "meta": {"count": 5, "module": "Dashboard", "sprint": "Sprint 14", "types": ["Functional", "Edge Case", "End to End"], "durationMs": 2750, "ids": ["TC-011", "TC-012", "TC-013", "TC-014", "TC-015"]}, "timestamp": "2026-03-16T11:00:00.000Z"}, {"id": "log_009", "type": "execution", "message": "TC-011 marked PASS \u2014 \"Dashboard loads within 3 seconds\"", "meta": {"id": "TC-011", "module": "Dashboard", "sprint": "Sprint 14", "status": "pass", "change": "pending \u2192 pass"}, "timestamp": "2026-03-17T08:00:00.000Z"}, {"id": "log_010", "type": "deletion", "message": "Deleted TC-000 \u2014 \"Placeholder test case\"", "meta": {"id": "TC-000", "module": "General", "sprint": "Unassigned"}, "timestamp": "2026-03-10T08:55:00.000Z"}]};
+const EMPTY_DB = () => ({ testCases:[], sprints:{}, sanitySuites:[], results:{}, logs:[] });
 let DB = (() => {
   const stored = localStorage.getItem(KEY);
-  if (stored) { try { return JSON.parse(stored); } catch(e) {} }
+  if (stored) { try { const p = JSON.parse(stored); if(p.testCases) return p; } catch(e) {} }
   return JSON.parse(JSON.stringify(DEMO_DATA));
 })();
 if (!DB.logs) DB.logs = [];
-const save = () => localStorage.setItem(KEY, JSON.stringify(DB));
 const typeColors = {Functional:'functional','Edge Case':'edge',Negative:'negative','End to End':'e2e',Impact:'impact'};
 let activeLogFilter = 'all';
 let currentTcId = null;
 let editMode = false;
 let selectedCases = new Set();
+let syncTimer = null;
+let lastSyncedHash = '';
+let isSyncing = false;
+
+// ── SYNC ENGINE ──
+function dbHash() {
+  return DB.testCases.length + '|' + Object.keys(DB.results).length + '|' + DB.logs.length;
+}
+
+function setSyncState(state, msg) {
+  const dot = document.getElementById('syncDot');
+  const lbl = document.getElementById('syncLabel');
+  if (!dot || !lbl) return;
+  dot.className = 'sync-dot ' + state;
+  lbl.textContent = msg;
+}
+
+async function syncToServer() {
+  if (isSyncing) return;
+  isSyncing = true;
+  setSyncState('syncing', 'Saving…');
+  try {
+    const resp = await fetch('/api/db/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(DB)
+    });
+    if (resp.ok) {
+      lastSyncedHash = dbHash();
+      localStorage.setItem(KEY, JSON.stringify(DB));
+      setSyncState('synced', 'Synced ✓');
+    } else {
+      setSyncState('error', 'Sync failed');
+    }
+  } catch {
+    setSyncState('error', 'Offline — local only');
+    localStorage.setItem(KEY, JSON.stringify(DB));
+  } finally {
+    isSyncing = false;
+  }
+}
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(DB));
+  clearTimeout(syncTimer);
+  setSyncState('syncing', 'Unsaved…');
+  syncTimer = setTimeout(() => {
+    if (dbHash() !== lastSyncedHash) syncToServer();
+    else setSyncState('synced', 'Synced ✓');
+  }, 1500);
+}
+
+async function manualSync() {
+  await syncToServer();
+  showNotif('Synced to cloud!', 'success');
+}
+
+async function loadFromServer() {
+  const overlay = document.getElementById('loadingOverlay');
+  const msg = document.getElementById('loadingMsg');
+  try {
+    if (msg) msg.textContent = 'Fetching your workspace…';
+    const resp = await fetch('/api/db/load');
+    if (!resp.ok) throw new Error('Server error ' + resp.status);
+    const serverDB = await resp.json();
+    const serverCount = (serverDB.testCases || []).length;
+    const localRaw = localStorage.getItem(KEY);
+    const localDB = localRaw ? (() => { try { return JSON.parse(localRaw); } catch { return null; } })() : null;
+    const localCount = (localDB?.testCases || []).length;
+    // Use server if it has data, else keep local
+    if (serverCount > 0) {
+      DB = { ...EMPTY_DB(), ...serverDB };
+      if (msg) msg.textContent = serverCount + ' test cases loaded ✓';
+    } else if (localCount > 0) {
+      DB = { ...EMPTY_DB(), ...localDB };
+      if (msg) msg.textContent = 'Loaded ' + localCount + ' local cases — syncing…';
+      syncToServer();
+    } else {
+      DB = JSON.parse(JSON.stringify(DEMO_DATA));
+      if (msg) msg.textContent = 'Fresh workspace ready!';
+    }
+    if (!DB.logs) DB.logs = [];
+    lastSyncedHash = dbHash();
+    localStorage.setItem(KEY, JSON.stringify(DB));
+    setSyncState('synced', 'Synced ✓');
+  } catch(err) {
+    if (msg) msg.textContent = 'Using local cache…';
+    const localRaw = localStorage.getItem(KEY);
+    if (localRaw) { try { DB = { ...EMPTY_DB(), ...JSON.parse(localRaw) }; } catch {} }
+    setSyncState('error', 'Cloud unavailable');
+  } finally {
+    if (overlay) {
+      setTimeout(() => overlay.classList.add('hidden'), 600);
+      setTimeout(() => overlay.style.display='none', 1100);
+    }
+  }
+}
 
 // ---- NOTIFICATIONS ----
 function showNotif(msg, type='') {
@@ -1719,8 +1853,13 @@ document.querySelectorAll('.nav-item').forEach(item => {
   });
 });
 
-// Init
-updateDataLists(); updateSidebar(); renderDashboard();
+// Init — load from Netlify Blobs first, then render
+(async () => {
+  await loadFromServer();
+  updateDataLists();
+  updateSidebar();
+  renderDashboard();
+})();
 
 // ---- THEME ----
 function toggleTheme() {
