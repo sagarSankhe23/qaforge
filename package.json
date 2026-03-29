@@ -1,0 +1,8 @@
+{
+  "name": "qa-forge",
+  "version": "1.0.0",
+  "description": "QA Forge - AI Powered Test Management",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
