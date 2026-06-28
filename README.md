@@ -1,2 +1,0 @@
-# qaforge
-Test Management Platform
