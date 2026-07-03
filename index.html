@@ -1018,6 +1018,54 @@ function renderDashboard() {
 
 // ---- GENERATE ----
 
+const MOCK_ACTIONS = {
+  'Functional': ['Verify {f} completes successfully with valid inputs', 'Verify {f} behaves correctly for the primary user flow', 'Verify {f} updates the UI/state as expected after action', 'Verify {f} works correctly across supported roles'],
+  'Negative': ['Verify {f} handles invalid input gracefully with an error message', 'Verify {f} rejects empty/mandatory fields correctly', 'Verify {f} prevents duplicate/conflicting submissions', 'Verify {f} does not proceed when a required precondition is unmet'],
+  'Edge Case': ['Verify {f} behaves correctly at the boundary value limits', 'Verify {f} handles maximum allowed load/length gracefully', 'Verify {f} behaves correctly under rapid repeated actions', 'Verify {f} handles simultaneous/concurrent user sessions correctly'],
+  'Regression': ['Verify {f} still works correctly after the latest related change', 'Verify {f} integration with dependent modules remains unaffected', 'Verify existing data is unaffected after {f} deployment'],
+  'UI/UX': ['Verify {f} elements render correctly on different screen sizes', 'Verify {f} labels, tooltips and validation messages are clear', 'Verify {f} is accessible via keyboard navigation'],
+  'Performance': ['Verify {f} responds within acceptable time under normal load', 'Verify {f} performs consistently under peak concurrent usage'],
+  'Security': ['Verify {f} enforces proper access control/authorization', 'Verify {f} does not expose sensitive data in responses/logs'],
+  'API': ['Verify {f} API returns correct response schema and status code', 'Verify {f} API handles malformed/missing request payloads correctly']
+};
+const MOCK_PRIORITY = ['High','High','Medium','Medium','Medium','Low'];
+
+function mockGenerateCases({ desc, module, types, count, startId, impacted, notes, project, env }) {
+  const feature = desc.length > 60 ? desc.slice(0,57) + '...' : desc;
+  const featureShort = desc.split(/[.,]/)[0].trim();
+  const cases = [];
+  let i = 0;
+  while (cases.length < count) {
+    const type = types[i % types.length];
+    const templates = MOCK_ACTIONS[type] || MOCK_ACTIONS['Functional'];
+    const template = templates[Math.floor(cases.length / types.length) % templates.length];
+    const title = template.replace('{f}', featureShort || module).replace(/^(.)/, m => m.toUpperCase());
+    const id = 'TC-' + String(startId + cases.length).padStart(3, '0');
+    cases.push({
+      id,
+      title: title.length > 90 ? title.slice(0,87) + '...' : title,
+      type,
+      priority: MOCK_PRIORITY[cases.length % MOCK_PRIORITY.length],
+      preconditions: project ? `User is logged into ${project} with valid access on ${env}.` : `User is logged in with valid access on ${env}.`,
+      steps: [
+        `Navigate to the "${module}" section.`,
+        `Locate and initiate: ${featureShort || desc}.`,
+        type === 'Negative' ? 'Provide invalid/incomplete input where applicable.' : 'Provide valid input/data as required.',
+        type === 'Edge Case' ? 'Apply boundary or extreme values to the relevant field(s).' : 'Submit/confirm the action.',
+        'Observe the system response and resulting state.'
+      ].filter(Boolean),
+      expected: type === 'Negative'
+        ? 'System displays an appropriate validation/error message and does not proceed.'
+        : type === 'Performance'
+        ? 'System responds within the expected time threshold without degradation.'
+        : 'System completes the action successfully and reflects the expected result/state.',
+      impactedArea: impacted || module
+    });
+    i++;
+  }
+  return cases;
+}
+
 async function generateCases() {
   const desc = document.getElementById('reqDesc').value.trim();
   if (!desc) { showNotif('Please enter a requirement description'); return; }
@@ -1043,32 +1091,11 @@ async function generateCases() {
   if (regenBtn) regenBtn.disabled = true;
   status.textContent = 'Calling Claude AI…';
 
-  const prompt = `You are a senior QA engineer. Generate exactly ${count} test cases.
-Feature: ${desc}
-Module: ${module}${platformNote}${envNote}
-Test types required: ${types.join(', ')}
-${impacted ? ' Impacted modules: ' + impacted + '.' : ''}${notes ? ' Context: ' + notes : ''}
-
-Return ONLY a valid JSON array. No markdown, no code fences. Raw JSON only.
-Each object must have exactly: id (start from TC-${String(startId).padStart(3,'0')}), title (max 10 words), type (one of [${types.map(t=>`"${t}"`).join(',')}]), priority ("High"|"Medium"|"Low"), preconditions (string), steps (array of 3-6 strings), expected (string), impactedArea (string).`;
-
-  const ANTHROPIC_API_KEY = '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';
   const t0 = Date.now();
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4000, messages:[{role:'user',content:prompt}] })
-    });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error?.message || JSON.stringify(data.error) || 'API error');
-    const raw = data.content.filter(c => c.type === 'text').map(c => c.text).join('');
-    const cases = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    // Offline demo mode: generates realistic test cases locally, no network/API required.
+    await new Promise(r => setTimeout(r, 700 + Math.random() * 600)); // simulate thinking time
+    const cases = mockGenerateCases({ desc, module, types, count: Number(count), startId, impacted, notes, project, env });
     const ms = Date.now() - t0;
     cases.forEach(tc => { tc.module = module; tc.sprint = sprint; tc.impacted = impacted; tc.project = project; tc.env = env; tc.created = new Date().toISOString(); });
     DB.testCases.push(...cases);
