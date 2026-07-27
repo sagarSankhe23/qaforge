@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QA Forge — Test Management Platform</title>
+<title>QA Forge - Test Management Tool</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22qg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234f8cff%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237c3aed%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22url%28%23qg%29%22/%3E%0A%20%20%3Cpolygon%20points%3D%2235%208%2012%2034%2028%2034%2026%2056%2052%2026%2034%2026%2035%208%22%20fill%3D%22%23ffffff%22/%3E%0A%3C/svg%3E%0A"/>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAADOUlEQVRYhb3XT2xUVRTH8e+587DMwEwnJUZNCCEKMV2wMKxYsDBCoi4kQlyAmAi0xQ1/EmDBjh2QJkJa/7VDNZrGjVbYQUSjrkhIGpUYIYQEISGASA100nnMzDvHRTvTPzPTvndB3uq+3Ek+v3fPOW9mhDnXO8dsjVa1S4zXxFiJ2hIxEAMMRI1m9w3r6fsHAtdM7TSp6uAX/dl7Mz2pLd7os7ZMUU+g7BbDiQEtsAT4nD35V7C9pwbSw7MCTOJ2FrVX68ATx+t75ozDA0OZ4wAOIDOuJ58SjhhixtHd709sBpCpmv/me+y5DLz8omP0d00a7G45NbHaaaS7fPG2APbvWkQ+63Uqzz1TSfc4idjog6cEPtgesGqlUCq1+NwCJXFqW5zACp+av7spxdo1DoCwZF79gEmnQ21pUvytjSk2rE/VZ7lU8sFBjLxLiq97xbH59WkcIJzwwhGtNV9MvPMlR9e2ABFmByiZFy4GLi6+/Hlh786AYPbDTwXwwzFwcfCOduFAT0Am3YjXS+CBi0GwEJ5ugwM9AR15aa4Dn368uOUewE/nKox8VW4arKEHZq4DB/t2Bix/oTW+0PXHrxGnh5vjzO2BWf0AdG0N6FztvPGb15XP+0Ks2rokrlXttm1KsW6tP37/nvFZb0ilNE8/GMj2Q2VL+hZbvMjo/6hFRzI5lh8eCbl9I5oXR61JCWKMUz7XuieiCAonHsXCG0sQAxeDbLZ5ADP4uvCIq5eqsfDJAAlxDNqzzZ/+7HdlLv5ciY1LvQQJcFEj16QEoxeqnPu2nAindgJJf0zMDXDtSsTwJyFoMnzeMZwvWK59OsCdW0qhNyQqJ8drPfAg6STUTqD40BjsDSkVzQsXtYcO5HLSScjlhEoZBnpD/rmtXjhqmHLTOY1GkuAYLM3Bl/0hN65G3rgYODjvwlR60Iy/4+JicP5MhUsXq4+FixGJ6CkB6O6e2ILxjRiS9PvcE4dI+479smyfAygUMiPOOIxhTwVXfhgrdhyEqb9mAANDmeMu0vfEGPsf8YhI+8bG828OjkoFoOGVtmfH+LPViusWtbeBVWLkHxMvovwlxvfO6dDRH5f9OdP7D1nksf1fyhBdAAAAAElFTkSuQmCC"/>
+<link rel="apple-touch-icon" href="data:image/png;base64,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"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -67,7 +70,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 .page-title{font-family:var(--font-head);font-size:18px;font-weight:700}
 .page-sub{font-size:12px;color:var(--text3);margin-top:2px}
 .topbar-actions{display:flex;gap:8px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:var(--font-body)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:var(--font-body);white-space:nowrap}
 .btn svg{width:14px;height:14px}
 .btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 8px var(--accent)33}.btn-primary:hover{background:#3a7aff;box-shadow:0 4px 16px var(--accent)44;transform:translateY(-1px)}
 .btn-primary:active{transform:translateY(0);box-shadow:0 1px 4px var(--accent)33}
@@ -116,6 +119,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 .tag-blocked{background:#f59e0b18;color:#f59e0b;border:1px solid #f59e0b28}
 .tag-pending{background:#8b91a818;color:#8b91a8;border:1px solid #8b91a828}
 .tag-high{background:#ef444414;color:#ef4444}.tag-medium{background:#f59e0b14;color:#f59e0b}.tag-low{background:#10b98114;color:#10b981}
+.tag-risk-high{background:#ef444418;color:#ef4444;border:1px solid #ef444440}.tag-risk-medium{background:#f59e0b18;color:#f59e0b;border:1px solid #f59e0b40}.tag-risk-low{background:#10b98118;color:#10b981;border:1px solid #10b98140}
 .tag-generation{background:#4f8cff18;color:#4f8cff;border:1px solid #4f8cff28}
 .tag-execution{background:#7c3aed18;color:#a78bfa;border:1px solid #7c3aed28}
 .tag-manual{background:#06d6a018;color:#06d6a0;border:1px solid #06d6a028}
@@ -227,6 +231,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 .sidebar-overlay{display:none;position:fixed;inset:0;background:#00000055;z-index:49;backdrop-filter:blur(2px)}
 .sidebar-overlay.show{display:block}
 
+/* ── TABLET BREAKPOINT (fixes Library filter row overflow + stat grid squeeze between phone and desktop widths) ── */
+@media(max-width:1024px){
+  .topbar-actions{flex-wrap:wrap;row-gap:8px}
+  .search-wrap{flex:1 1 100%;max-width:none}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  [style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
+}
+
 /* ── MOBILE BREAKPOINT ── */
 @media(max-width:768px){
   .sidebar-close-btn{display:flex!important}
@@ -330,11 +342,116 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 .onboard-desc{font-size:12px;color:var(--text3);line-height:1.6}
 .onboard-check{position:absolute;top:14px;right:14px;width:20px;height:20px;border-radius:50%;background:var(--success);display:none;align-items:center;justify-content:center}
 .onboard-step.done .onboard-check{display:flex}
+
+/* ===== Landing ===== */
+#landing{min-height:100vh;background:var(--bg);display:flex;flex-direction:column;opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease}
+#landing.ready{opacity:1;transform:none}
+.ticker-bar{border-bottom:1px solid var(--border);overflow:hidden;white-space:nowrap;background:var(--bg2)}
+.ticker-track{display:inline-flex;align-items:center;animation:ticker-scroll 38s linear infinite}
+.ticker-bar:hover .ticker-track{animation-play-state:paused}
+@keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick{display:inline-flex;align-items:center;gap:7px;padding:9px 22px;font-family:var(--font-mono);font-size:11.5px;color:var(--text3);border-right:1px solid var(--border)}
+.tick b{color:var(--text2);font-weight:500}
+.tick .up{color:var(--success)}
+.tick .down{color:var(--danger)}
+.tick .blk{color:var(--warn)}
+.landing-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 24px 40px;position:relative}
+.landing-hero::before{content:'';position:absolute;top:0;left:50%;width:640px;height:420px;transform:translateX(-50%);background:radial-gradient(ellipse at center,var(--accent)10,transparent 70%);pointer-events:none}
+.landing-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;margin-bottom:22px}
+.landing-eyebrow::before,.landing-eyebrow::after{content:'';width:22px;height:1px;background:var(--accent)55}
+.landing-title{font-family:var(--font-head);font-weight:800;font-size:clamp(30px,5vw,52px);line-height:1.08;letter-spacing:-.02em;max-width:780px;margin-bottom:20px}
+.landing-title em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.landing-sub{font-size:15px;color:var(--text2);max-width:520px;line-height:1.7;margin-bottom:34px}
+.landing-actions{display:flex;gap:12px;align-items:center;margin-bottom:52px;flex-wrap:wrap;justify-content:center}
+.landing-btn-primary{font-family:var(--font-body);font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;padding:13px 26px;border-radius:var(--r);cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 18px var(--accent)33;transition:transform .18s,box-shadow .18s}
+.landing-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--accent)44}
+.landing-btn-primary:active{transform:translateY(0)}
+.landing-btn-primary svg{width:15px;height:15px;transition:transform .18s}
+.landing-btn-primary:hover svg{transform:translateX(3px)}
+.landing-credit{font-size:12px;color:var(--text3)}
+.landing-credit b{color:var(--text2);font-weight:500}
+.landing-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:56px}
+.stat-block{padding:16px 30px;text-align:center;border-right:1px solid var(--border)}
+.stat-block:last-child{border-right:none}
+.stat-block b{display:block;font-family:var(--font-head);font-size:24px;font-weight:800;color:var(--text)}
+.stat-block span{font-size:10.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.landing-features{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:920px;width:100%;padding:0 24px 64px}
+.feat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-radius);padding:20px 18px;text-align:left;transition:border-color .2s,transform .2s}
+.feat-card:hover{border-color:var(--border3);transform:translateY(-3px)}
+.feat-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feat-icon svg{width:16px;height:16px}
+.feat-title{font-family:var(--font-head);font-size:13px;font-weight:700;margin-bottom:6px}
+.feat-desc{font-size:12px;color:var(--text3);line-height:1.55}
+@media (max-width:760px){
+  .landing-features{grid-template-columns:repeat(2,1fr)}
+  .landing-stats{grid-template-columns:repeat(2,1fr)}
+  .stat-block{border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .stat-block:nth-child(2n){border-right:none}
+  .stat-block:nth-last-child(-n+2){border-bottom:none}
+}
+@media (max-width:400px){
+  .landing-features{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){#landing{transition:none;opacity:1;transform:none}.ticker-track{animation:none}.feat-card,.landing-btn-primary{transition:none}}
 </style>
 </head>
 <body>
+
+<div id="sharedView" style="display:none;min-height:100vh;padding:40px 20px;max-width:960px;margin:0 auto">
+  <div id="sharedContent"></div>
+</div>
+
+<div id="landing">
+  <div class="ticker-bar">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </div>
+  <div class="landing-hero">
+    <div class="landing-eyebrow">QA platform &middot; capital markets</div>
+    <h1 class="landing-title">Test management built for<br><em>markets</em> that don't wait.</h1>
+    <p class="landing-sub">AI-generated test cases, sprint boards, and sign-off tracking built around how OMS, RMS, and BOD systems actually break &mdash; not a generic bug tracker.</p>
+    <div class="landing-actions">
+      <button class="landing-btn-primary" onclick="launchDemo()">
+        Try it live
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <div class="landing-credit">Built by <b>Sagar Sankhe</b> &middot; QA lead, trading platforms</div>
+    </div>
+    <div class="landing-stats" id="landingStats"></div>
+    <div class="landing-features">
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--accent)18;color:var(--accent)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+        </div>
+        <div class="feat-title">AI test generation</div>
+        <div class="feat-desc">Point it at a module and sprint, get functional, negative, and edge-case coverage back in seconds.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--accent2)18;color:var(--accent2)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="9" rx="1.5"/></svg>
+        </div>
+        <div class="feat-title">Sprint board</div>
+        <div class="feat-desc">Mark pass, fail, or blocked inline, and merge sprints into a deduplicated release sanity suite.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--success)18;color:var(--success)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <div class="feat-title">Sign-off tracking</div>
+        <div class="feat-desc">Share a suite for review and capture explicit sign-off before a release goes out.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon" style="background:var(--warn)18;color:var(--warn)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a1 1 0 0 1 1-1h9l5 5v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 12h6M9 16h6M9 8h2"/></svg>
+        </div>
+        <div class="feat-title">Audit trail</div>
+        <div class="feat-desc">Every generation, edit, and result change is logged &mdash; the same trail a BFSI audit would expect.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-<div class="app">
+<div class="app" id="appShell" style="display:none">
   <aside class="sidebar">
     <div class="logo" style="display:flex;align-items:center;justify-content:space-between">
       <div class="logo-mark">
@@ -414,14 +531,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
             <span id="themeLabel">Light</span>
           </button>
 
-          <button class="btn btn-ghost btn-sm export-btn" onclick="exportAllCSV()" title="Export CSV">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            <span class="export-label">CSV</span>
-          </button>
-          <button class="btn btn-ghost btn-sm export-btn" onclick="exportExcel()" title="Export Excel" style="color:var(--success);border-color:var(--success)33">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-            <span class="export-label">Excel</span>
-          </button>
+          <div style="position:relative;display:inline-block">
+            <button class="btn btn-ghost btn-sm export-btn" onclick="toggleExportMenu('topExportMenu',event)" title="Export">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span class="export-label">Export</span>
+            </button>
+            <div class="export-menu" id="topExportMenu" style="display:none;position:absolute;top:100%;right:0;margin-top:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);box-shadow:0 8px 24px rgba(0,0,0,.3);min-width:200px;z-index:300;overflow:hidden">
+              <button onclick="exportAllCSV()" style="display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;color:var(--text1);font-size:13px;cursor:pointer" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">CSV (standard)</button>
+              <button onclick="exportExcel()" style="display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;color:var(--text1);font-size:13px;cursor:pointer" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">Excel (.xls)</button>
+              <button onclick="exportJiraCSV(DB.testCases,'qa_forge_jira_import.csv')" style="display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;color:var(--text1);font-size:13px;cursor:pointer" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">Jira / Xray CSV</button>
+              <button onclick="exportAzureDevOpsCSV(DB.testCases,'qa_forge_ado_import.csv')" style="display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;color:var(--text1);font-size:13px;cursor:pointer" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">Azure DevOps CSV</button>
+            </div>
+          </div>
           <button class="btn btn-primary" onclick="navigate('generate')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Test Cases
           </button>
@@ -575,9 +696,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
           <select class="form-select" style="width:140px;padding:7px 10px" id="filterModule" onchange="renderLibrary()"><option value="">All modules</option></select>
           <select class="form-select" style="width:130px;padding:7px 10px" id="filterSprint" onchange="renderLibrary()"><option value="">All sprints</option></select>
           <select class="form-select" style="width:120px;padding:7px 10px" id="filterType" onchange="renderLibrary()"><option value="">All types</option><option>Functional</option><option>Edge Case</option><option>Negative</option><option>End to End</option><option>Impact</option></select>
+          <select class="form-select" style="width:120px;padding:7px 10px" id="filterRisk" onchange="renderLibrary()"><option value="">All risk tiers</option><option value="High">High risk</option><option value="Medium">Medium risk</option><option value="Low">Low risk</option></select>
           <select class="form-select" style="width:120px;padding:7px 10px" id="filterProject" onchange="renderLibrary()"><option value="">All platforms</option><option value="Android">📱 Android</option><option value="iOS">🍎 iOS</option><option value="EXE">🖥️ EXE</option><option value="Web">🌐 Web</option><option value="API">⚙️ API</option></select>
           <select class="form-select" style="width:120px;padding:7px 10px" id="filterStatus" onchange="renderLibrary()"><option value="">All status</option><option value="pending">Pending</option><option value="pass">Pass</option><option value="fail">Fail</option><option value="blocked">Blocked</option></select>
-          <button class="btn btn-ghost btn-sm" onclick="exportFilteredCSV()">Export CSV</button>
+          <div style="position:relative;display:inline-block">
+            <button class="btn btn-ghost btn-sm" onclick="toggleExportMenu('libExportMenu',event)">Export ▾</button>
+            <div class="export-menu" id="libExportMenu" style="display:none;position:absolute;top:100%;right:0;margin-top:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);box-shadow:0 8px 24px rgba(0,0,0,.3);min-width:200px;z-index:300;overflow:hidden">
+              <button onclick="exportFilteredCSV()" style="display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;color:var(--text1);font-size:13px;cursor:pointer" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">CSV (standard)</button>
+              <button onclick="exportJiraCSV(getLibraryFilteredCases(),'qa_forge_jira_import.csv')" style="display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;color:var(--text1);font-size:13px;cursor:pointer" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">Jira / Xray CSV</button>
+              <button onclick="exportAzureDevOpsCSV(getLibraryFilteredCases(),'qa_forge_ado_import.csv')" style="display:block;width:100%;text-align:left;padding:9px 14px;background:none;border:none;color:var(--text1);font-size:13px;cursor:pointer" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='none'">Azure DevOps CSV</button>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Bulk action bar -->
@@ -704,28 +833,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
       <div style="text-align:center;margin-bottom:24px">
         <!-- QA Forge Logo SVG -->
         <div style="position:relative;width:90px;height:90px;margin:0 auto 14px">
-          <!-- Outer glow ring -->
-          <div style="position:absolute;inset:-6px;border-radius:28px;background:linear-gradient(135deg,#4f8cff,#7c3aed);filter:blur(14px);opacity:.5"></div>
-          <!-- Main icon container -->
-          <div style="position:relative;width:90px;height:90px;background:linear-gradient(145deg,#1a1f2e,#0d1117);border-radius:22px;border:1px solid #ffffff18;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px #00000044,inset 0 1px 0 #ffffff12">
-            <!-- Inner gradient overlay -->
-            <div style="position:absolute;inset:0;border-radius:22px;background:linear-gradient(145deg,#4f8cff15,#7c3aed25)"></div>
-            <!-- SVG Logo -->
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:54px;height:54px;position:relative;z-index:1">
-              <!-- Shield base -->
-              <path d="M24 4L8 10V22C8 31.6 15.2 40.4 24 43C32.8 40.4 40 31.6 40 22V10L24 4Z" fill="url(#shieldGrad)" opacity="0.9"/>
-              <!-- Shield border -->
-              <path d="M24 4L8 10V22C8 31.6 15.2 40.4 24 43C32.8 40.4 40 31.6 40 22V10L24 4Z" stroke="#ffffff22" stroke-width="1" fill="none"/>
-              <!-- Lightning bolt (AI power) -->
-              <path d="M27 14L19 25H24.5L21 34L29 23H23.5L27 14Z" fill="white" opacity="0.95"/>
-              <!-- Checkmark overlay -->
-              <path d="M16 23L21 28L32 17" stroke="#06d6a0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <defs>
-                <linearGradient id="shieldGrad" x1="8" y1="4" x2="40" y2="43">
-                  <stop offset="0%" stop-color="#4f8cff"/>
-                  <stop offset="100%" stop-color="#7c3aed"/>
-                </linearGradient>
-              </defs>
+          <!-- Glow backdrop (matches sidebar logo's ::after glow, scaled up) -->
+          <div style="position:absolute;inset:-8px;border-radius:30px;background:linear-gradient(135deg,#4f8cff,#7c3aed);filter:blur(18px);opacity:.4;z-index:0"></div>
+          <!-- Main icon (same solid gradient + box-shadow as sidebar mark) -->
+          <div style="position:relative;width:90px;height:90px;background:linear-gradient(135deg,#4f8cff,#7c3aed);border-radius:22px;box-shadow:0 8px 28px #4f8cff55;display:flex;align-items:center;justify-content:center;z-index:1">
+            <!-- SVG Logo (matches sidebar mark) -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:44px;height:44px;position:relative;z-index:1">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
             </svg>
           </div>
         </div>
@@ -818,6 +932,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
   </div>
 </div>
 
+<!-- Hidden static form so Netlify detects and registers this form at build/deploy time.
+     Do not remove — the JS submitFeedback() function POSTs to this form's endpoint. -->
+<form name="qaforge-feedback" data-netlify="true" netlify-honeypot="bot-field" style="display:none">
+  <input type="text" name="name" />
+  <input type="text" name="rating" />
+  <input type="text" name="tags" />
+  <textarea name="feedback"></textarea>
+  <input type="text" name="bot-field" />
+</form>
 <!-- Feedback FAB -->
 <button class="feedback-fab" onclick="openModal('feedbackModal')">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
@@ -826,15 +949,102 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
 
 <script>
 const KEY = 'qaforge_demo';
-const DEMO_DATA = {"testCases": [{"id": "TC-001", "title": "Verify valid login with email and password", "type": "Functional", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User is registered and system is accessible", "steps": ["Navigate to login page", "Enter valid email address", "Enter valid password", "Click Login button", "Verify redirection to dashboard"], "expected": "User is logged in and redirected to the dashboard", "impactedArea": "Dashboard, Session Management", "created": "2026-03-10T09:00:00.000Z"}, {"id": "TC-002", "title": "Login fails with incorrect password", "type": "Negative", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User account exists", "steps": ["Navigate to login page", "Enter valid email", "Enter wrong password", "Click Login", "Observe error message"], "expected": "Error message 'Invalid credentials' is displayed", "impactedArea": "Authentication", "created": "2026-03-10T09:01:00.000Z"}, {"id": "TC-003", "title": "Account lockout after 5 failed attempts", "type": "Edge Case", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User account is active", "steps": ["Attempt login with wrong password 5 times", "Observe lockout message", "Try valid credentials", "Verify account is locked", "Check email for lockout notification"], "expected": "Account locked after 5 attempts, email notification sent", "impactedArea": "Authentication, Email Service", "created": "2026-03-10T09:02:00.000Z"}, {"id": "TC-004", "title": "Remember me persists session for 30 days", "type": "Functional", "priority": "Medium", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User has valid credentials", "steps": ["Login with Remember Me checked", "Close browser", "Reopen browser after 24 hours", "Navigate to app URL", "Verify session is still active"], "expected": "User remains logged in without re-authentication", "impactedArea": "Session Management", "created": "2026-03-10T09:03:00.000Z"}, {"id": "TC-005", "title": "OAuth login via Google redirects correctly", "type": "End to End", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "Google OAuth app is configured", "steps": ["Click Sign in with Google", "Authenticate with Google credentials", "Authorize app permissions", "Verify redirect back to app", "Check user profile populated"], "expected": "User logged in via Google, profile synced", "impactedArea": "Authentication, Profile", "created": "2026-03-10T09:04:00.000Z"}, {"id": "TC-006", "title": "Verify order placement with valid items", "type": "Functional", "priority": "High", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "User logged in, items in cart", "steps": ["Navigate to cart", "Review items and quantities", "Click Proceed to Checkout", "Enter shipping details", "Confirm and place order"], "expected": "Order placed successfully with confirmation number", "impactedArea": "Inventory, Payment, Notifications", "created": "2026-03-14T10:00:00.000Z"}, {"id": "TC-007", "title": "Order fails with out-of-stock item", "type": "Negative", "priority": "High", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "Item set to out-of-stock in inventory", "steps": ["Add out-of-stock item to cart", "Navigate to checkout", "Attempt to place order", "Observe system response"], "expected": "Error displayed: Item no longer available", "impactedArea": "Inventory, Order Placement", "created": "2026-03-14T10:01:00.000Z"}, {"id": "TC-008", "title": "Place order with maximum cart items limit", "type": "Edge Case", "priority": "Medium", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "Cart limit is set to 50 items", "steps": ["Add 50 items to cart", "Attempt to add 51st item", "Observe behavior", "Proceed to checkout with 50 items", "Complete order"], "expected": "51st item rejected with message, 50-item order completes", "impactedArea": "Cart, Order Placement", "created": "2026-03-14T10:02:00.000Z"}, {"id": "TC-009", "title": "Risk engine blocks high-risk trades", "type": "Impact", "priority": "High", "module": "Risk Engine", "sprint": "Sprint 13", "preconditions": "Risk thresholds configured", "steps": ["Login as trader", "Attempt trade exceeding risk limit", "Observe blocking behavior", "Check audit log", "Verify notification to risk manager"], "expected": "Trade blocked, audit logged, manager notified", "impactedArea": "Trading, Audit, Notifications", "created": "2026-03-14T10:03:00.000Z"}, {"id": "TC-010", "title": "BOD process runs successfully at market open", "type": "End to End", "priority": "High", "module": "BOD Process", "sprint": "Sprint 13", "preconditions": "System in pre-market state", "steps": ["Trigger BOD at 9:00 AM", "Monitor position initialization", "Verify P&L reset", "Check risk limit reload", "Confirm trading enabled"], "expected": "BOD completes in under 2 minutes, all systems ready", "impactedArea": "Risk Engine, Trading, Reporting", "created": "2026-03-14T10:04:00.000Z"}, {"id": "TC-011", "title": "Dashboard loads within 3 seconds", "type": "Functional", "priority": "Medium", "module": "Dashboard", "sprint": "Sprint 14", "preconditions": "User logged in with 1000+ records", "steps": ["Login with heavy data account", "Navigate to dashboard", "Measure load time", "Verify all widgets render", "Check for JS errors"], "expected": "Dashboard renders fully within 3 seconds", "impactedArea": "Dashboard, Performance", "created": "2026-03-16T11:00:00.000Z"}, {"id": "TC-012", "title": "Export to CSV includes all required fields", "type": "Functional", "priority": "Medium", "module": "Reporting", "sprint": "Sprint 14", "preconditions": "At least 10 test cases exist", "steps": ["Navigate to Test Library", "Apply module filter", "Click Export CSV", "Open exported file", "Verify all 12 columns present"], "expected": "CSV contains ID, Title, Type, Priority, Module, Sprint, Status, Notes", "impactedArea": "Reporting", "created": "2026-03-16T11:01:00.000Z"}, {"id": "TC-013", "title": "Sanity suite merge combines cases without duplicates", "type": "End to End", "priority": "High", "module": "Sprint Board", "sprint": "Sprint 14", "preconditions": "At least 2 sprints with overlapping cases", "steps": ["Navigate to Sprint Board", "Select Sprint 12 and Sprint 13", "Click Merge", "Name suite Release 1.0 Sanity", "Verify case count is deduplicated"], "expected": "Suite created with unique cases only", "impactedArea": "Sprint Board, Test Management", "created": "2026-03-16T11:02:00.000Z"}, {"id": "TC-014", "title": "Bulk mark 20 cases as passed simultaneously", "type": "Edge Case", "priority": "Medium", "module": "Test Library", "sprint": "Sprint 14", "preconditions": "20+ test cases in library", "steps": ["Open Test Library", "Select all cases via checkbox", "Click Mark Pass", "Confirm action", "Verify all cases show pass status"], "expected": "All 20 cases marked pass, activity log updated", "impactedArea": "Test Library, Activity Logs", "created": "2026-03-16T11:03:00.000Z"}, {"id": "TC-015", "title": "Inline pass/fail on sprint board persists on refresh", "type": "Functional", "priority": "Low", "module": "Sprint Board", "sprint": "Sprint 14", "preconditions": "Sprint board has test cases", "steps": ["Open Sprint Board", "Mark TC-001 as Pass inline", "Refresh the page", "Verify TC-001 still shows Pass", "Check activity log entry"], "expected": "Result persists after page refresh, logged in activity", "impactedArea": "Sprint Board, Activity Logs", "created": "2026-03-16T11:04:00.000Z"}], "sprints": {"Sprint 12": {"name": "Sprint 12", "cases": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005"]}, "Sprint 13": {"name": "Sprint 13", "cases": ["TC-006", "TC-007", "TC-008", "TC-009", "TC-010"]}, "Sprint 14": {"name": "Sprint 14", "cases": ["TC-011", "TC-012", "TC-013", "TC-014", "TC-015"]}}, "sanitySuites": [{"id": "suite_demo1", "name": "Release 1.0 Sanity", "mergedSprints": ["Sprint 12", "Sprint 13"], "caseIds": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005", "TC-006", "TC-007", "TC-008", "TC-009", "TC-010"], "created": "2026-03-16T12:00:00.000Z"}], "results": {"TC-001": {"status": "pass", "markedAt": "2026-03-15T10:00:00.000Z", "note": ""}, "TC-002": {"status": "pass", "markedAt": "2026-03-15T10:05:00.000Z", "note": ""}, "TC-003": {"status": "pass", "markedAt": "2026-03-15T10:10:00.000Z", "note": ""}, "TC-004": {"status": "fail", "markedAt": "2026-03-15T10:15:00.000Z", "note": "Session expires after browser restart \u2014 BUG-2341"}, "TC-005": {"status": "pass", "markedAt": "2026-03-15T10:20:00.000Z", "note": ""}, "TC-006": {"status": "pass", "markedAt": "2026-03-16T09:00:00.000Z", "note": ""}, "TC-007": {"status": "pass", "markedAt": "2026-03-16T09:05:00.000Z", "note": ""}, "TC-008": {"status": "blocked", "markedAt": "2026-03-16T09:10:00.000Z", "note": "Cart limit feature not yet deployed to QA env"}, "TC-009": {"status": "pass", "markedAt": "2026-03-16T09:15:00.000Z", "note": ""}, "TC-010": {"status": "fail", "markedAt": "2026-03-16T09:20:00.000Z", "note": "BOD taking 4.2 min \u2014 BUG-2356 raised"}, "TC-011": {"status": "pass", "markedAt": "2026-03-17T08:00:00.000Z", "note": ""}, "TC-012": {"status": "pass", "markedAt": "2026-03-17T08:05:00.000Z", "note": ""}}, "logs": [{"id": "log_001", "type": "generation", "message": "Generated 5 cases for \"Authentication\" \u203a Sprint 12", "meta": {"count": 5, "module": "Authentication", "sprint": "Sprint 12", "types": ["Functional", "Negative", "Edge Case", "End to End"], "durationMs": 3210, "ids": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005"]}, "timestamp": "2026-03-10T09:00:00.000Z"}, {"id": "log_002", "type": "generation", "message": "Generated 5 cases for \"Order Placement\" \u203a Sprint 13", "meta": {"count": 5, "module": "Order Placement", "sprint": "Sprint 13", "types": ["Functional", "Negative", "Edge Case", "Impact", "End to End"], "durationMs": 2980, "ids": ["TC-006", "TC-007", "TC-008", "TC-009", "TC-010"]}, "timestamp": "2026-03-14T10:00:00.000Z"}, {"id": "log_003", "type": "execution", "message": "TC-001 marked PASS \u2014 \"Verify valid login with email and password\"", "meta": {"id": "TC-001", "module": "Authentication", "sprint": "Sprint 12", "status": "pass", "change": "pending \u2192 pass"}, "timestamp": "2026-03-15T10:00:00.000Z"}, {"id": "log_004", "type": "execution", "message": "TC-004 marked FAIL \u2014 \"Remember me persists session for 30 days\"", "meta": {"id": "TC-004", "module": "Authentication", "sprint": "Sprint 12", "status": "fail", "change": "pending \u2192 fail"}, "timestamp": "2026-03-15T10:15:00.000Z"}, {"id": "log_005", "type": "execution", "message": "TC-008 marked BLOCKED \u2014 \"Place order with maximum cart items limit\"", "meta": {"id": "TC-008", "module": "Order Placement", "sprint": "Sprint 13", "status": "blocked", "change": "pending \u2192 blocked"}, "timestamp": "2026-03-16T09:10:00.000Z"}, {"id": "log_006", "type": "execution", "message": "TC-010 marked FAIL \u2014 \"BOD process runs successfully at market open\"", "meta": {"id": "TC-010", "module": "BOD Process", "sprint": "Sprint 13", "status": "fail", "change": "pending \u2192 fail"}, "timestamp": "2026-03-16T09:20:00.000Z"}, {"id": "log_007", "type": "manual", "message": "Sanity suite \"Release 1.0 Sanity\" created (10 cases from Sprint 12, Sprint 13)", "meta": {"suiteName": "Release 1.0 Sanity", "sprints": ["Sprint 12", "Sprint 13"], "caseCount": 10}, "timestamp": "2026-03-16T12:00:00.000Z"}, {"id": "log_008", "type": "generation", "message": "Generated 5 cases for \"Dashboard\" \u203a Sprint 14", "meta": {"count": 5, "module": "Dashboard", "sprint": "Sprint 14", "types": ["Functional", "Edge Case", "End to End"], "durationMs": 2750, "ids": ["TC-011", "TC-012", "TC-013", "TC-014", "TC-015"]}, "timestamp": "2026-03-16T11:00:00.000Z"}, {"id": "log_009", "type": "execution", "message": "TC-011 marked PASS \u2014 \"Dashboard loads within 3 seconds\"", "meta": {"id": "TC-011", "module": "Dashboard", "sprint": "Sprint 14", "status": "pass", "change": "pending \u2192 pass"}, "timestamp": "2026-03-17T08:00:00.000Z"}, {"id": "log_010", "type": "deletion", "message": "Deleted TC-000 \u2014 \"Placeholder test case\"", "meta": {"id": "TC-000", "module": "General", "sprint": "Unassigned"}, "timestamp": "2026-03-10T08:55:00.000Z"}]};
+const DEMO_DATA = {"testCases": [{"id": "TC-001", "title": "Verify valid login with email and password", "type": "Functional", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User is registered and system is accessible", "steps": ["Navigate to login page", "Enter valid email address", "Enter valid password", "Click Login button", "Verify redirection to dashboard"], "expected": "User is logged in and redirected to the dashboard", "impactedArea": "Dashboard, Session Management", "created": "2026-03-10T09:00:00.000Z"}, {"id": "TC-002", "title": "Login fails with incorrect password", "type": "Negative", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User account exists", "steps": ["Navigate to login page", "Enter valid email", "Enter wrong password", "Click Login", "Observe error message"], "expected": "Error message 'Invalid credentials' is displayed", "impactedArea": "Authentication", "created": "2026-03-10T09:01:00.000Z"}, {"id": "TC-003", "title": "Account lockout after 5 failed attempts", "type": "Edge Case", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User account is active", "steps": ["Attempt login with wrong password 5 times", "Observe lockout message", "Try valid credentials", "Verify account is locked", "Check email for lockout notification"], "expected": "Account locked after 5 attempts, email notification sent", "impactedArea": "Authentication, Email Service", "created": "2026-03-10T09:02:00.000Z"}, {"id": "TC-004", "title": "Remember me persists session for 30 days", "type": "Functional", "priority": "Medium", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "User has valid credentials", "steps": ["Login with Remember Me checked", "Close browser", "Reopen browser after 24 hours", "Navigate to app URL", "Verify session is still active"], "expected": "User remains logged in without re-authentication", "impactedArea": "Session Management", "created": "2026-03-10T09:03:00.000Z"}, {"id": "TC-005", "title": "OAuth login via Google redirects correctly", "type": "End to End", "priority": "High", "module": "Authentication", "sprint": "Sprint 12", "preconditions": "Google OAuth app is configured", "steps": ["Click Sign in with Google", "Authenticate with Google credentials", "Authorize app permissions", "Verify redirect back to app", "Check user profile populated"], "expected": "User logged in via Google, profile synced", "impactedArea": "Authentication, Profile", "created": "2026-03-10T09:04:00.000Z"}, {"id": "TC-006", "title": "Verify order placement with valid items", "type": "Functional", "priority": "High", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "User logged in, items in cart", "steps": ["Navigate to cart", "Review items and quantities", "Click Proceed to Checkout", "Enter shipping details", "Confirm and place order"], "expected": "Order placed successfully with confirmation number", "impactedArea": "Inventory, Payment, Notifications", "created": "2026-03-14T10:00:00.000Z"}, {"id": "TC-007", "title": "Order fails with out-of-stock item", "type": "Negative", "priority": "High", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "Item set to out-of-stock in inventory", "steps": ["Add out-of-stock item to cart", "Navigate to checkout", "Attempt to place order", "Observe system response"], "expected": "Error displayed: Item no longer available", "impactedArea": "Inventory, Order Placement", "created": "2026-03-14T10:01:00.000Z"}, {"id": "TC-008", "title": "Place order with maximum cart items limit", "type": "Edge Case", "priority": "Medium", "module": "Order Placement", "sprint": "Sprint 13", "preconditions": "Cart limit is set to 50 items", "steps": ["Add 50 items to cart", "Attempt to add 51st item", "Observe behavior", "Proceed to checkout with 50 items", "Complete order"], "expected": "51st item rejected with message, 50-item order completes", "impactedArea": "Cart, Order Placement", "created": "2026-03-14T10:02:00.000Z"}, {"id": "TC-009", "title": "Risk engine blocks high-risk trades", "type": "Impact", "priority": "High", "module": "Risk Engine", "sprint": "Sprint 13", "preconditions": "Risk thresholds configured", "steps": ["Login as trader", "Attempt trade exceeding risk limit", "Observe blocking behavior", "Check audit log", "Verify notification to risk manager"], "expected": "Trade blocked, audit logged, manager notified", "impactedArea": "Trading, Audit, Notifications", "created": "2026-03-14T10:03:00.000Z"}, {"id": "TC-010", "title": "BOD process runs successfully at market open", "type": "End to End", "priority": "High", "module": "BOD Process", "sprint": "Sprint 13", "preconditions": "System in pre-market state", "steps": ["Trigger BOD at 9:00 AM", "Monitor position initialization", "Verify P&L reset", "Check risk limit reload", "Confirm trading enabled"], "expected": "BOD completes in under 2 minutes, all systems ready", "impactedArea": "Risk Engine, Trading, Reporting", "created": "2026-03-14T10:04:00.000Z"}, {"id": "TC-011", "title": "Dashboard loads within 3 seconds", "type": "Functional", "priority": "Medium", "module": "Dashboard", "sprint": "Sprint 14", "preconditions": "User logged in with 1000+ records", "steps": ["Login with heavy data account", "Navigate to dashboard", "Measure load time", "Verify all widgets render", "Check for JS errors"], "expected": "Dashboard renders fully within 3 seconds", "impactedArea": "Dashboard, Performance", "created": "2026-03-16T11:00:00.000Z"}, {"id": "TC-012", "title": "Export to CSV includes all required fields", "type": "Functional", "priority": "Medium", "module": "Reporting", "sprint": "Sprint 14", "preconditions": "At least 10 test cases exist", "steps": ["Navigate to Test Library", "Apply module filter", "Click Export CSV", "Open exported file", "Verify all 12 columns present"], "expected": "CSV contains ID, Title, Type, Priority, Module, Sprint, Status, Notes", "impactedArea": "Reporting", "created": "2026-03-16T11:01:00.000Z"}, {"id": "TC-013", "title": "Sanity suite merge combines cases without duplicates", "type": "End to End", "priority": "High", "module": "Sprint Board", "sprint": "Sprint 14", "preconditions": "At least 2 sprints with overlapping cases", "steps": ["Navigate to Sprint Board", "Select Sprint 12 and Sprint 13", "Click Merge", "Name suite Release 1.0 Sanity", "Verify case count is deduplicated"], "expected": "Suite created with unique cases only", "impactedArea": "Sprint Board, Test Management", "created": "2026-03-16T11:02:00.000Z"}, {"id": "TC-014", "title": "Bulk mark 20 cases as passed simultaneously", "type": "Edge Case", "priority": "Medium", "module": "Test Library", "sprint": "Sprint 14", "preconditions": "20+ test cases in library", "steps": ["Open Test Library", "Select all cases via checkbox", "Click Mark Pass", "Confirm action", "Verify all cases show pass status"], "expected": "All 20 cases marked pass, activity log updated", "impactedArea": "Test Library, Activity Logs", "created": "2026-03-16T11:03:00.000Z"}, {"id": "TC-015", "title": "Inline pass/fail on sprint board persists on refresh", "type": "Functional", "priority": "Low", "module": "Sprint Board", "sprint": "Sprint 14", "preconditions": "Sprint board has test cases", "steps": ["Open Sprint Board", "Mark TC-001 as Pass inline", "Refresh the page", "Verify TC-001 still shows Pass", "Check activity log entry"], "expected": "Result persists after page refresh, logged in activity", "impactedArea": "Sprint Board, Activity Logs", "created": "2026-03-16T11:04:00.000Z"}, {"id": "TC-016", "title": "Verify new order routes to correct exchange segment based on instrument type", "type": "Functional", "priority": "High", "riskTier": "High", "module": "OMS", "sprint": "Sprint 15", "preconditions": "Trader has multi-segment access enabled", "steps": ["Login as trader with multi-segment access", "Select instrument from Equity Cash segment", "Place a fresh buy order", "Verify order routes to NSE Cash segment gateway", "Repeat for F&O and Currency segments and confirm correct exchange routing"], "expected": "Order is routed to the correct exchange segment gateway (NSE/BSE Cash, F&O, Currency) matching the instrument type", "impactedArea": "Order Routing, Exchange Gateway", "created": "2026-06-01T09:00:00.000Z"}, {"id": "TC-017", "title": "Order rejected when price is outside daily price band", "type": "Negative", "priority": "High", "riskTier": "High", "module": "OMS", "sprint": "Sprint 15", "preconditions": "Scrip has a defined circuit limit for the day", "steps": ["Login as trader", "Select a scrip with defined circuit limit", "Enter order price above the upper circuit band", "Submit the order", "Observe system response"], "expected": "Order is rejected with message 'Price outside circuit limit', no order sent to exchange", "impactedArea": "OMS, Exchange Gateway", "created": "2026-06-01T09:01:00.000Z"}, {"id": "TC-018", "title": "Partial fill updates remaining quantity and order status correctly", "type": "Edge Case", "priority": "Medium", "riskTier": "Medium", "module": "OMS", "sprint": "Sprint 15", "preconditions": "Scrip has low liquidity for partial execution", "steps": ["Place a large quantity order in low-liquidity scrip", "Wait for partial execution from exchange", "Verify order status changes to 'Partially Filled'", "Check remaining quantity is updated correctly", "Cancel remaining quantity and verify final status"], "expected": "Order shows correct filled/remaining split and updates to 'Cancelled' after residual cancellation", "impactedArea": "OMS, Order Book", "created": "2026-06-01T09:02:00.000Z"}, {"id": "TC-019", "title": "Order modification resets time priority as per exchange rule", "type": "Functional", "priority": "Medium", "riskTier": "Medium", "module": "OMS", "sprint": "Sprint 15", "preconditions": "An open limit order exists in the order book", "steps": ["Place a limit order and note queue position", "Modify the order quantity upward", "Verify order receives new timestamp in exchange queue", "Modify price only and verify same behavior", "Confirm original time priority is lost after modification"], "expected": "Order modification resets time priority per exchange rule, confirmed in order book position", "impactedArea": "OMS, Exchange Gateway", "created": "2026-06-01T09:03:00.000Z"}, {"id": "TC-020", "title": "Order cancellation before market open queues correctly for BOD", "type": "Functional", "priority": "Low", "riskTier": "Low", "module": "OMS", "sprint": "Sprint 15", "preconditions": "GTC order placed after previous market close", "steps": ["Place a GTC order after market close", "Submit a cancellation request before next day BOD", "Trigger BOD process", "Verify cancelled order does not appear in next day's order book", "Check audit log for cancellation timestamp"], "expected": "Order is cancelled and excluded from next trading day's book, cancellation logged with pre-market timestamp", "impactedArea": "OMS, BOD Process, Audit", "created": "2026-06-01T09:04:00.000Z"}, {"id": "TC-021", "title": "RMS blocks order exceeding client-level margin limit", "type": "Functional", "priority": "High", "riskTier": "High", "module": "RMS", "sprint": "Sprint 15", "preconditions": "Client has a configured margin limit", "steps": ["Login as trader with defined margin limit", "Attempt order requiring margin above available limit", "Submit the order", "Observe RMS response", "Check audit log for blocked attempt"], "expected": "Order blocked with 'Insufficient margin' message, audit log records attempt", "impactedArea": "RMS, Audit", "created": "2026-06-02T09:00:00.000Z"}, {"id": "TC-022", "title": "Real-time MTM loss triggers auto square-off at configured threshold", "type": "Impact", "priority": "High", "riskTier": "High", "module": "RMS", "sprint": "Sprint 15", "preconditions": "MTM loss threshold configured for test account", "steps": ["Configure MTM loss threshold for test account", "Simulate adverse price movement causing loss beyond threshold", "Monitor RMS real-time MTM calculation", "Verify auto square-off order is triggered", "Confirm notification sent to trader and risk desk"], "expected": "Position auto-squared off once MTM loss breaches threshold, notifications sent to trader and risk desk", "impactedArea": "RMS, Trading, Notifications", "created": "2026-06-02T09:01:00.000Z"}, {"id": "TC-023", "title": "RMS rejects order breaching exchange-level exposure limit for a scrip", "type": "Negative", "priority": "High", "riskTier": "High", "module": "RMS", "sprint": "Sprint 15", "preconditions": "Scrip has an exchange-level exposure cap", "steps": ["Identify scrip with exchange-level exposure cap", "Place order that would breach the cap at client level", "Submit order", "Observe rejection message", "Verify exposure counter unchanged after rejection"], "expected": "Order rejected citing exposure limit breach, exposure utilization remains unchanged", "impactedArea": "RMS, Exchange Gateway", "created": "2026-06-02T09:02:00.000Z"}, {"id": "TC-024", "title": "Margin utilization updates in real time after trade execution", "type": "Functional", "priority": "Medium", "riskTier": "Medium", "module": "RMS", "sprint": "Sprint 15", "preconditions": "Account has available margin and open trading access", "steps": ["Note current margin utilization for account", "Execute a trade using available margin", "Refresh RMS dashboard", "Verify margin utilization reflects new position immediately", "Compare with back-office ledger for consistency"], "expected": "Margin utilization updates within seconds of execution and matches back-office figures", "impactedArea": "RMS, Reporting", "created": "2026-06-02T09:03:00.000Z"}, {"id": "TC-025", "title": "RMS allows trade after risk manager override for pre-approved breach", "type": "End to End", "priority": "Medium", "riskTier": "Medium", "module": "RMS", "sprint": "Sprint 15", "preconditions": "Risk manager override workflow is enabled", "steps": ["Attempt order that breaches a soft risk limit", "Observe system block with override option", "Login as risk manager and approve override", "Retry the original order as trader", "Verify order passes and override is logged"], "expected": "Order executes after authorized override, override action fully logged with approver ID", "impactedArea": "RMS, Audit, Trading", "created": "2026-06-02T09:04:00.000Z"}, {"id": "TC-026", "title": "Contract master file loads successfully with all active scrips before market open", "type": "Functional", "priority": "High", "riskTier": "High", "module": "BOD Validation", "sprint": "Sprint 15", "preconditions": "Exchange contract master file available for the trading day", "steps": ["Trigger BOD contract master load process", "Monitor load completion status", "Verify count of active scrips matches exchange master file", "Spot check newly listed and delisted scrips", "Confirm trading is blocked for scrips missing from master"], "expected": "Contract master loads completely with accurate scrip count before market open, missing scrips blocked from trading", "impactedArea": "BOD Process, Reference Data", "created": "2026-06-03T09:00:00.000Z"}, {"id": "TC-027", "title": "Previous day closing price and margin file reconcile without mismatch", "type": "Functional", "priority": "High", "riskTier": "High", "module": "BOD Validation", "sprint": "Sprint 15", "preconditions": "Exchange bhavcopy and margin files received", "steps": ["Trigger BOD reconciliation job", "Compare previous day closing prices against exchange bhavcopy", "Compare margin file values against exchange-published margins", "Flag any mismatches for manual review", "Verify BOD halts if critical mismatch is found"], "expected": "Closing price and margin file match exchange data exactly; BOD halts and alerts on any mismatch", "impactedArea": "BOD Process, Risk Engine, Reporting", "created": "2026-06-03T09:01:00.000Z"}, {"id": "TC-028", "title": "BOD process carries forward open positions correctly across segments", "type": "Functional", "priority": "High", "riskTier": "High", "module": "BOD Validation", "sprint": "Sprint 15", "preconditions": "Open positions exist across multiple segments at previous close", "steps": ["Note open positions across Equity, F&O and Currency at previous day close", "Run BOD position carry-forward job", "Verify positions appear correctly in next day's opening book", "Check quantity, average price and segment mapping", "Confirm P&L calculation resets correctly for the new day"], "expected": "All open positions carry forward accurately across segments with correct average price and reset P&L", "impactedArea": "BOD Process, Risk Engine, Trading", "created": "2026-06-03T09:02:00.000Z"}, {"id": "TC-029", "title": "Circuit limits and price bands refresh correctly for all scrips at BOD", "type": "Functional", "priority": "Medium", "riskTier": "Medium", "module": "BOD Validation", "sprint": "Sprint 15", "preconditions": "Corporate action adjustments published for select scrips", "steps": ["Trigger BOD circuit limit refresh job", "Verify updated circuit limits load for all scrips", "Spot check scrips with corporate action-adjusted bands", "Confirm old day's limits are fully overwritten", "Attempt a test order near new circuit band to validate"], "expected": "Circuit limits refresh correctly for all scrips including corporate-action adjustments", "impactedArea": "BOD Process, Reference Data", "created": "2026-06-03T09:03:00.000Z"}, {"id": "TC-030", "title": "BOD completes within SLA and trading enables only after successful validation", "type": "End to End", "priority": "High", "riskTier": "High", "module": "BOD Validation", "sprint": "Sprint 15", "preconditions": "Full BOD sequence scheduled for the trading day", "steps": ["Trigger full BOD sequence at scheduled time", "Monitor each validation stage (contract master, margin, positions, circuits)", "Measure total BOD completion time against SLA", "Verify trading remains disabled until all stages pass", "Confirm trading enables automatically on successful completion"], "expected": "BOD completes within SLA window and trading is enabled only once every validation stage passes", "impactedArea": "BOD Process, Trading, Risk Engine", "created": "2026-06-03T09:04:00.000Z"}, {"id": "TC-031", "title": "Price feed from NSE and BSE stays within acceptable latency and deviation threshold", "type": "Functional", "priority": "High", "riskTier": "High", "module": "Multi-Exchange Sync", "sprint": "Sprint 15", "preconditions": "Scrip is dual-listed on NSE and BSE", "steps": ["Subscribe to live price feed from NSE and BSE for a dual-listed scrip", "Capture timestamps for feed updates on both exchanges", "Measure latency difference between the two feeds", "Compare price deviation between exchanges", "Verify alert triggers if deviation exceeds configured threshold"], "expected": "Feed latency and price deviation remain within threshold, alert triggers automatically if breached", "impactedArea": "Market Data, Multi-Exchange Sync", "created": "2026-06-04T09:00:00.000Z"}, {"id": "TC-032", "title": "System fails over to backup exchange feed within SLA on primary feed drop", "type": "Edge Case", "priority": "High", "riskTier": "High", "module": "Multi-Exchange Sync", "sprint": "Sprint 15", "preconditions": "Backup feed source is configured and available", "steps": ["Establish primary feed connection to exchange A", "Simulate primary feed disconnection", "Monitor system detection of feed drop", "Verify automatic failover to backup feed source", "Measure time taken to resume live price updates"], "expected": "System detects feed drop and fails over to backup feed within configured SLA, no stale price display", "impactedArea": "Market Data, Multi-Exchange Sync", "created": "2026-06-04T09:01:00.000Z"}, {"id": "TC-033", "title": "Smart order routing selects exchange offering best available price", "type": "Functional", "priority": "Medium", "riskTier": "Medium", "module": "Multi-Exchange Sync", "sprint": "Sprint 15", "preconditions": "Scrip is listed on both NSE and BSE with a price difference", "steps": ["Identify a scrip listed on both NSE and BSE with price difference", "Place a market order using smart order routing", "Verify system evaluates best price across both exchanges", "Confirm order executes on the exchange with best price", "Check execution report for routing rationale"], "expected": "Order routes to and executes on the exchange offering the best available price at order time", "impactedArea": "Order Routing, Multi-Exchange Sync", "created": "2026-06-04T09:02:00.000Z"}, {"id": "TC-034", "title": "Exchange-specific holiday calendar prevents order placement on non-trading day", "type": "Negative", "priority": "Medium", "riskTier": "Medium", "module": "Multi-Exchange Sync", "sprint": "Sprint 15", "preconditions": "A date exists that is a holiday on one exchange but not another", "steps": ["Identify a date that is a holiday on one exchange but not another", "Attempt to place an order on the closed exchange", "Observe system response", "Attempt the same order on the open exchange", "Verify order is accepted only on the trading exchange"], "expected": "Order rejected on the closed exchange with holiday message, accepted normally on the open exchange", "impactedArea": "Multi-Exchange Sync, Reference Data", "created": "2026-06-04T09:03:00.000Z"}, {"id": "TC-035", "title": "Symbol mapping stays consistent across exchanges for the same underlying instrument", "type": "Functional", "priority": "Low", "riskTier": "Low", "module": "Multi-Exchange Sync", "sprint": "Sprint 15", "preconditions": "Instrument is listed on NSE, BSE and MCX where applicable", "steps": ["Select an instrument listed on NSE, BSE and MCX where applicable", "Verify internal symbol mapping table for each exchange listing", "Place test orders referencing each exchange-specific symbol", "Confirm all route to the same underlying instrument record", "Check reporting aggregates positions correctly across exchange symbols"], "expected": "Symbol mapping remains consistent and positions aggregate correctly across all exchange listings", "impactedArea": "Reference Data, Reporting, Multi-Exchange Sync", "created": "2026-06-04T09:04:00.000Z"}], "sprints": {"Sprint 12": {"name": "Sprint 12", "cases": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005"]}, "Sprint 13": {"name": "Sprint 13", "cases": ["TC-006", "TC-007", "TC-008", "TC-009", "TC-010"]}, "Sprint 14": {"name": "Sprint 14", "cases": ["TC-011", "TC-012", "TC-013", "TC-014", "TC-015"]}, "Sprint 15": {"name": "Sprint 15", "cases": ["TC-016", "TC-017", "TC-018", "TC-019", "TC-020", "TC-021", "TC-022", "TC-023", "TC-024", "TC-025", "TC-026", "TC-027", "TC-028", "TC-029", "TC-030", "TC-031", "TC-032", "TC-033", "TC-034", "TC-035"]}}, "sanitySuites": [{"id": "suite_demo1", "name": "Release 1.0 Sanity", "mergedSprints": ["Sprint 12", "Sprint 13"], "caseIds": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005", "TC-006", "TC-007", "TC-008", "TC-009", "TC-010"], "created": "2026-03-16T12:00:00.000Z"}], "results": {"TC-001": {"status": "pass", "markedAt": "2026-03-15T10:00:00.000Z", "note": ""}, "TC-002": {"status": "pass", "markedAt": "2026-03-15T10:05:00.000Z", "note": ""}, "TC-003": {"status": "pass", "markedAt": "2026-03-15T10:10:00.000Z", "note": ""}, "TC-004": {"status": "fail", "markedAt": "2026-03-15T10:15:00.000Z", "note": "Session expires after browser restart \u2014 BUG-2341"}, "TC-005": {"status": "pass", "markedAt": "2026-03-15T10:20:00.000Z", "note": ""}, "TC-006": {"status": "pass", "markedAt": "2026-03-16T09:00:00.000Z", "note": ""}, "TC-007": {"status": "pass", "markedAt": "2026-03-16T09:05:00.000Z", "note": ""}, "TC-008": {"status": "blocked", "markedAt": "2026-03-16T09:10:00.000Z", "note": "Cart limit feature not yet deployed to QA env"}, "TC-009": {"status": "pass", "markedAt": "2026-03-16T09:15:00.000Z", "note": ""}, "TC-010": {"status": "fail", "markedAt": "2026-03-16T09:20:00.000Z", "note": "BOD taking 4.2 min \u2014 BUG-2356 raised"}, "TC-011": {"status": "pass", "markedAt": "2026-03-17T08:00:00.000Z", "note": ""}, "TC-012": {"status": "pass", "markedAt": "2026-03-17T08:05:00.000Z", "note": ""}}, "logs": [{"id": "log_001", "type": "generation", "message": "Generated 5 cases for \"Authentication\" \u203a Sprint 12", "meta": {"count": 5, "module": "Authentication", "sprint": "Sprint 12", "types": ["Functional", "Negative", "Edge Case", "End to End"], "durationMs": 3210, "ids": ["TC-001", "TC-002", "TC-003", "TC-004", "TC-005"]}, "timestamp": "2026-03-10T09:00:00.000Z"}, {"id": "log_002", "type": "generation", "message": "Generated 5 cases for \"Order Placement\" \u203a Sprint 13", "meta": {"count": 5, "module": "Order Placement", "sprint": "Sprint 13", "types": ["Functional", "Negative", "Edge Case", "Impact", "End to End"], "durationMs": 2980, "ids": ["TC-006", "TC-007", "TC-008", "TC-009", "TC-010"]}, "timestamp": "2026-03-14T10:00:00.000Z"}, {"id": "log_003", "type": "execution", "message": "TC-001 marked PASS \u2014 \"Verify valid login with email and password\"", "meta": {"id": "TC-001", "module": "Authentication", "sprint": "Sprint 12", "status": "pass", "change": "pending \u2192 pass"}, "timestamp": "2026-03-15T10:00:00.000Z"}, {"id": "log_004", "type": "execution", "message": "TC-004 marked FAIL \u2014 \"Remember me persists session for 30 days\"", "meta": {"id": "TC-004", "module": "Authentication", "sprint": "Sprint 12", "status": "fail", "change": "pending \u2192 fail"}, "timestamp": "2026-03-15T10:15:00.000Z"}, {"id": "log_005", "type": "execution", "message": "TC-008 marked BLOCKED \u2014 \"Place order with maximum cart items limit\"", "meta": {"id": "TC-008", "module": "Order Placement", "sprint": "Sprint 13", "status": "blocked", "change": "pending \u2192 blocked"}, "timestamp": "2026-03-16T09:10:00.000Z"}, {"id": "log_006", "type": "execution", "message": "TC-010 marked FAIL \u2014 \"BOD process runs successfully at market open\"", "meta": {"id": "TC-010", "module": "BOD Process", "sprint": "Sprint 13", "status": "fail", "change": "pending \u2192 fail"}, "timestamp": "2026-03-16T09:20:00.000Z"}, {"id": "log_007", "type": "manual", "message": "Sanity suite \"Release 1.0 Sanity\" created (10 cases from Sprint 12, Sprint 13)", "meta": {"suiteName": "Release 1.0 Sanity", "sprints": ["Sprint 12", "Sprint 13"], "caseCount": 10}, "timestamp": "2026-03-16T12:00:00.000Z"}, {"id": "log_008", "type": "generation", "message": "Generated 5 cases for \"Dashboard\" \u203a Sprint 14", "meta": {"count": 5, "module": "Dashboard", "sprint": "Sprint 14", "types": ["Functional", "Edge Case", "End to End"], "durationMs": 2750, "ids": ["TC-011", "TC-012", "TC-013", "TC-014", "TC-015"]}, "timestamp": "2026-03-16T11:00:00.000Z"}, {"id": "log_009", "type": "execution", "message": "TC-011 marked PASS \u2014 \"Dashboard loads within 3 seconds\"", "meta": {"id": "TC-011", "module": "Dashboard", "sprint": "Sprint 14", "status": "pass", "change": "pending \u2192 pass"}, "timestamp": "2026-03-17T08:00:00.000Z"}, {"id": "log_010", "type": "deletion", "message": "Deleted TC-000 \u2014 \"Placeholder test case\"", "meta": {"id": "TC-000", "module": "General", "sprint": "Sprint 15"}, "timestamp": "2026-03-10T08:55:00.000Z"}, {"id": "log_011", "type": "generation", "message": "Generated 5 cases for \"OMS\" \u203a Sprint 15", "meta": {"count": 5, "module": "OMS", "sprint": "Sprint 15", "types": ["Functional", "Negative", "Edge Case"], "durationMs": 3050, "ids": ["TC-016", "TC-017", "TC-018", "TC-019", "TC-020"]}, "timestamp": "2026-06-01T09:00:00.000Z"}, {"id": "log_012", "type": "generation", "message": "Generated 5 cases for \"RMS\" \u203a Sprint 15", "meta": {"count": 5, "module": "RMS", "sprint": "Sprint 15", "types": ["Functional", "Impact", "Negative", "End to End"], "durationMs": 3120, "ids": ["TC-021", "TC-022", "TC-023", "TC-024", "TC-025"]}, "timestamp": "2026-06-02T09:00:00.000Z"}, {"id": "log_013", "type": "generation", "message": "Generated 5 cases for \"BOD Validation\" \u203a Sprint 15", "meta": {"count": 5, "module": "BOD Validation", "sprint": "Sprint 15", "types": ["Functional", "End to End"], "durationMs": 2890, "ids": ["TC-026", "TC-027", "TC-028", "TC-029", "TC-030"]}, "timestamp": "2026-06-03T09:00:00.000Z"}, {"id": "log_014", "type": "generation", "message": "Generated 5 cases for \"Multi-Exchange Sync\" \u203a Sprint 15", "meta": {"count": 5, "module": "Multi-Exchange Sync", "sprint": "Sprint 15", "types": ["Functional", "Edge Case", "Negative"], "durationMs": 3005, "ids": ["TC-031", "TC-032", "TC-033", "TC-034", "TC-035"]}, "timestamp": "2026-06-04T09:00:00.000Z"}]};
+// Keep the Sprint 15 (capital markets) demo entries looking freshly generated,
+// regardless of what actual date the site is opened on.
+(function freshenSprint15Dates() {
+  const now = Date.now();
+  const day = 24 * 60 * 60 * 1000;
+  const moduleOffsets = { 'OMS': 3, 'RMS': 2, 'BOD Validation': 1, 'Multi-Exchange Sync': 0 };
+  DEMO_DATA.testCases.forEach(tc => {
+    if (tc.sprint === 'Sprint 15' && moduleOffsets.hasOwnProperty(tc.module)) {
+      const idxInModule = DEMO_DATA.testCases.filter(t => t.module === tc.module && t.sprint === 'Sprint 15').indexOf(tc);
+      const ts = now - (moduleOffsets[tc.module] * day) - (idxInModule * 15 * 60 * 1000);
+      tc.created = new Date(ts).toISOString();
+    }
+  });
+  DEMO_DATA.logs.forEach(log => {
+    if (log.meta && log.meta.sprint === 'Sprint 15' && moduleOffsets.hasOwnProperty(log.meta.module)) {
+      log.timestamp = new Date(now - (moduleOffsets[log.meta.module] * day)).toISOString();
+    }
+  });
+})();
 let DB = (() => {
   const stored = localStorage.getItem(KEY);
   if (stored) { try { return JSON.parse(stored); } catch(e) {} }
   return JSON.parse(JSON.stringify(DEMO_DATA));
 })();
 if (!DB.logs) DB.logs = [];
-const save = () => localStorage.setItem(KEY, JSON.stringify(DB));
+const save = () => {
+  localStorage.setItem(KEY, JSON.stringify(DB));
+  scheduleServerSync();
+};
+
+// Debounced push to the shared open datastore (Netlify Function + Neon).
+// localStorage write above is instant and always succeeds; this is best-effort
+// on top of it, so a slow/offline connection never blocks the UI.
+let _syncTimer = null;
+function scheduleServerSync() {
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(pushToServer, 600);
+}
+async function pushToServer() {
+  try {
+    await fetch('/.netlify/functions/qa-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: DB })
+    });
+  } catch (e) {
+    // Offline or function unreachable — localStorage already has the data,
+    // nothing further to do here.
+  }
+}
+
+// On load: paint instantly from localStorage/demo data (already done above),
+// then check the shared store for a newer version from another visitor and
+// swap it in if present. This is what makes "everyone sees the latest
+// generated cases" actually true, while keeping the page usable immediately.
+async function pullFromServer() {
+  try {
+    const resp = await fetch('/.netlify/functions/qa-data');
+    if (!resp.ok) return;
+    const { data } = await resp.json();
+    if (data && typeof data === 'object' && Array.isArray(data.testCases)) {
+      DB = data;
+      if (!DB.logs) DB.logs = [];
+      localStorage.setItem(KEY, JSON.stringify(DB));
+      updateDataLists(); updateSidebar(); renderDashboard();
+    }
+  } catch (e) {
+    // Offline, function not deployed, or DB not reachable — keep local copy.
+  }
+}
+
+// One-time migration: move any case (or sprint bucket) still tagged "Unassigned"
+// into Sprint 15, since that's now the default landing sprint.
+(function migrateUnassignedToSprint15() {
+  let migratedCount = 0;
+  const movedIds = [];
+  DB.testCases.forEach(tc => {
+    if (!tc.sprint || tc.sprint === 'Unassigned') {
+      tc.sprint = 'Sprint 15';
+      migratedCount++;
+      movedIds.push(tc.id);
+    }
+  });
+  if (migratedCount > 0) {
+    if (!DB.sprints['Sprint 15']) DB.sprints['Sprint 15'] = { name: 'Sprint 15', cases: [] };
+    movedIds.forEach(id => { if (!DB.sprints['Sprint 15'].cases.includes(id)) DB.sprints['Sprint 15'].cases.push(id); });
+    if (DB.sprints['Unassigned']) delete DB.sprints['Unassigned'];
+    DB.logs.unshift({ id: 'log_migrate_' + Date.now(), type: 'manual', message: `Reassigned ${migratedCount} case(s) from "Unassigned" to Sprint 15`, meta: { count: migratedCount, ids: movedIds }, timestamp: new Date().toISOString() });
+    save();
+  }
+})();
+
 const typeColors = {Functional:'functional','Edge Case':'edge',Negative:'negative','End to End':'e2e',Impact:'impact'};
+function riskTierOf(tc) { return tc.riskTier || (tc.priority === 'High' ? 'High' : tc.priority === 'Low' ? 'Low' : 'Medium'); }
+function riskBadge(tc) { const r = riskTierOf(tc); return `<span class="tag tag-risk-${r.toLowerCase()}" title="Business risk tier — how much impact a failure here would have on trading/compliance">Risk: ${r}</span>`; }
 let activeLogFilter = 'all';
 let currentTcId = null;
 let editMode = false;
@@ -1028,16 +1238,37 @@ const MOCK_ACTIONS = {
   'Security': ['Verify {f} enforces proper access control/authorization', 'Verify {f} does not expose sensitive data in responses/logs'],
   'API': ['Verify {f} API returns correct response schema and status code', 'Verify {f} API handles malformed/missing request payloads correctly']
 };
+// Capital-markets-flavored variants, used instead of the generic set above
+// whenever the description/module signals trading/OMS/RMS/BOD domain content.
+// This keeps the offline fallback (used only if the live Claude call fails)
+// reasonably domain-aware instead of dropping to generic app-QA phrasing.
+const TRADING_MOCK_ACTIONS = {
+  'Functional': ['Verify {f} completes and routes correctly to the applicable exchange/segment gateway', 'Verify {f} updates order/position state correctly per exchange rules', 'Verify {f} reflects correctly across OMS, RMS and reporting after execution'],
+  'Negative': ['Verify {f} is rejected with a clear message when it breaches margin/exposure limits', 'Verify {f} is rejected when the price falls outside the daily circuit/price band', 'Verify {f} is blocked and logged when a required risk precondition is unmet'],
+  'Edge Case': ['Verify {f} behaves correctly at circuit limit / margin boundary values', 'Verify {f} handles partial fills and residual-quantity cancellation correctly', 'Verify {f} behaves correctly for dual-listed scrips across exchanges'],
+  'Impact': ['Verify {f} auto-triggers the correct risk action (square-off/block) once its threshold is breached', 'Verify {f} correctly notifies the trader and risk desk when triggered'],
+  'End to End': ['Verify {f} completes across the full order lifecycle without manual intervention', 'Verify {f} carries through correctly into next-day BOD processing'],
+  'Regression': ['Verify {f} still behaves correctly after the latest exchange/reference-data change', 'Verify audit log and reconciliation figures remain accurate after {f}'],
+  'UI/UX': ['Verify {f} clearly surfaces risk/margin/rejection states to the trader', 'Verify {f} is legible and unambiguous under fast-moving market data'],
+  'Performance': ['Verify {f} completes within SLA even under peak market-open load', 'Verify {f} price feed/latency stays within threshold under load'],
+  'Security': ['Verify {f} enforces role-based access (trader vs risk manager) correctly', 'Verify {f} audit trail captures approver identity for any override'],
+  'API': ['Verify {f} API returns the correct schema/status for a valid order/risk request', 'Verify {f} API rejects malformed order/risk payloads with the correct error code']
+};
+const TRADING_KEYWORDS = /\b(oms|rms|bod|eod|margin|circuit|exchange|nse|bse|mcx|scrip|exposure|order|trade|trading|risk|square[- ]?off|mtm|settlement|contract master|broker|demat|portfolio|derivative|f&o|equity|currency segment|commodity)\b/i;
+function isTradingDomain(desc, module) {
+  return TRADING_KEYWORDS.test(desc || '') || TRADING_KEYWORDS.test(module || '');
+}
 const MOCK_PRIORITY = ['High','High','Medium','Medium','Medium','Low'];
 
 function mockGenerateCases({ desc, module, types, count, startId, impacted, notes, project, env }) {
   const feature = desc.length > 60 ? desc.slice(0,57) + '...' : desc;
   const featureShort = desc.split(/[.,]/)[0].trim();
+  const domainActions = isTradingDomain(desc, module) ? TRADING_MOCK_ACTIONS : MOCK_ACTIONS;
   const cases = [];
   let i = 0;
   while (cases.length < count) {
     const type = types[i % types.length];
-    const templates = MOCK_ACTIONS[type] || MOCK_ACTIONS['Functional'];
+    const templates = domainActions[type] || MOCK_ACTIONS[type] || MOCK_ACTIONS['Functional'];
     const template = templates[Math.floor(cases.length / types.length) % templates.length];
     const title = template.replace('{f}', featureShort || module).replace(/^(.)/, m => m.toUpperCase());
     const id = 'TC-' + String(startId + cases.length).padStart(3, '0');
@@ -1074,13 +1305,11 @@ async function generateCases() {
 
   const count = document.getElementById('reqCount').value;
   const module = document.getElementById('reqModule').value.trim() || 'General';
-  const sprint = document.getElementById('reqSprint').value.trim() || 'Unassigned';
+  const sprint = document.getElementById('reqSprint').value.trim() || 'Sprint 15';
   const impacted = document.getElementById('reqImpacted').value.trim();
   const notes = document.getElementById('reqNotes').value.trim();
   const project = document.getElementById('reqProject')?.value || '';
   const env = document.getElementById('reqEnv')?.value || 'UAT';
-  const platformNote = project ? ` Platform: ${project}.` : '';
-  const envNote = ` Test environment: ${env}.`;
   const startId = DB.testCases.length + 1;
 
   const btn = document.getElementById('genBtn');
@@ -1092,10 +1321,45 @@ async function generateCases() {
   status.textContent = 'Calling Claude AI…';
 
   const t0 = Date.now();
+  let rawCases = null;
+  let usedAI = false;
+
   try {
-    // Offline demo mode: generates realistic test cases locally, no network/API required.
-    await new Promise(r => setTimeout(r, 700 + Math.random() * 600)); // simulate thinking time
-    const cases = mockGenerateCases({ desc, module, types, count: Number(count), startId, impacted, notes, project, env });
+    const resp = await fetch('/.netlify/functions/generate-cases', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ desc, module, types, count: Number(count), impacted, notes, project, env })
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (Array.isArray(data.cases) && data.cases.length) {
+        rawCases = data.cases;
+        usedAI = true;
+      }
+    }
+  } catch (e) {
+    // Network error, function not deployed, or offline — fall through to local generator below.
+  }
+
+  try {
+    let cases;
+    if (rawCases) {
+      // Response came from Claude: attach IDs and any fields the model doesn't set itself.
+      cases = rawCases.slice(0, Number(count)).map((c, idx) => ({
+        id: 'TC-' + String(startId + idx).padStart(3, '0'),
+        title: (c.title || '').slice(0, 120),
+        type: c.type || types[idx % types.length],
+        priority: c.priority || 'Medium',
+        riskTier: c.riskTier,
+        preconditions: c.preconditions || '',
+        steps: Array.isArray(c.steps) ? c.steps : [String(c.steps || '')].filter(Boolean),
+        expected: c.expected || '',
+        impactedArea: c.impactedArea || impacted || module
+      }));
+    } else {
+      // Fallback: real API call failed (not deployed yet, no network, key missing, etc).
+      cases = mockGenerateCases({ desc, module, types, count: Number(count), startId, impacted, notes, project, env });
+    }
     const ms = Date.now() - t0;
     cases.forEach(tc => { tc.module = module; tc.sprint = sprint; tc.impacted = impacted; tc.project = project; tc.env = env; tc.created = new Date().toISOString(); });
     DB.testCases.push(...cases);
@@ -1103,10 +1367,10 @@ async function generateCases() {
     DB.sprints[sprint].cases.push(...cases.map(c => c.id));
     save(); updateDataLists(); renderPreview(cases, module, sprint);
     showNotif(cases.length + ' test cases generated!', 'success');
-    status.textContent = cases.length + ' cases added · ' + (ms/1000).toFixed(1) + 's';
+    status.textContent = cases.length + ' cases added · ' + (ms/1000).toFixed(1) + 's' + (usedAI ? '' : ' · offline mode');
     updateSidebar();
     if (regenBtn) { regenBtn.style.display = 'inline-flex'; }
-    addLog('generation', `Generated ${cases.length} cases for "${module}" › ${sprint}${project?' ['+project+']':''}`, { count:cases.length, module, sprint, project, env, types, durationMs:ms, ids:cases.map(c=>c.id) });
+    addLog('generation', `Generated ${cases.length} cases for "${module}" › ${sprint}${project?' ['+project+']':''}`, { count:cases.length, module, sprint, project, env, types, durationMs:ms, ids:cases.map(c=>c.id), source: usedAI ? 'claude' : 'offline' });
   } catch(e) {
     showNotif('Error: ' + e.message, 'error');
     status.textContent = 'Generation failed.';
@@ -1122,7 +1386,7 @@ function addManualCase() {
   const title = document.getElementById('manTitle').value.trim();
   if (!title) { showNotif('Enter a title'); return; }
   const module = document.getElementById('manModule').value.trim() || 'General';
-  const sprint = document.getElementById('manSprint').value.trim() || 'Unassigned';
+  const sprint = document.getElementById('manSprint').value.trim() || 'Sprint 15';
   const steps = document.getElementById('manSteps').value.trim().split('\n').filter(Boolean);
   const expected = document.getElementById('manExpected').value.trim();
   const type = document.getElementById('manType').value;
@@ -1148,6 +1412,7 @@ function renderPreview(cases, module, sprint) {
         <span style="font-family:var(--font-mono);font-size:11px;color:var(--text3)">${tc.id}</span>
         <span class="tag tag-${typeColors[tc.type]||'functional'}" style="font-size:10px">${tc.type}</span>
         <span class="tag tag-${(tc.priority||'medium').toLowerCase()}" style="font-size:10px">${tc.priority}</span>
+        ${riskBadge(tc)}
       </div>
       <div style="font-size:13px;font-weight:500">${tc.title}</div>
     </div>`;
@@ -1176,6 +1441,8 @@ function renderLibrary() {
   if (filterMod) cases = cases.filter(c => c.module === filterMod);
   if (filterSpr) cases = cases.filter(c => c.sprint === filterSpr);
   if (filterType) cases = cases.filter(c => c.type === filterType);
+  const filterRisk = document.getElementById('filterRisk')?.value || '';
+  if (filterRisk) cases = cases.filter(c => riskTierOf(c) === filterRisk);
   if (filterProject) cases = cases.filter(c => c.project === filterProject);
   if (filterStatus) {
     if (filterStatus === 'pending') cases = cases.filter(c => !DB.results[c.id]?.status);
@@ -1198,7 +1465,7 @@ function renderLibrary() {
 
   let html = `<table class="tc-table"><thead><tr>
     <th style="width:32px"><input type="checkbox" id="libSelectAll" onchange="toggleSelectAll(this.checked)" style="accent-color:var(--accent)"></th>
-    <th>ID</th><th>Title</th><th>Type</th><th>Priority</th><th class="hide-mobile">Platform</th><th>Module</th><th class="hide-mobile">Sprint</th><th>Status</th><th></th>
+    <th>ID</th><th>Title</th><th>Type</th><th>Priority</th><th class="hide-mobile">Risk</th><th class="hide-mobile">Platform</th><th>Module</th><th class="hide-mobile">Sprint</th><th>Status</th><th></th>
   </tr></thead><tbody>`;
   cases.forEach(tc => {
     const res = DB.results[tc.id];
@@ -1211,14 +1478,17 @@ function renderLibrary() {
       <td class="tc-title-cell">${tc.title}<small>${tc.tags&&tc.tags.length?tc.tags.map(t=>'#'+t).join(' '):tc.impactedArea||tc.impacted||''}</small></td>
       <td><span class="tag tag-${typeColors[tc.type]||'functional'}">${tc.type}</span></td>
       <td><span class="tag tag-${(tc.priority||'medium').toLowerCase()}">${tc.priority}</span></td>
+      <td class="hide-mobile">${riskBadge(tc)}</td>
       <td class="hide-mobile" style="font-size:12px;color:var(--text2)">${platformIcon} ${tc.project||'—'}</td>
       <td style="font-size:12px;color:var(--text2)">${tc.module}</td>
       <td class="hide-mobile"><span class="sprint-chip" style="font-size:10px;padding:2px 7px">${tc.sprint}</span></td>
       <td>${statusTag}</td>
-      <td style="display:flex;gap:5px">
-        <button class="btn btn-ghost btn-xs" onclick="openTcDetail('${tc.id}')">View</button>
-        <button class="btn btn-ghost btn-xs" onclick="openTcDetail('${tc.id}');toggleEditMode(true)">Edit</button>
-        <button class="btn btn-danger btn-xs" onclick="deleteCase('${tc.id}')">Del</button>
+      <td style="white-space:nowrap;min-width:150px">
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-ghost btn-xs" onclick="openTcDetail('${tc.id}')">View</button>
+          <button class="btn btn-ghost btn-xs" onclick="openTcDetail('${tc.id}');toggleEditMode(true)">Edit</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteCase('${tc.id}')">Del</button>
+        </div>
       </td>
     </tr>`;
   });
@@ -1329,6 +1599,7 @@ function renderTcModalBody(tc) {
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <span class="tag tag-${tc2}">${tc.type}</span>
       <span class="tag tag-${(tc.priority||'medium').toLowerCase()}">${tc.priority}</span>
+      ${riskBadge(tc)}
       ${res ? `<span class="tag tag-${res.status}">${res.status}</span>` : '<span class="tag tag-pending">pending</span>'}
       ${tc.manual ? '<span class="tag" style="background:var(--bg3);color:var(--text3);border:1px solid var(--border)">manual</span>' : ''}
     </div>
@@ -1413,6 +1684,26 @@ function addNote(id, note) {
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 // ---- SPRINT BOARD (inline marking) ----
+function renameSprint(oldName) {
+  const input = prompt(`Rename sprint "${oldName}" to:`, oldName);
+  if (input === null) return;
+  const trimmed = input.trim();
+  if (!trimmed || trimmed === oldName) return;
+  if (DB.sprints[trimmed]) {
+    if (!confirm(`"${trimmed}" already exists. Merge "${oldName}" into it?`)) return;
+    const oldCases = DB.sprints[oldName].cases;
+    oldCases.forEach(id => { if (!DB.sprints[trimmed].cases.includes(id)) DB.sprints[trimmed].cases.push(id); });
+    delete DB.sprints[oldName];
+  } else {
+    DB.sprints[trimmed] = { name: trimmed, cases: DB.sprints[oldName].cases };
+    delete DB.sprints[oldName];
+  }
+  DB.testCases.forEach(tc => { if (tc.sprint === oldName) tc.sprint = trimmed; });
+  addLog('manual', `Renamed sprint "${oldName}" to "${trimmed}"`, { oldName, newName: trimmed });
+  save();
+  renderSprint();
+  showNotif(`Sprint renamed to "${trimmed}"`, 'success');
+}
 function renderSprint() {
   const sprintEntries = Object.entries(DB.sprints);
   if (!sprintEntries.length) {
@@ -1443,7 +1734,12 @@ function renderSprint() {
     html += `<div class="card" style="margin-bottom:16px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
         <div>
-          <div style="font-family:var(--font-head);font-size:15px;font-weight:700">${sprintName}</div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-family:var(--font-head);font-size:15px;font-weight:700">${sprintName}</span>
+            <button onclick="renameSprint('${sprintName.replace(/'/g,"\\'")}')" title="Rename sprint" style="background:none;border:none;cursor:pointer;padding:2px;color:var(--text3);display:inline-flex;align-items:center">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+          </div>
           <div style="font-size:12px;color:var(--text3);margin-top:2px">${cases.length} cases · <span style="color:var(--success)">${passed} passed</span> · <span style="color:var(--danger)">${failed} failed</span> · ${pending} pending</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px">
@@ -1454,7 +1750,7 @@ function renderSprint() {
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
       <div style="margin-top:12px;overflow-x:auto;-webkit-overflow-scrolling:touch">
         <table class="tc-table">
-          <thead><tr><th>ID</th><th>Title</th><th>Type</th><th>Priority</th><th>Status</th><th>Mark Result</th><th>Note</th></tr></thead>
+          <thead><tr><th>ID</th><th>Title</th><th>Type</th><th>Priority</th><th>Risk</th><th>Status</th><th>Mark Result</th><th>Note</th></tr></thead>
           <tbody>${cases.map(tc => {
             const res = DB.results[tc.id];
             const st = res?.status || 'pending';
@@ -1463,6 +1759,7 @@ function renderSprint() {
               <td style="font-size:13px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer" onclick="openTcDetail('${tc.id}')">${tc.title}</td>
               <td><span class="tag tag-${typeColors[tc.type]||'functional'}" style="font-size:10px">${tc.type}</span></td>
               <td><span class="tag tag-${(tc.priority||'medium').toLowerCase()}" style="font-size:10px">${tc.priority}</span></td>
+              <td>${riskBadge(tc)}</td>
               <td><span class="tag tag-${st}" style="font-size:10px">${st}</span></td>
               <td>
                 <div style="display:flex;gap:4px">
@@ -1509,13 +1806,12 @@ function deleteSuite(id) {
 function renderSignoff() {
   const sprints = Object.keys(DB.sprints);
   const suites = DB.sanitySuites;
-  let html = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">`;
+  let html = `<div style="display:flex;flex-direction:column;gap:20px">`;
   html += `<div class="card"><div class="card-title" style="margin-bottom:14px">Sprint Signoff Links</div>`;
   if (!sprints.length) { html += '<div style="font-size:13px;color:var(--text3)">No sprints yet.</div>'; }
   else sprints.forEach(sprint => {
     const n = DB.sprints[sprint].cases.length;
-    const shareData = btoa(unescape(encodeURIComponent(JSON.stringify({type:'sprint',name:sprint}))));
-    const link = window.location.href.split('?')[0] + '?share=' + shareData;
+    const link = window.location.href.split('?')[0] + '?share=' + buildSharePayload('sprint', sprint, DB.sprints[sprint].cases);
     const eid = 'lnk_' + btoa(sprint).replace(/=/g,'');
     html += `<div style="margin-bottom:14px"><div style="font-weight:500;font-size:13px;margin-bottom:6px">${sprint} <span style="font-size:11px;color:var(--text3)">(${n} cases)</span></div><div class="share-box"><span class="share-link" id="${eid}">${link}</span><button class="btn btn-ghost btn-sm" onclick="copyLinkById('${eid}')">Copy</button></div></div>`;
   });
@@ -1523,17 +1819,99 @@ function renderSignoff() {
   html += `<div class="card"><div class="card-title" style="margin-bottom:14px">Sanity Suite Links</div>`;
   if (!suites.length) { html += '<div style="font-size:13px;color:var(--text3)">No sanity suites yet.</div>'; }
   else suites.forEach(suite => {
-    const shareData = btoa(unescape(encodeURIComponent(JSON.stringify({type:'suite',id:suite.id,name:suite.name}))));
-    const link = window.location.href.split('?')[0] + '?share=' + shareData;
+    const link = window.location.href.split('?')[0] + '?share=' + buildSharePayload('suite', suite.name, suite.caseIds);
     html += `<div style="margin-bottom:14px"><div style="font-weight:500;font-size:13px;margin-bottom:6px">${suite.name} <span style="font-size:11px;color:var(--text3)">(${suite.caseIds.length} cases)</span></div><div class="share-box"><span class="share-link" id="lnk_${suite.id}">${link}</span><button class="btn btn-ghost btn-sm" onclick="copyLinkById('lnk_${suite.id}')">Copy</button></div></div>`;
   });
   html += '</div></div>';
   document.getElementById('signoffContent').innerHTML = html;
 }
 
+// Builds a self-contained, base64-encoded share payload: the actual test case +
+// result data for the given case IDs travels inside the link itself, so anyone
+// opening it sees the real report even with empty local storage (new device,
+// incognito window, different browser) — no server round-trip required.
+function buildSharePayload(type, name, caseIds) {
+  const cases = caseIds.map(id => DB.testCases.find(tc => tc.id === id)).filter(Boolean);
+  const results = {};
+  caseIds.forEach(id => { if (DB.results[id]) results[id] = DB.results[id]; });
+  const payload = { type, name, generatedAt: new Date().toISOString(), cases, results };
+  return btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+}
+
 function copyLinkById(elId) {
   const el = document.getElementById(elId);
   if (el) { navigator.clipboard.writeText(el.textContent).catch(()=>{}); showNotif('Link copied!','success'); }
+}
+
+// Renders the read-only report for a shared link. This runs entirely from the
+// data embedded in the URL — it never touches DB/localStorage — so it looks
+// identical whether the recipient has QA Forge data on their machine or not.
+function renderSharedReport(payload) {
+  const cases = payload.cases || [];
+  const results = payload.results || {};
+  const pass = cases.filter(c => results[c.id]?.status === 'pass').length;
+  const fail = cases.filter(c => results[c.id]?.status === 'fail').length;
+  const blocked = cases.filter(c => results[c.id]?.status === 'blocked').length;
+  const total = cases.length;
+  const pct = total ? Math.round(pass / total * 100) : 0;
+  const generated = payload.generatedAt ? new Date(payload.generatedAt).toLocaleString() : '';
+
+  let html = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;flex-wrap:wrap;gap:12px">
+      <div>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">${payload.type === 'suite' ? 'Sanity Suite' : 'Sprint'} · Shared Report</div>
+        <div style="font-family:var(--font-head);font-size:24px;font-weight:800">${payload.name}</div>
+        ${generated ? `<div style="font-size:11px;color:var(--text3);margin-top:4px">Generated ${generated}</div>` : ''}
+      </div>
+      <span style="font-size:10px;color:var(--text3);border:1px solid var(--border2);border-radius:var(--r);padding:4px 8px">Read-only</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-block"><b>${total}</b><span>Cases</span></div>
+      <div class="stat-block"><b>${pass}</b><span>Passed</span></div>
+      <div class="stat-block"><b>${fail}</b><span>Failed</span></div>
+      <div class="stat-block"><b>${blocked}</b><span>Blocked</span></div>
+    </div>
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><div class="card-title">Sign-off Progress</div><span style="font-family:var(--font-head);font-weight:800">${pct}%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden"><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse">
+      <thead><tr style="text-align:left;font-size:11px;color:var(--text3);text-transform:uppercase">
+        <th style="padding:10px 14px">ID</th><th style="padding:10px 14px">Title</th><th style="padding:10px 14px">Module</th><th style="padding:10px 14px">Type</th><th style="padding:10px 14px">Status</th><th style="padding:10px 14px">Note</th>
+      </tr></thead><tbody>`;
+  cases.forEach(tc => {
+    const res = results[tc.id];
+    const statusTag = res ? `<span class="tag tag-${res.status}">${res.status}</span>` : `<span class="tag tag-pending">pending</span>`;
+    html += `<tr style="border-top:1px solid var(--border)">
+      <td style="padding:10px 14px;font-family:var(--font-mono);font-size:12px">${tc.id}</td>
+      <td style="padding:10px 14px;font-size:13px">${tc.title}</td>
+      <td style="padding:10px 14px;font-size:12px;color:var(--text2)">${tc.module||''}</td>
+      <td style="padding:10px 14px"><span class="tag tag-${typeColors[tc.type]||'functional'}" style="font-size:10px">${tc.type||''}</span></td>
+      <td style="padding:10px 14px">${statusTag}</td>
+      <td style="padding:10px 14px;font-size:12px;color:var(--text2)">${res?.note||''}</td>
+    </tr>`;
+  });
+  html += `</tbody></table></div></div>
+    <div style="margin-top:20px;text-align:center">
+      <a href="${window.location.href.split('?')[0]}" class="btn btn-ghost btn-sm" style="text-decoration:none;display:inline-block">Open QA Forge →</a>
+    </div>`;
+  document.getElementById('sharedContent').innerHTML = html;
+}
+
+function tryRenderSharedLink() {
+  const params = new URLSearchParams(window.location.search);
+  const shareParam = params.get('share');
+  if (!shareParam) return false;
+  try {
+    const payload = JSON.parse(decodeURIComponent(escape(atob(shareParam))));
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('appShell').style.display = 'none';
+    document.getElementById('sharedView').style.display = '';
+    renderSharedReport(payload);
+    return true;
+  } catch (e) {
+    return false; // malformed/old-style link — fall back to normal app
+  }
 }
 
 // ---- MERGE ----
@@ -1602,6 +1980,55 @@ function exportExcel() {
   showNotif('Excel exported!', 'success');
   addLog('manual', `Exported ${cases.length} cases to Excel`, { count: cases.length });
 }
+function downloadCSV(rows, filename) {
+  const csv = rows.map(r => r.map(c => `"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = filename; a.click();
+  showNotif(filename + ' exported!', 'success');
+  addLog('manual', `Exported ${rows.length-1} row(s) to ${filename}`, { count: rows.length-1, filename });
+}
+function exportJiraCSV(cases, filename) {
+  const rows = [['Issue Type','Summary','Test Type','Priority','Risk Tier','Labels','Preconditions','Action','Data','Expected Result']];
+  cases.forEach(tc => {
+    const steps = Array.isArray(tc.steps) ? tc.steps : [tc.steps||''];
+    steps.forEach((step, i) => {
+      rows.push(['Test', i===0?tc.title:'', tc.type, tc.priority, i===0?riskTierOf(tc):'', `${tc.module};${tc.sprint}`.replace(/\s+/g,'-'), i===0?(tc.preconditions||''):'', step, '', i===steps.length-1?(tc.expected||''):'']);
+    });
+  });
+  downloadCSV(rows, filename);
+}
+function exportAzureDevOpsCSV(cases, filename) {
+  const rows = [['ID','Work Item Type','Title','Test Step','Step Action','Step Expected','Area Path','Priority','Risk Tier']];
+  cases.forEach(tc => {
+    const steps = Array.isArray(tc.steps) ? tc.steps : [tc.steps||''];
+    steps.forEach((step, i) => {
+      rows.push([tc.id, i===0?'Test Case':'', i===0?tc.title:'', i+1, step, i===steps.length-1?(tc.expected||''):'', `${tc.module}\\${tc.sprint}`, i===0?tc.priority:'', i===0?riskTierOf(tc):'']);
+    });
+  });
+  downloadCSV(rows, filename);
+}
+function getLibraryFilteredCases() {
+  const search = (document.getElementById('libSearch')?.value||'').toLowerCase();
+  const fm = document.getElementById('filterModule').value;
+  const fs = document.getElementById('filterSprint').value;
+  const ft = document.getElementById('filterType').value;
+  const fr = document.getElementById('filterRisk')?.value || '';
+  let cases = DB.testCases;
+  if (search) cases = cases.filter(c => c.title?.toLowerCase().includes(search)||c.id?.toLowerCase().includes(search)||c.module?.toLowerCase().includes(search));
+  if (fm) cases = cases.filter(c => c.module===fm);
+  if (fs) cases = cases.filter(c => c.sprint===fs);
+  if (ft) cases = cases.filter(c => c.type===ft);
+  if (fr) cases = cases.filter(c => riskTierOf(c)===fr);
+  return cases;
+}
+function toggleExportMenu(id, ev) {
+  ev?.stopPropagation();
+  document.querySelectorAll('.export-menu').forEach(m => { if (m.id !== id) m.style.display = 'none'; });
+  const m = document.getElementById(id);
+  if (m) m.style.display = m.style.display === 'block' ? 'none' : 'block';
+}
+document.addEventListener('click', () => document.querySelectorAll('.export-menu').forEach(m => m.style.display = 'none'));
 function exportFilteredCSV() {
   const search = (document.getElementById('libSearch')?.value||'').toLowerCase();
   const fm = document.getElementById('filterModule').value;
@@ -1760,8 +2187,38 @@ document.querySelectorAll('.nav-item').forEach(item => {
   });
 });
 
+// ---- LANDING ----
+function initLanding() {
+  const total = DB.testCases.length;
+  const sprints = Object.keys(DB.sprints).length;
+  const modules = new Set(DB.testCases.map(t => t.module)).size;
+  const results = Object.values(DB.results);
+  const passRate = results.length ? Math.round(results.filter(r => r.status === 'pass').length / results.length * 100) + '%' : '—';
+  document.getElementById('landingStats').innerHTML = `
+    <div class="stat-block"><b>${total}</b><span>Test cases</span></div>
+    <div class="stat-block"><b>${sprints}</b><span>Sprints</span></div>
+    <div class="stat-block"><b>${modules}</b><span>Modules</span></div>
+    <div class="stat-block"><b>${passRate}</b><span>Pass rate</span></div>
+  `;
+  const statusMeta = { pass: ['▲', 'up'], fail: ['▼', 'down'], blocked: ['●', 'blk'] };
+  const ticks = DB.testCases.slice(0, 24).map(tc => {
+    const r = DB.results[tc.id];
+    const [glyph, cls] = r ? statusMeta[r.status] || ['·', ''] : ['·', ''];
+    return `<span class="tick">${tc.id} <b>${tc.module}</b> <span class="${cls}">${glyph}</span></span>`;
+  }).join('');
+  document.getElementById('tickerTrack').innerHTML = ticks + ticks; // doubled for seamless loop
+  requestAnimationFrame(() => document.getElementById('landing').classList.add('ready'));
+}
+function launchDemo() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('appShell').style.display = '';
+  navigate('dashboard');
+}
+if (!tryRenderSharedLink()) initLanding();
+
 // Init
 updateDataLists(); updateSidebar(); renderDashboard(); // Show settings on first load if no key
+pullFromServer();
 if (!true) {
   setTimeout(() => {
                 
@@ -1826,11 +2283,18 @@ function submitFeedback() {
   const name = document.getElementById('fbName').value.trim() || 'Anonymous';
   const tags = [...document.querySelectorAll('#feedbackModal button[style*="accent"]')].map(b => b.textContent).join(', ');
   const rating = currentRating ? ratingLabels[currentRating] : 'Not rated';
-  // Save feedback locally
+  // Save feedback locally (so it still shows up in this browser's Activity Log)
   const feedbacks = JSON.parse(localStorage.getItem('qaforge_feedback') || '[]');
   feedbacks.push({ name, rating, tags, text, timestamp: new Date().toISOString() });
   localStorage.setItem('qaforge_feedback', JSON.stringify(feedbacks));
   addLog('manual', `Feedback from ${name} — ${rating}`, { name, rating, tags });
+  // Send to Netlify Forms so the site owner actually receives it (see hidden
+  // "qaforge-feedback" form above). Fails silently if not hosted on Netlify.
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ 'form-name': 'qaforge-feedback', name, rating, tags, feedback: text }).toString()
+  }).catch(() => {});
   closeModal('feedbackModal');
   showNotif('Thank you for your feedback! 🙏', 'success');
   document.getElementById('fbText').value = '';
