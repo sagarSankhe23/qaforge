@@ -1015,6 +1015,11 @@ async function pullFromServer() {
       if (!DB.logs) DB.logs = [];
       localStorage.setItem(KEY, JSON.stringify(DB));
       updateDataLists(); updateSidebar(); renderDashboard();
+      // Landing page paints from the local/demo DB before this fetch resolves,
+      // so once the shared server data lands, refresh the landing stat block
+      // too (only if it's still on screen) — otherwise it stays stuck on the
+      // stale count while the dashboard behind it already shows the real one.
+      if (document.getElementById('landingStats')) initLanding();
     }
   } catch (e) {
     // Offline, function not deployed, or DB not reachable — keep local copy.
