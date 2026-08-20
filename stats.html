@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QA Forge Analytics</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22qg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234f8cff%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237c3aed%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22url%28%23qg%29%22/%3E%0A%20%20%3Cpolygon%20points%3D%2235%208%2012%2034%2028%2034%2026%2056%2052%2026%2034%2026%2035%208%22%20fill%3D%22%23ffffff%22/%3E%0A%3C/svg%3E%0A"/>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAADOUlEQVRYhb3XT2xUVRTH8e+587DMwEwnJUZNCCEKMV2wMKxYsDBCoi4kQlyAmAi0xQ1/EmDBjh2QJkJa/7VDNZrGjVbYQUSjrkhIGpUYIYQEISGASA100nnMzDvHRTvTPzPTvndB3uq+3Ek+v3fPOW9mhDnXO8dsjVa1S4zXxFiJ2hIxEAMMRI1m9w3r6fsHAtdM7TSp6uAX/dl7Mz2pLd7os7ZMUU+g7BbDiQEtsAT4nD35V7C9pwbSw7MCTOJ2FrVX68ATx+t75ozDA0OZ4wAOIDOuJ58SjhhixtHd709sBpCpmv/me+y5DLz8omP0d00a7G45NbHaaaS7fPG2APbvWkQ+63Uqzz1TSfc4idjog6cEPtgesGqlUCq1+NwCJXFqW5zACp+av7spxdo1DoCwZF79gEmnQ21pUvytjSk2rE/VZ7lU8sFBjLxLiq97xbH59WkcIJzwwhGtNV9MvPMlR9e2ABFmByiZFy4GLi6+/Hlh786AYPbDTwXwwzFwcfCOduFAT0Am3YjXS+CBi0GwEJ5ugwM9AR15aa4Dn368uOUewE/nKox8VW4arKEHZq4DB/t2Bix/oTW+0PXHrxGnh5vjzO2BWf0AdG0N6FztvPGb15XP+0Ks2rokrlXttm1KsW6tP37/nvFZb0ilNE8/GMj2Q2VL+hZbvMjo/6hFRzI5lh8eCbl9I5oXR61JCWKMUz7XuieiCAonHsXCG0sQAxeDbLZ5ADP4uvCIq5eqsfDJAAlxDNqzzZ/+7HdlLv5ciY1LvQQJcFEj16QEoxeqnPu2nAindgJJf0zMDXDtSsTwJyFoMnzeMZwvWK59OsCdW0qhNyQqJ8drPfAg6STUTqD40BjsDSkVzQsXtYcO5HLSScjlhEoZBnpD/rmtXjhqmHLTOY1GkuAYLM3Bl/0hN65G3rgYODjvwlR60Iy/4+JicP5MhUsXq4+FixGJ6CkB6O6e2ILxjRiS9PvcE4dI+479smyfAygUMiPOOIxhTwVXfhgrdhyEqb9mAANDmeMu0vfEGPsf8YhI+8bG828OjkoFoOGVtmfH+LPViusWtbeBVWLkHxMvovwlxvfO6dDRH5f9OdP7D1nksf1fyhBdAAAAAElFTkSuQmCC"/>
+<style>
+  body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1115;color:#e6e6e6;padding:32px;max-width:900px;margin:0 auto;}
+  h1{font-size:20px;margin-bottom:4px;}
+  h2{font-size:15px;margin-top:36px;margin-bottom:12px;color:#c4c8d0;}
+  p.sub{color:#888;font-size:13px;margin-top:0;margin-bottom:28px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
+  .card{background:#1a1d24;border:1px solid #2a2d35;border-radius:10px;padding:16px 18px;}
+  .card .label{font-size:12.5px;color:#9aa0aa;margin-bottom:6px;}
+  .card .value{font-size:26px;font-weight:700;color:#7c3aed;}
+  .breakdown{margin-top:8px;padding-top:8px;border-top:1px solid #2a2d35;font-size:12px;color:#c4c8d0;}
+  .breakdown div{display:flex;justify-content:space-between;padding:2px 0;}
+  input{background:#1a1d24;border:1px solid #2a2d35;color:#e6e6e6;padding:8px 10px;border-radius:6px;font-size:14px;width:220px;margin-right:8px;}
+  button{background:#7c3aed;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:600;cursor:pointer;font-size:14px;}
+  #err{color:#f87171;font-size:13px;margin-top:10px;}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid #23262e;white-space:nowrap;}
+  th{color:#9aa0aa;font-weight:600;}
+  td{color:#dcdfe4;}
+  .pill{display:inline-block;background:#23262e;color:#c4c8d0;border-radius:5px;padding:1px 7px;font-size:11px;}
+  .tablewrap{overflow-x:auto;}
+</style>
+</head>
+<body>
+  <h1>QA Forge Analytics</h1>
+  <p class="sub">Try it live, test case creation, feedback, and About views — with city/region/browser/OS per event.</p>
+
+  <div>
+    <input id="keyInput" type="password" placeholder="Enter your STATS_SECRET">
+    <button onclick="load()">View</button>
+  </div>
+  <div id="err"></div>
+  <div id="results" style="margin-top:24px;"></div>
+
+<script>
+const EVENT_LABELS = {
+  'try-it-live': 'Try it live clicks',
+  'create-testcase': 'Test cases generated (runs)',
+  'send-feedback': 'Feedback submitted',
+  'about-qaforge': 'About QA Forge views',
+};
+
+async function load(){
+  const key = document.getElementById('keyInput').value.trim();
+  const err = document.getElementById('err');
+  const results = document.getElementById('results');
+  err.textContent = '';
+  results.innerHTML = 'Loading…';
+
+  try{
+    const resp = await fetch('/.netlify/functions/get-stats?key=' + encodeURIComponent(key));
+    if (!resp.ok) {
+      err.textContent = resp.status === 401 ? 'Wrong key.' : 'Error loading stats.';
+      results.innerHTML = '';
+      return;
+    }
+    const data = await resp.json();
+    render(data.stats || {}, data.recentEvents || []);
+  } catch(e){
+    err.textContent = 'Could not reach the stats function.';
+    results.innerHTML = '';
+  }
+}
+
+function render(stats, events){
+  const results = document.getElementById('results');
+  const topLevelKeys = Object.keys(stats).filter(k => !k.includes(':'));
+
+  let html = `<div class="cards">`;
+  for (const key of topLevelKeys) {
+    const label = EVENT_LABELS[key] || key;
+    const count = stats[key];
+    const breakdownKeys = Object.keys(stats).filter(k => k.startsWith(key + ':'));
+    const breakdownHtml = breakdownKeys.length ? `<div class="breakdown">${
+      breakdownKeys.map(k => {
+        const parts = k.split(':');
+        const value = parts.slice(2).join(':');
+        return `<div><span>${value}</span><span>${stats[k]}</span></div>`;
+      }).join('')
+    }</div>` : '';
+    html += `<div class="card"><div class="label">${label}</div><div class="value">${count}</div>${breakdownHtml}</div>`;
+  }
+  html += `</div>`;
+
+  html += `<h2>Recent activity (last ${events.length})</h2>`;
+  if (!events.length) {
+    html += `<p style="color:#888;font-size:13px;">No events recorded yet.</p>`;
+  } else {
+    html += `<div class="tablewrap"><table>
+      <tr><th>Time</th><th>Event</th><th>Detail</th><th>City</th><th>Region</th><th>Country</th><th>Browser</th><th>OS</th><th>Device</th></tr>
+      ${events.map(e => `<tr>
+        <td>${new Date(e.time).toLocaleString()}</td>
+        <td><span class="pill">${EVENT_LABELS[e.event] || e.event}</span></td>
+        <td>${e.detail ? Object.values(e.detail).join(', ') : '—'}</td>
+        <td>${e.city || '—'}</td>
+        <td>${e.region || '—'}</td>
+        <td>${e.country || '—'}</td>
+        <td>${e.browser || '—'}</td>
+        <td>${e.os || '—'}</td>
+        <td>${e.deviceType || '—'}</td>
+      </tr>`).join('')}
+    </table></div>`;
+  }
+
+  results.innerHTML = html;
+}
+</script>
+</body>
+</html>

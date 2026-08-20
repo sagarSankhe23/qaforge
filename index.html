@@ -502,7 +502,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-si
       </div>
       <div class="nav-section">
         <div class="nav-label">Info</div>
-        <button class="nav-item" onclick="openModal('aboutModal')">
+        <button class="nav-item" onclick="openModal('aboutModal');trackEvent('about-qaforge')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>About QA Forge
         </button>
       </div>
@@ -1371,6 +1371,7 @@ async function generateCases() {
     if (!DB.sprints[sprint]) DB.sprints[sprint] = { name: sprint, cases: [] };
     DB.sprints[sprint].cases.push(...cases.map(c => c.id));
     save(); updateDataLists(); renderPreview(cases, module, sprint);
+    trackEvent('create-testcase', { count: String(cases.length), source: usedAI ? 'claude' : 'offline' });
     showNotif(cases.length + ' test cases generated!', 'success');
     status.textContent = cases.length + ' cases added · ' + (ms/1000).toFixed(1) + 's' + (usedAI ? '' : ' · offline mode');
     updateSidebar();
@@ -2214,7 +2215,23 @@ function initLanding() {
   document.getElementById('tickerTrack').innerHTML = ticks + ticks; // doubled for seamless loop
   requestAnimationFrame(() => document.getElementById('landing').classList.add('ready'));
 }
+// ── Analytics event tracking (via our own Netlify Function) ─────
+// Sends a lightweight, fire-and-forget event count to /.netlify/functions/track-event.
+// No location/IP is sent from the browser — city/region/country is resolved
+// server-side from Netlify's built-in geo context. Never blocks the UI.
+function trackEvent(name, data) {
+  try {
+    fetch('/.netlify/functions/track-event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: name, ...(data || {}) }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch (e) { /* analytics failures should never break the page */ }
+}
+
 function launchDemo() {
+  trackEvent('try-it-live');
   document.getElementById('landing').style.display = 'none';
   document.getElementById('appShell').style.display = '';
   navigate('dashboard');
@@ -2301,6 +2318,7 @@ function submitFeedback() {
     body: new URLSearchParams({ 'form-name': 'qaforge-feedback', name, rating, tags, feedback: text }).toString()
   }).catch(() => {});
   closeModal('feedbackModal');
+  trackEvent('send-feedback', { rating });
   showNotif('Thank you for your feedback! 🙏', 'success');
   document.getElementById('fbText').value = '';
   document.getElementById('fbName').value = '';
