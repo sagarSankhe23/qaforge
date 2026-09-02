@@ -3,63 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <title>QA Forge Analytics</title>
+<meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22qg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%234f8cff%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237c3aed%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2216%22%20fill%3D%22url%28%23qg%29%22/%3E%0A%20%20%3Cpolygon%20points%3D%2235%208%2012%2034%2028%2034%2026%2056%2052%2026%2034%2026%2035%208%22%20fill%3D%22%23ffffff%22/%3E%0A%3C/svg%3E%0A"/>
 <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAADOUlEQVRYhb3XT2xUVRTH8e+587DMwEwnJUZNCCEKMV2wMKxYsDBCoi4kQlyAmAi0xQ1/EmDBjh2QJkJa/7VDNZrGjVbYQUSjrkhIGpUYIYQEISGASA100nnMzDvHRTvTPzPTvndB3uq+3Ek+v3fPOW9mhDnXO8dsjVa1S4zXxFiJ2hIxEAMMRI1m9w3r6fsHAtdM7TSp6uAX/dl7Mz2pLd7os7ZMUU+g7BbDiQEtsAT4nD35V7C9pwbSw7MCTOJ2FrVX68ATx+t75ozDA0OZ4wAOIDOuJ58SjhhixtHd709sBpCpmv/me+y5DLz8omP0d00a7G45NbHaaaS7fPG2APbvWkQ+63Uqzz1TSfc4idjog6cEPtgesGqlUCq1+NwCJXFqW5zACp+av7spxdo1DoCwZF79gEmnQ21pUvytjSk2rE/VZ7lU8sFBjLxLiq97xbH59WkcIJzwwhGtNV9MvPMlR9e2ABFmByiZFy4GLi6+/Hlh786AYPbDTwXwwzFwcfCOduFAT0Am3YjXS+CBi0GwEJ5ugwM9AR15aa4Dn368uOUewE/nKox8VW4arKEHZq4DB/t2Bix/oTW+0PXHrxGnh5vjzO2BWf0AdG0N6FztvPGb15XP+0Ks2rokrlXttm1KsW6tP37/nvFZb0ilNE8/GMj2Q2VL+hZbvMjo/6hFRzI5lh8eCbl9I5oXR61JCWKMUz7XuieiCAonHsXCG0sQAxeDbLZ5ADP4uvCIq5eqsfDJAAlxDNqzzZ/+7HdlLv5ciY1LvQQJcFEj16QEoxeqnPu2nAindgJJf0zMDXDtSsTwJyFoMnzeMZwvWK59OsCdW0qhNyQqJ8drPfAg6STUTqD40BjsDSkVzQsXtYcO5HLSScjlhEoZBnpD/rmtXjhqmHLTOY1GkuAYLM3Bl/0hN65G3rgYODjvwlR60Iy/4+JicP5MhUsXq4+FixGJ6CkB6O6e2ILxjRiS9PvcE4dI+479smyfAygUMiPOOIxhTwVXfhgrdhyEqb9mAANDmeMu0vfEGPsf8YhI+8bG828OjkoFoOGVtmfH+LPViusWtbeBVWLkHxMvovwlxvfO6dDRH5f9OdP7D1nksf1fyhBdAAAAAElFTkSuQmCC"/>
 <style>
-  body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1115;color:#e6e6e6;padding:32px;max-width:900px;margin:0 auto;}
-  h1{font-size:20px;margin-bottom:4px;}
-  h2{font-size:15px;margin-top:36px;margin-bottom:12px;color:#c4c8d0;}
-  p.sub{color:#888;font-size:13px;margin-top:0;margin-bottom:28px;}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
-  .card{background:#1a1d24;border:1px solid #2a2d35;border-radius:10px;padding:16px 18px;}
-  .card .label{font-size:12.5px;color:#9aa0aa;margin-bottom:6px;}
-  .card .value{font-size:26px;font-weight:700;color:#7c3aed;}
-  .breakdown{margin-top:8px;padding-top:8px;border-top:1px solid #2a2d35;font-size:12px;color:#c4c8d0;}
-  .breakdown div{display:flex;justify-content:space-between;padding:2px 0;}
-  input{background:#1a1d24;border:1px solid #2a2d35;color:#e6e6e6;padding:8px 10px;border-radius:6px;font-size:14px;width:220px;margin-right:8px;}
-  button{background:#7c3aed;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-weight:600;cursor:pointer;font-size:14px;}
-  #err{color:#f87171;font-size:13px;margin-top:10px;}
-  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;}
-  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid #23262e;white-space:nowrap;}
-  th{color:#9aa0aa;font-weight:600;}
+  :root{
+    --accent: #a78bfa;
+    --accent-soft: rgba(167,139,250,0.14);
+    --bg: #0b0d11;
+    --panel: #14171d;
+    --panel-border: #262a33;
+    --text: #e8e9ec;
+    --muted: #8b909c;
+    --danger: #f87171;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:28px 20px 60px;
+    max-width:960px;
+    margin:0 auto;
+    -webkit-font-smoothing:antialiased;
+  }
+  .header{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .header .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+  h1{font-size:21px;font-weight:700;margin:0;letter-spacing:-0.01em;}
+  p.sub{color:var(--muted);font-size:13px;margin:6px 0 26px;line-height:1.5;}
+  h2{font-size:14px;margin-top:34px;margin-bottom:12px;color:#c4c8d0;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;}
+
+  .authRow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--panel-border);padding:14px 16px;border-radius:12px;}
+  input[type=password]{
+    background:#1a1e26;border:1px solid var(--panel-border);color:var(--text);
+    padding:9px 12px;border-radius:8px;font-size:14px;width:200px;
+    transition:border-color .15s;
+  }
+  input[type=password]:focus{outline:none;border-color:var(--accent);}
+  .remember{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer;user-select:none;}
+  .remember input{accent-color:var(--accent);cursor:pointer;}
+  button{
+    background:var(--accent);color:#08090b;border:none;padding:9px 16px;border-radius:8px;
+    font-weight:700;cursor:pointer;font-size:14px;transition:filter .15s,transform .1s;
+  }
+  button:hover{filter:brightness(1.08);}
+  button:active{transform:scale(0.98);}
+  #err{color:var(--danger);font-size:13px;margin-top:10px;min-height:1px;}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;}
+  .card{
+    background:var(--panel);border:1px solid var(--panel-border);border-radius:12px;
+    padding:18px 18px 16px;transition:border-color .15s,transform .15s;
+  }
+  .card:hover{border-color:#3a3f4a;transform:translateY(-1px);}
+  .card .label{font-size:12.5px;color:var(--muted);margin-bottom:8px;font-weight:500;}
+  .card .value{font-size:30px;font-weight:800;color:var(--accent);line-height:1;letter-spacing:-0.02em;}
+  .breakdown{margin-top:12px;padding-top:12px;border-top:1px solid var(--panel-border);font-size:12.5px;color:#c4c8d0;}
+  .breakdown div{display:flex;justify-content:space-between;padding:3px 0;}
+  .breakdown span:last-child{color:var(--accent);font-weight:600;}
+
+  .tablewrap{overflow-x:auto;border:1px solid var(--panel-border);border-radius:12px;background:var(--panel);}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--panel-border);white-space:nowrap;}
+  tr:last-child td{border-bottom:none;}
+  th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:0.03em;background:#181b21;}
   td{color:#dcdfe4;}
-  .pill{display:inline-block;background:#23262e;color:#c4c8d0;border-radius:5px;padding:1px 7px;font-size:11px;}
-  .tablewrap{overflow-x:auto;}
+  tbody tr:hover td{background:#181b21;}
+  .pill{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;}
+  .empty{color:var(--muted);font-size:13px;padding:20px;text-align:center;}
+  .footer{margin-top:40px;color:#565a63;font-size:11.5px;text-align:center;}
+
+  @media (max-width:600px){
+    body{padding:20px 14px 40px;}
+    input[type=password]{width:100%;}
+    .authRow{flex-direction:column;align-items:stretch;}
+  }
 </style>
 </head>
 <body>
-  <h1>QA Forge Analytics</h1>
+  <div class="header"><span class="dot"></span><h1>QA Forge Analytics</h1></div>
   <p class="sub">Try it live, test case creation, feedback, and About views — with city/region/browser/OS per event.</p>
 
-  <div>
+  <div class="authRow">
     <input id="keyInput" type="password" placeholder="Enter your STATS_SECRET">
+    <label class="remember"><input type="checkbox" id="rememberChk"> Remember this device</label>
     <button onclick="load()">View</button>
   </div>
   <div id="err"></div>
-  <div id="results" style="margin-top:24px;"></div>
+  <div id="results" style="margin-top:26px;"></div>
 
 <script>
-const EVENT_LABELS = {
-  'try-it-live': 'Try it live clicks',
-  'create-testcase': 'Test cases generated (runs)',
-  'send-feedback': 'Feedback submitted',
-  'about-qaforge': 'About QA Forge views',
-};
+const STORAGE_KEY = 'qaforge_stats_key';
+const EVENT_LABELS = {"try-it-live": "Try it live clicks", "create-testcase": "Test cases generated (runs)", "send-feedback": "Feedback submitted", "about-qaforge": "About QA Forge views"};
+
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+// Consistent 12-hour formatting regardless of the viewer's device/locale
+// settings (previously used toLocaleString() with no options, which
+// rendered 24-hour time on some devices and 12-hour on others).
+function fmtTime(iso){
+  const d = new Date(iso);
+  return d.toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    document.getElementById('keyInput').value = saved;
+    document.getElementById('rememberChk').checked = true;
+    load();
+  }
+});
 
 async function load(){
   const key = document.getElementById('keyInput').value.trim();
+  const remember = document.getElementById('rememberChk').checked;
   const err = document.getElementById('err');
   const results = document.getElementById('results');
   err.textContent = '';
-  results.innerHTML = 'Loading…';
+  results.innerHTML = '<div class="empty">Loading…</div>';
 
   try{
     const resp = await fetch('/.netlify/functions/get-stats?key=' + encodeURIComponent(key));
     if (!resp.ok) {
       err.textContent = resp.status === 401 ? 'Wrong key.' : 'Error loading stats.';
       results.innerHTML = '';
-      return;
+      return; // never save an unverified key
     }
+    // Only persist the key once it's confirmed correct
+    if (remember) localStorage.setItem(STORAGE_KEY, key);
+    else localStorage.removeItem(STORAGE_KEY);
+
     const data = await resp.json();
     render(data.stats || {}, data.recentEvents || []);
   } catch(e){
@@ -73,6 +147,9 @@ function render(stats, events){
   const topLevelKeys = Object.keys(stats).filter(k => !k.includes(':'));
 
   let html = `<div class="cards">`;
+  if (!topLevelKeys.length) {
+    html += `<div class="empty" style="grid-column:1/-1;">No events recorded yet.</div>`;
+  }
   for (const key of topLevelKeys) {
     const label = EVENT_LABELS[key] || key;
     const count = stats[key];
@@ -81,29 +158,29 @@ function render(stats, events){
       breakdownKeys.map(k => {
         const parts = k.split(':');
         const value = parts.slice(2).join(':');
-        return `<div><span>${value}</span><span>${stats[k]}</span></div>`;
+        return `<div><span>${esc(value)}</span><span>${esc(stats[k])}</span></div>`;
       }).join('')
     }</div>` : '';
-    html += `<div class="card"><div class="label">${label}</div><div class="value">${count}</div>${breakdownHtml}</div>`;
+    html += `<div class="card"><div class="label">${esc(label)}</div><div class="value">${esc(count)}</div>${breakdownHtml}</div>`;
   }
   html += `</div>`;
 
   html += `<h2>Recent activity (last ${events.length})</h2>`;
   if (!events.length) {
-    html += `<p style="color:#888;font-size:13px;">No events recorded yet.</p>`;
+    html += `<div class="tablewrap"><div class="empty">No events recorded yet.</div></div>`;
   } else {
     html += `<div class="tablewrap"><table>
       <tr><th>Time</th><th>Event</th><th>Detail</th><th>City</th><th>Region</th><th>Country</th><th>Browser</th><th>OS</th><th>Device</th></tr>
       ${events.map(e => `<tr>
-        <td>${new Date(e.time).toLocaleString()}</td>
-        <td><span class="pill">${EVENT_LABELS[e.event] || e.event}</span></td>
-        <td>${e.detail ? Object.values(e.detail).join(', ') : '—'}</td>
-        <td>${e.city || '—'}</td>
-        <td>${e.region || '—'}</td>
-        <td>${e.country || '—'}</td>
-        <td>${e.browser || '—'}</td>
-        <td>${e.os || '—'}</td>
-        <td>${e.deviceType || '—'}</td>
+        <td>${esc(fmtTime(e.time))}</td>
+        <td><span class="pill">${esc(EVENT_LABELS[e.event] || e.event)}</span></td>
+        <td>${e.detail ? esc(Object.values(e.detail).join(', ')) : '—'}</td>
+        <td>${esc(e.city) || '—'}</td>
+        <td>${esc(e.region) || '—'}</td>
+        <td>${esc(e.country) || '—'}</td>
+        <td>${esc(e.browser) || '—'}</td>
+        <td>${esc(e.os) || '—'}</td>
+        <td>${esc(e.deviceType) || '—'}</td>
       </tr>`).join('')}
     </table></div>`;
   }
@@ -111,5 +188,6 @@ function render(stats, events){
   results.innerHTML = html;
 }
 </script>
+<div class="footer">Private dashboard · not indexed · data stored only in your own Netlify project</div>
 </body>
 </html>
